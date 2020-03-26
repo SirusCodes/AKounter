@@ -1,3 +1,4 @@
+import 'package:akounter/screens/add_data/add_students.dart';
 import 'package:akounter/screens/in_dev.dart';
 import 'package:flutter/material.dart';
 
@@ -16,9 +17,7 @@ class StudentList extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => InDevelopment(
-                        text: "This will divert to show add student data")),
+                MaterialPageRoute(builder: (context) => AddStudent()),
               );
             },
           )

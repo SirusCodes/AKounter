@@ -45,6 +45,7 @@ class _AddBranchState extends State<AddBranch> {
                       hint: "Name",
                       keyboardType: TextInputType.text,
                       label: "Name",
+                      textCapitalization: TextCapitalization.words,
                       controller: _nameController,
                       validator: (value) =>
                           _isEmpty(value) ? "Name can't be empty!" : null,
@@ -115,6 +116,7 @@ class _AddBranchState extends State<AddBranch> {
           if (_formKey.currentState.validate()) {
             _formKey.currentState.save();
             debugPrint("Saved");
+            _save();
             _clearAllTFF();
           }
         },
@@ -139,6 +141,9 @@ class _AddBranchState extends State<AddBranch> {
     });
   }
 
+  _save() {
+    // TODO: Add provider after completing ui
+  }
   @override
   void dispose() {
     _nameController.dispose();

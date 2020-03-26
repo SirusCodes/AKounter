@@ -43,7 +43,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         accentColor: Colors.black,
         primaryColor: Colors.white,
-        splashColor: Colors.black54,
+        splashColor: Colors.black26,
+        textTheme: TextTheme(
+          display1: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w700),
+        ),
       ),
       home: MultiProvider(
         providers: [

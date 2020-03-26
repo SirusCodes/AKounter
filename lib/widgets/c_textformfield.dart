@@ -8,18 +8,22 @@ class CTextFormField extends StatelessWidget {
     this.keyboardType,
     this.validator,
     this.onSaved,
+    this.onChanged,
+    this.textCapitalization = TextCapitalization.none,
   });
   final String label, hint;
   final TextEditingController controller;
   final TextInputType keyboardType;
   final Function validator;
-  final Function onSaved;
+  final Function onSaved, onChanged;
+  final TextCapitalization textCapitalization;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       keyboardType: keyboardType,
       style: TextStyle(color: Theme.of(context).accentColor),
+      textCapitalization: textCapitalization,
       controller: controller,
       validator: validator,
       onSaved: onSaved,
@@ -31,6 +35,7 @@ class CTextFormField extends StatelessWidget {
         border: border(context),
         focusedBorder: border(context),
       ),
+      onChanged: onChanged,
     );
   }
 
