@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CTextFormField extends StatelessWidget {
   CTextFormField({
@@ -10,6 +11,7 @@ class CTextFormField extends StatelessWidget {
     this.onSaved,
     this.onChanged,
     this.textCapitalization = TextCapitalization.none,
+    this.inputFormatters,
   });
   final String label, hint;
   final TextEditingController controller;
@@ -17,6 +19,7 @@ class CTextFormField extends StatelessWidget {
   final Function validator;
   final Function onSaved, onChanged;
   final TextCapitalization textCapitalization;
+  final List<TextInputFormatter> inputFormatters;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +30,7 @@ class CTextFormField extends StatelessWidget {
       controller: controller,
       validator: validator,
       onSaved: onSaved,
+      inputFormatters: inputFormatters,
       decoration: InputDecoration(
         hintText: hint,
         hintStyle: TextStyle(color: Theme.of(context).accentColor),

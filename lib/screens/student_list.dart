@@ -1,5 +1,5 @@
 import 'package:akounter/screens/add_data/add_students.dart';
-import 'package:akounter/screens/in_dev.dart';
+import 'package:akounter/screens/student_details.dart';
 import 'package:flutter/material.dart';
 
 class StudentList extends StatelessWidget {
@@ -39,9 +39,7 @@ class StudentList extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => InDevelopment(
-                              text: "This will divert to show add fees n all")),
+                      MaterialPageRoute(builder: (context) => StudentDetails()),
                     );
                   },
                 ),

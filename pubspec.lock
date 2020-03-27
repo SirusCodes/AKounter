@@ -92,6 +92,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.8"
+  date_text_input_formatter:
+    dependency: "direct main"
+    description:
+      name: date_text_input_formatter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.2"
   firebase:
     dependency: transitive
     description:

@@ -1,5 +1,6 @@
 import 'package:akounter/widgets/c_textformfield.dart';
 import 'package:date_format/date_format.dart';
+import 'package:date_text_input_formatter/date_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
@@ -97,6 +98,11 @@ class _AddStudentState extends State<AddStudent> {
                             keyboardType: TextInputType.number,
                             label: "DOB",
                             controller: _dobController,
+                            inputFormatters: [
+                              DateTextInputFormatter(
+                                format: ["dd", "mm", "yyyy"],
+                              )
+                            ],
                           ),
                         ),
                         IconButton(
@@ -108,7 +114,7 @@ class _AddStudentState extends State<AddStudent> {
                             onConfirm: (DateTime date) {
                               setState(() {
                                 _dobController.text = formatDate(
-                                    date, [dd, "-", mm, "-", "yyyy"]);
+                                    date, ["dd", "-", "mm", "-", "yyyy"]);
                               });
                             },
                           ),
