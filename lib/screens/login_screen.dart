@@ -1,11 +1,11 @@
 import 'package:akounter/provider/login_provider.dart';
-import 'package:akounter/screens/branch_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final _user = Provider.of<LoginProvider>(context, listen: false);
     return Container(
       color: Colors.white,
       child: Column(
@@ -40,17 +40,8 @@ class Login extends StatelessWidget {
             ),
             splashColor: Colors.blue,
             borderSide: BorderSide(color: Colors.black12, width: 2.0),
-            onPressed: () => Provider.of<LoginProvider>(context, listen: false)
-                .signInWithGoogle()
-                .whenComplete(
-                  () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => BranchScreen(),
-                    ),
-                  ),
-                )
-                .catchError((e) => print(e)),
+            onPressed: () =>
+                _user.signInWithGoogle().catchError((e) => print(e)),
           )
         ],
       ),

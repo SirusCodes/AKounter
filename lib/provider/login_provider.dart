@@ -19,13 +19,12 @@ class LoginProvider with ChangeNotifier {
 
   Future<void> signInWithGoogle() async {
     final GoogleSignInAccount googleSignInAccount =
-        await _googleSignIn.signIn();
+        await _googleSignIn.signIn().catchError((e) => print(e));
 
-    final GoogleSignInAuthentication googleSignInAuthentication =
-        await googleSignInAccount.authentication;
+    if (googleSignInAccount != null) {
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount.authentication;
 
-    if (googleSignInAuthentication.accessToken != null &&
-        googleSignInAuthentication.idToken != null) {
       final AuthCredential credential = GoogleAuthProvider.getCredential(
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken,
@@ -45,7 +44,5 @@ class LoginProvider with ChangeNotifier {
 
   void signOutGoogle() async {
     await _googleSignIn.signOut();
-
-    print("User Sign Out");
   }
 }

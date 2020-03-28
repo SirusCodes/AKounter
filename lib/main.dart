@@ -44,8 +44,14 @@ class MyApp extends StatelessWidget {
         accentColor: Colors.black,
         primaryColor: Colors.white,
         splashColor: Colors.black26,
+        cardTheme: CardTheme(elevation: 3.0),
         textTheme: TextTheme(
           display1: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w700),
+          display2: TextStyle(
+            fontSize: 25.0,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
         ),
       ),
       home: MultiProvider(

@@ -1,5 +1,6 @@
 import 'package:akounter/screens/add_data/add_entry.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class StudentDetails extends StatefulWidget {
   @override
@@ -24,7 +25,7 @@ class _StudentDetailsState extends State<StudentDetails> {
                 ),
                 IconButton(
                   icon: Icon(Icons.call),
-                  onPressed: () {},
+                  onPressed: () => launch("tel:1234567890"),
                 ),
               ],
               pinned: true,
