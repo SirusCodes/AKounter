@@ -1,9 +1,12 @@
+import 'package:akounter/models/branch_model.dart';
+import 'package:akounter/provider/branch_provider.dart';
 import 'package:akounter/widgets/c_textformfield.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AddBranch extends StatefulWidget {
-  const AddBranch({Key key}) : super(key: key);
-
+  const AddBranch({Key key, this.branch}) : super(key: key);
+  final BranchModel branch;
   @override
   _AddBranchState createState() => _AddBranchState();
 }
@@ -15,17 +18,27 @@ class _AddBranchState extends State<AddBranch> {
   TextEditingController _aboveGreen = TextEditingController();
   TextEditingController _member = TextEditingController();
 
-  bool _indirectCheck;
-
+  bool _indirectCheck = false;
+  BranchModel _model = BranchModel();
   @override
   void initState() {
-    _indirectCheck = false;
+    if (widget.branch.id != null) {
+      _model = widget.branch;
+      _model.id = _model.id.toString();
+      _nameController.text = _model.name;
+      _belowGreen.text = _model.belowGreen.toString();
+      _aboveGreen.text = _model.aboveGreen.toString();
+      _member.text = _model.memberDiscount.toString();
+      _indirectCheck = _model.indirectPayment;
+    }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final _branch = Provider.of<BranchProvider>(context);
     const _padding = const EdgeInsets.only(left: 15.0, right: 15.0, top: 15.0);
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Add Branch"),
@@ -49,40 +62,46 @@ class _AddBranchState extends State<AddBranch> {
                       controller: _nameController,
                       validator: (value) =>
                           _isEmpty(value) ? "Name can't be empty!" : null,
+                      onSaved: (value) {
+                        _model.name = value;
+                      },
                     ),
                   ),
                   Padding(
                     padding: _padding,
                     child: CTextFormField(
-                      hint: "400",
-                      keyboardType: TextInputType.number,
-                      label: "Below Green",
-                      controller: _belowGreen,
-                      validator: (value) =>
-                          _isEmpty(value) ? "Value can't be empty!" : null,
-                    ),
+                        hint: "400",
+                        keyboardType: TextInputType.number,
+                        label: "Below Green",
+                        controller: _belowGreen,
+                        validator: (value) =>
+                            _isEmpty(value) ? "Value can't be empty!" : null,
+                        onSaved: (value) =>
+                            _model.belowGreen = int.parse(value)),
                   ),
                   Padding(
                     padding: _padding,
                     child: CTextFormField(
-                      hint: "500",
-                      keyboardType: TextInputType.number,
-                      label: "Above Green",
-                      controller: _aboveGreen,
-                      validator: (value) =>
-                          _isEmpty(value) ? "Value can't be empty!" : null,
-                    ),
+                        hint: "500",
+                        keyboardType: TextInputType.number,
+                        label: "Above Green",
+                        controller: _aboveGreen,
+                        validator: (value) =>
+                            _isEmpty(value) ? "Value can't be empty!" : null,
+                        onSaved: (value) =>
+                            _model.aboveGreen = int.parse(value)),
                   ),
                   Padding(
                     padding: _padding,
                     child: CTextFormField(
-                      hint: "Member Discount",
-                      keyboardType: TextInputType.number,
-                      label: "Member Discount",
-                      controller: _member,
-                      validator: (value) =>
-                          _isEmpty(value) ? "Value can't be empty!" : null,
-                    ),
+                        hint: "50",
+                        keyboardType: TextInputType.number,
+                        label: "Member Discount",
+                        controller: _member,
+                        validator: (value) =>
+                            _isEmpty(value) ? "Value can't be empty!" : null,
+                        onSaved: (value) =>
+                            _model.memberDiscount = int.parse(value)),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -91,6 +110,7 @@ class _AddBranchState extends State<AddBranch> {
                         onChanged: (bool value) {
                           setState(() {
                             _indirectCheck = value;
+                            _model.indirectPayment = value;
                           });
                         },
                         value: _indirectCheck,
@@ -116,7 +136,10 @@ class _AddBranchState extends State<AddBranch> {
           if (_formKey.currentState.validate()) {
             _formKey.currentState.save();
             debugPrint("Saved");
-            _save();
+            if (_model.id == null)
+              _branch.addBranch(_model);
+            else
+              _branch.updateBranch(_model, _model.id);
             _clearAllTFF();
           }
         },
@@ -141,9 +164,6 @@ class _AddBranchState extends State<AddBranch> {
     });
   }
 
-  _save() {
-    // TODO: Add provider after completing ui
-  }
   @override
   void dispose() {
     _nameController.dispose();

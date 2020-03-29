@@ -1,9 +1,9 @@
 import 'package:akounter/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class LoginProvider with ChangeNotifier {
+class LoginProvider {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
@@ -22,23 +22,32 @@ class LoginProvider with ChangeNotifier {
         await _googleSignIn.signIn().catchError((e) => print(e));
 
     if (googleSignInAccount != null) {
-      final GoogleSignInAuthentication googleSignInAuthentication =
+      final GoogleSignInAuthentication googleSignInAuth =
           await googleSignInAccount.authentication;
+      if (googleSignInAuth.accessToken != null &&
+          googleSignInAuth.idToken != null) {
+        final AuthCredential credential = GoogleAuthProvider.getCredential(
+          accessToken: googleSignInAuth.accessToken,
+          idToken: googleSignInAuth.idToken,
+        );
+        final AuthResult authResult =
+            await _auth.signInWithCredential(credential);
+        final FirebaseUser user = authResult.user;
+        assert(!user.isAnonymous);
+        assert(await user.getIdToken() != null);
 
-      final AuthCredential credential = GoogleAuthProvider.getCredential(
-        accessToken: googleSignInAuthentication.accessToken,
-        idToken: googleSignInAuthentication.idToken,
-      );
-      final AuthResult authResult =
-          await _auth.signInWithCredential(credential);
-      final FirebaseUser user = authResult.user;
-      assert(!user.isAnonymous);
-      assert(await user.getIdToken() != null);
+        final FirebaseUser currentUser = await _auth.currentUser();
+        assert(user.uid == currentUser.uid);
 
-      final FirebaseUser currentUser = await _auth.currentUser();
-      assert(user.uid == currentUser.uid);
-
-      return _userFromFirebase(user);
+        return _userFromFirebase(user);
+      } else {
+        throw PlatformException(
+            code: 'ERROR_MISSING_GOOGLE_AUTH_TOKEN',
+            message: 'Missing Google Auth Token');
+      }
+    } else {
+      throw PlatformException(
+          code: 'ERROR_ABORTED_BY_USER', message: 'Sign in aborted by user');
     }
   }
 

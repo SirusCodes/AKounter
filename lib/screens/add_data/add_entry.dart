@@ -158,8 +158,10 @@ class _AddEntryState extends State<AddEntry> {
       return Equipments();
     } else if (_paymentType == PaymentType.dress) {
       return Dress();
-    } else {
+    } else if (_paymentType == PaymentType.others) {
       return Others();
+    } else {
+      return Container();
     }
   }
 }
