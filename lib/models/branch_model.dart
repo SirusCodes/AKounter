@@ -15,7 +15,7 @@ class BranchModel {
     this.memberDiscount,
   });
 
-  BranchModel.fromMap(Map snapshot, String id)
+  BranchModel.fromJson(Map snapshot, String id)
       : id = id ?? '',
         name = snapshot['name'] ?? '',
         aboveGreen = snapshot['above_green'] ?? 0,

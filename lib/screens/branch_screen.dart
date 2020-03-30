@@ -1,9 +1,10 @@
 import 'package:akounter/models/branch_model.dart';
 import 'package:akounter/provider/branch_provider.dart';
+import 'package:akounter/provider/student_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import './add_data/add_branches.dart';
-import './student_list.dart';
+import './student_screen.dart';
 import 'package:flutter/material.dart';
 
 class BranchScreen extends StatelessWidget {
@@ -41,7 +42,7 @@ class BranchScreen extends StatelessWidget {
             builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (snapshot.hasData) {
                 _branchList = snapshot.data.documents
-                    .map((f) => BranchModel.fromMap(f.data, f.documentID))
+                    .map((f) => BranchModel.fromJson(f.data, f.documentID))
                     .toList();
 
                 return ListView.builder(
@@ -64,10 +65,13 @@ class BranchScreen extends StatelessWidget {
                         ),
                         title: Text(_branchList[i].name),
                         onTap: () {
+                          StudentProvider().id = _branchList[i].id;
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => StudentList(),
+                              builder: (context) => StudentScreen(
+                                branchID: _branchList[i].id,
+                              ),
                             ),
                           );
                         },

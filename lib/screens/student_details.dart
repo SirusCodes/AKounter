@@ -1,13 +1,42 @@
+import 'package:akounter/models/student_model.dart';
 import 'package:akounter/screens/add_data/add_entry.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class StudentDetails extends StatefulWidget {
+  const StudentDetails({this.student});
+  final StudentModel student;
   @override
   _StudentDetailsState createState() => _StudentDetailsState();
 }
 
 class _StudentDetailsState extends State<StudentDetails> {
+  var _belts = [
+    "White",
+    "Orange",
+    "Yellow",
+    "Green",
+    "Blue",
+    "Purple",
+    "Brown 3",
+    "Brown 2",
+    "Brown 1",
+    "Black"
+  ];
+  var _months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,13 +54,13 @@ class _StudentDetailsState extends State<StudentDetails> {
                 ),
                 IconButton(
                   icon: Icon(Icons.call),
-                  onPressed: () => launch("tel:1234567890"),
+                  onPressed: () => launch("tel:${widget.student.number}"),
                 ),
               ],
               pinned: true,
               expandedHeight: 200.0,
               flexibleSpace: FlexibleSpaceBar(
-                title: Text("Dummy name"),
+                title: Text(widget.student.name),
                 background: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -39,21 +68,14 @@ class _StudentDetailsState extends State<StudentDetails> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Text(
-                          "Roll No. : Dummy no.",
+                          "Number : ${widget.student.number}",
                           style: TextStyle(
                             color: Theme.of(context).accentColor,
                             fontSize: 16.0,
                           ),
                         ),
                         Text(
-                          "Branch : Test Branch",
-                          style: TextStyle(
-                            color: Theme.of(context).accentColor,
-                            fontSize: 16.0,
-                          ),
-                        ),
-                        Text(
-                          "Number : 1234567890",
+                          "Member : ${widget.student.gender}",
                           style: TextStyle(
                             color: Theme.of(context).accentColor,
                             fontSize: 16.0,
@@ -65,21 +87,14 @@ class _StudentDetailsState extends State<StudentDetails> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Text(
-                          "Belt : white",
+                          "Belt : ${_belts[widget.student.belt]}",
                           style: TextStyle(
                             color: Theme.of(context).accentColor,
                             fontSize: 16.0,
                           ),
                         ),
                         Text(
-                          "Fee Paid Till : Jan",
-                          style: TextStyle(
-                            color: Theme.of(context).accentColor,
-                            fontSize: 16.0,
-                          ),
-                        ),
-                        Text(
-                          "Member : No",
+                          "Fees Till : ${_months[widget.student.fees]}",
                           style: TextStyle(
                             color: Theme.of(context).accentColor,
                             fontSize: 16.0,

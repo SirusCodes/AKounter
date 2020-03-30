@@ -5,19 +5,13 @@ import 'package:flutter/foundation.dart';
 
 class BranchProvider with ChangeNotifier {
   BranchServices _branches = BranchServices("branches");
-  BranchModel _branchModel = BranchModel();
+
   List<BranchModel> products;
-
-  void setBranch(BranchModel branchModel) {
-    _branchModel = branchModel;
-  }
-
-  BranchModel getBranch() => _branchModel;
 
   Future<List<BranchModel>> fetchBranches() async {
     var result = await _branches.getDataCollection();
     products = result.documents
-        .map((doc) => BranchModel.fromMap(doc.data, doc.documentID))
+        .map((doc) => BranchModel.fromJson(doc.data, doc.documentID))
         .toList();
     return products;
   }
@@ -28,7 +22,7 @@ class BranchProvider with ChangeNotifier {
 
   Future<BranchModel> getBranchById(String id) async {
     var doc = await _branches.getBranchById(id);
-    return BranchModel.fromMap(doc.data, doc.documentID);
+    return BranchModel.fromJson(doc.data, doc.documentID);
   }
 
   Future removeBranch(String id) async {

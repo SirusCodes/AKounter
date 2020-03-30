@@ -1,14 +1,17 @@
+import 'package:akounter/models/student_model.dart';
+import 'package:akounter/provider/student_provider.dart';
 import 'package:akounter/widgets/c_textformfield.dart';
 import 'package:date_format/date_format.dart';
 import 'package:date_text_input_formatter/date_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:provider/provider.dart';
 
 enum Gender { male, female }
 
 class AddStudent extends StatefulWidget {
-  const AddStudent({Key key}) : super(key: key);
-
+  const AddStudent({Key key, this.student}) : super(key: key);
+  final StudentModel student;
   @override
   _AddStudentState createState() => _AddStudentState();
 }
@@ -19,12 +22,13 @@ class _AddStudentState extends State<AddStudent> {
   TextEditingController _dobController = TextEditingController();
   TextEditingController _numController = TextEditingController();
 
-  bool _indirectCheck;
+  bool _memberCheck = false, _onTrial = false;
 
   Gender _gender = Gender.male;
 
   double _sliderBelt, _sliderMonth;
 
+  StudentModel _student = StudentModel();
   var _belts = [
     "White",
     "Orange",
@@ -53,14 +57,18 @@ class _AddStudentState extends State<AddStudent> {
   ];
   @override
   void initState() {
-    _indirectCheck = false;
     _sliderBelt = 0.0;
     _sliderMonth = (DateTime.now().month - 1).ceilToDouble();
+    if (widget.student.id != null) {
+      _student = widget.student;
+      _update();
+    }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final _students = Provider.of<StudentProvider>(context);
     const _padding = const EdgeInsets.only(left: 15.0, right: 15.0, top: 15.0);
     return Scaffold(
       appBar: AppBar(
@@ -85,6 +93,7 @@ class _AddStudentState extends State<AddStudent> {
                       controller: _nameController,
                       validator: (value) =>
                           _isEmpty(value) ? "Name can't be empty!" : null,
+                      onSaved: (value) => _student.name = value,
                     ),
                   ),
                   Padding(
@@ -103,6 +112,7 @@ class _AddStudentState extends State<AddStudent> {
                                 format: ["dd", "mm", "yyyy"],
                               )
                             ],
+                            onSaved: (value) => _student.dob = value,
                           ),
                         ),
                         IconButton(
@@ -129,21 +139,35 @@ class _AddStudentState extends State<AddStudent> {
                       keyboardType: TextInputType.phone,
                       label: "Number",
                       controller: _numController,
+                      onSaved: (value) => _student.number = value,
                     ),
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       Checkbox(
                         onChanged: (bool value) {
                           setState(() {
-                            _indirectCheck = value;
+                            _memberCheck = value;
                           });
                         },
-                        value: _indirectCheck,
+                        value: _memberCheck,
                       ),
                       Text(
-                        "Is Member   ",
+                        "Is Member",
+                        style: TextStyle(
+                            fontSize: 16.0, fontWeight: FontWeight.w600),
+                      ),
+                      Checkbox(
+                        onChanged: (bool value) {
+                          setState(() {
+                            _onTrial = value;
+                          });
+                        },
+                        value: _onTrial,
+                      ),
+                      Text(
+                        "On Trial",
                         style: TextStyle(
                             fontSize: 16.0, fontWeight: FontWeight.w600),
                       )
@@ -259,6 +283,10 @@ class _AddStudentState extends State<AddStudent> {
             _formKey.currentState.save();
             debugPrint("Saved");
             _save();
+            if (_student.id != null)
+              _students.updateStudent(_student, _student.id);
+            else
+              _students.addStudent(_student);
             _clearAllTFF();
           }
         },
@@ -278,21 +306,36 @@ class _AddStudentState extends State<AddStudent> {
       _nameController.clear();
       _numController.clear();
       _dobController.clear();
-      _indirectCheck = false;
+      _memberCheck = false;
       _sliderBelt = 0.0;
       _sliderMonth = (DateTime.now().month - 1).ceilToDouble();
       _gender = Gender.male;
     });
   }
 
-  _save() {
-    // TODO: Add provider after completing ui
+  void _save() {
+    _student.isMember = _memberCheck;
+    _student.onTrial = _onTrial;
+    _student.gender = _gender == Gender.male ? "Male" : "Female";
+    _student.belt = _sliderBelt.toInt();
+    _student.fees = _sliderMonth.toInt();
   }
+
   @override
   void dispose() {
     _nameController.dispose();
     _numController.dispose();
     _dobController.dispose();
     super.dispose();
+  }
+
+  void _update() {
+    _nameController.text = _student.name;
+    _numController.text = _student.number;
+    _dobController.text = _student.dob;
+    _memberCheck = _student.isMember;
+    _sliderBelt = _student.belt.toDouble();
+    _sliderMonth = _student.fees.toDouble();
+    _gender = _student.gender == "Male" ? Gender.male : Gender.female;
   }
 }

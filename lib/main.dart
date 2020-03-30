@@ -1,5 +1,6 @@
 import 'package:akounter/provider/branch_provider.dart';
 import 'package:akounter/provider/login_provider.dart';
+import 'package:akounter/provider/student_provider.dart';
 import 'package:akounter/widgets/auth_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,6 +26,8 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<BranchProvider>(create: (_) => BranchProvider()),
+        ChangeNotifierProvider<StudentProvider>(
+            create: (_) => StudentProvider()),
         Provider<LoginProvider>(create: (_) => LoginProvider()),
       ],
       child: MaterialApp(
