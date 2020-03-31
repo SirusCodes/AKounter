@@ -253,7 +253,7 @@ class _AddStudentState extends State<AddStudent> {
                         ),
                         Slider(
                           label: _months[_sliderMonth.round()],
-                          divisions: 12,
+                          divisions: 11,
                           value: _sliderMonth,
                           onChanged: (value) {
                             setState(() {
