@@ -1,9 +1,8 @@
 import 'package:akounter/models/branch_model.dart';
 import 'package:akounter/services/branch_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 
-class BranchProvider with ChangeNotifier {
+class BranchProvider {
   BranchServices _branches = BranchServices("branches");
 
   List<BranchModel> products;

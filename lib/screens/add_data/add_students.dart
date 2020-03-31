@@ -28,7 +28,7 @@ class _AddStudentState extends State<AddStudent> {
 
   double _sliderBelt, _sliderMonth;
 
-  StudentModel _student = StudentModel();
+  StudentModel _student = StudentModel(pending: 0);
   var _belts = [
     "White",
     "Orange",

@@ -1,16 +1,10 @@
+import 'package:akounter/doc_id.dart';
 import 'package:akounter/models/student_model.dart';
 import 'package:akounter/services/student_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 
-class StudentProvider with ChangeNotifier {
-  static String _id = "";
-
-  set id(String docID) {
-    _id = docID;
-  }
-
-  StudentServices _students = StudentServices(_id);
+class StudentProvider {
+  StudentServices _students = StudentServices();
 
   List<StudentModel> products;
 
@@ -23,8 +17,7 @@ class StudentProvider with ChangeNotifier {
   }
 
   Stream<QuerySnapshot> fetchStudentesAsStream() {
-    print(_id + " from provider");
-
+    print(DocID().getBranchID);
     return _students.streamDataCollection();
   }
 

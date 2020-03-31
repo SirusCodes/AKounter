@@ -1,6 +1,6 @@
+import 'package:akounter/doc_id.dart';
 import 'package:akounter/models/branch_model.dart';
 import 'package:akounter/provider/branch_provider.dart';
-import 'package:akounter/provider/student_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import './add_data/add_branches.dart';
@@ -65,7 +65,7 @@ class BranchScreen extends StatelessWidget {
                         ),
                         title: Text(_branchList[i].name),
                         onTap: () {
-                          StudentProvider().id = _branchList[i].id;
+                          DocID().setBranchID = _branchList[i].id;
                           Navigator.push(
                             context,
                             MaterialPageRoute(
