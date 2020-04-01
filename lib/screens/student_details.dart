@@ -1,17 +1,11 @@
-import 'package:akounter/models/student_model.dart';
+import 'package:akounter/locator.dart';
 import 'package:akounter/screens/add_data/add_entry.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../data.dart';
 
-class StudentDetails extends StatefulWidget {
-  const StudentDetails({this.student});
-  final StudentModel student;
-  @override
-  _StudentDetailsState createState() => _StudentDetailsState();
-}
-
-class _StudentDetailsState extends State<StudentDetails> {
-  var _belts = [
+class StudentDetails extends StatelessWidget {
+  final _belts = [
     "White",
     "Orange",
     "Yellow",
@@ -23,7 +17,7 @@ class _StudentDetailsState extends State<StudentDetails> {
     "Brown 1",
     "Black"
   ];
-  var _months = [
+  final _months = [
     "January",
     "February",
     "March",
@@ -37,6 +31,7 @@ class _StudentDetailsState extends State<StudentDetails> {
     "November",
     "December"
   ];
+  final _student = locator<Data>().getStudent;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,13 +49,13 @@ class _StudentDetailsState extends State<StudentDetails> {
                 ),
                 IconButton(
                   icon: Icon(Icons.call),
-                  onPressed: () => launch("tel:${widget.student.number}"),
+                  onPressed: () => launch("tel:${_student.number}"),
                 ),
               ],
               pinned: true,
               expandedHeight: 200.0,
               flexibleSpace: FlexibleSpaceBar(
-                title: Text(widget.student.name),
+                title: Text(_student.name),
                 background: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -68,14 +63,14 @@ class _StudentDetailsState extends State<StudentDetails> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Text(
-                          "Number : ${widget.student.number}",
+                          "Number : ${_student.number}",
                           style: TextStyle(
                             color: Theme.of(context).accentColor,
                             fontSize: 16.0,
                           ),
                         ),
                         Text(
-                          "Member : ${widget.student.gender}",
+                          "Member : ${_student.gender}",
                           style: TextStyle(
                             color: Theme.of(context).accentColor,
                             fontSize: 16.0,
@@ -87,14 +82,14 @@ class _StudentDetailsState extends State<StudentDetails> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Text(
-                          "Belt : ${_belts[widget.student.belt]}",
+                          "Belt : ${_belts[_student.belt]}",
                           style: TextStyle(
                             color: Theme.of(context).accentColor,
                             fontSize: 16.0,
                           ),
                         ),
                         Text(
-                          "Fees Till : ${_months[widget.student.fees]}",
+                          "Fees Till : ${_months[_student.fees]}",
                           style: TextStyle(
                             color: Theme.of(context).accentColor,
                             fontSize: 16.0,

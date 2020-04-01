@@ -1,4 +1,5 @@
 import 'package:akounter/provider/add_entry_provider.dart';
+import 'package:akounter/screens/student_details.dart';
 import 'package:akounter/widgets/add_entry_components/dress.dart';
 import 'package:akounter/widgets/add_entry_components/equipments.dart';
 import 'package:akounter/widgets/add_entry_components/examination.dart';
@@ -55,6 +56,17 @@ class _AddEntryState extends State<AddEntry> {
       appBar: AppBar(
         elevation: 0.0,
         title: Text("Add Entry"),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.list),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => StudentDetails(),
+              ),
+            ),
+          )
+        ],
       ),
       body: SizedBox.expand(
         child: Container(
