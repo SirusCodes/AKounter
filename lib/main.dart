@@ -1,3 +1,4 @@
+import 'package:akounter/locator.dart';
 import 'package:akounter/provider/branch_provider.dart';
 import 'package:akounter/provider/login_provider.dart';
 import 'package:akounter/provider/student_provider.dart';
@@ -8,7 +9,7 @@ import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  setup();
   runApp(MyApp());
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   SystemChrome.setSystemUIOverlayStyle(

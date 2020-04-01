@@ -1,4 +1,4 @@
-class DocID {
+class Data {
   static String _branchID;
   set setBranchID(String newID) {
     _branchID = newID;

@@ -1,4 +1,3 @@
-import 'package:akounter/doc_id.dart';
 import 'package:akounter/models/student_model.dart';
 import 'package:akounter/services/student_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -17,7 +16,6 @@ class StudentProvider {
   }
 
   Stream<QuerySnapshot> fetchStudentesAsStream() {
-    print(DocID().getBranchID);
     return _students.streamDataCollection();
   }
 

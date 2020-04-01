@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../doc_id.dart';
+import '../data.dart';
+import '../locator.dart';
 
 class StudentServices {
   Firestore _db = Firestore.instance;
   CollectionReference ref;
+
+  var _id = locator<Data>();
 
   StudentServices() {
     _db.settings(persistenceEnabled: true);
@@ -43,7 +46,7 @@ class StudentServices {
   void _updateDB() {
     ref = _db
         .collection("branches")
-        .document(DocID().getBranchID)
+        .document(_id.getBranchID)
         .collection("students");
   }
 }
