@@ -1,3 +1,4 @@
+import 'package:akounter/locator.dart';
 import 'package:akounter/models/student_model.dart';
 import 'package:akounter/provider/student_provider.dart';
 import 'package:akounter/screens/add_data/add_students.dart';
@@ -6,9 +7,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../data.dart';
+
 class StudentScreen extends StatelessWidget {
-  const StudentScreen({Key key, this.branchID}) : super(key: key);
-  final String branchID;
+  const StudentScreen({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final _students = Provider.of<StudentProvider>(context);
@@ -65,6 +68,7 @@ class StudentScreen extends StatelessWidget {
                       ),
                       title: Text(_studentList[i].name),
                       onTap: () {
+                        locator<Data>().setStudent = _studentList[i];
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -77,7 +81,6 @@ class StudentScreen extends StatelessWidget {
                       trailing: IconButton(
                         icon: Icon(Icons.delete),
                         onPressed: () {
-                          print(_studentList[i].name);
                           _students.removeStudent(_studentList[i].id);
                         },
                       ),

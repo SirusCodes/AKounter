@@ -1,53 +1,47 @@
+import 'package:akounter/provider/add_entry_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class Equipments extends StatefulWidget {
-  const Equipments({Key key}) : super(key: key);
-
-  @override
-  _EquipmentsState createState() => _EquipmentsState();
-}
-
-class _EquipmentsState extends State<Equipments> {
-  bool _gloves = false,
-      _kickpad = false,
-      _chestguard = false,
-      _footguard = false;
-
+class Equipments extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return GridView.count(
-      childAspectRatio: 3.2,
-      shrinkWrap: true,
-      crossAxisCount: 2,
-      children: <Widget>[
-        _checkBoxWithText(
-          Checkbox(
-            value: _gloves,
-            onChanged: (value) => setState(() => _gloves = value),
-          ),
-          "Gloves",
-        ),
-        _checkBoxWithText(
-          Checkbox(
-            value: _kickpad,
-            onChanged: (value) => setState(() => _kickpad = value),
-          ),
-          "Kickpad",
-        ),
-        _checkBoxWithText(
-            Checkbox(
-              value: _chestguard,
-              onChanged: (value) => setState(() => _chestguard = value),
+    return Consumer<AddEntryProvider>(
+      builder: (_, _entry, __) {
+        return GridView.count(
+          childAspectRatio: 3.2,
+          shrinkWrap: true,
+          crossAxisCount: 2,
+          children: <Widget>[
+            _checkBoxWithText(
+              Checkbox(
+                value: _entry.getGloves,
+                onChanged: (value) => _entry.setGloves = value,
+              ),
+              "Gloves",
             ),
-            "ChestGuard"),
-        _checkBoxWithText(
-          Checkbox(
-            value: _footguard,
-            onChanged: (value) => setState(() => _footguard = value),
-          ),
-          "FootGuard",
-        ),
-      ],
+            _checkBoxWithText(
+              Checkbox(
+                value: _entry.getKickpad,
+                onChanged: (value) => _entry.setKickpad = value,
+              ),
+              "Kickpad",
+            ),
+            _checkBoxWithText(
+                Checkbox(
+                  value: _entry.getChestguard,
+                  onChanged: (value) => _entry.setChestguard = value,
+                ),
+                "ChestGuard"),
+            _checkBoxWithText(
+              Checkbox(
+                value: _entry.getFootguard,
+                onChanged: (value) => _entry.setFootguard = value,
+              ),
+              "FootGuard",
+            ),
+          ],
+        );
+      },
     );
   }
 

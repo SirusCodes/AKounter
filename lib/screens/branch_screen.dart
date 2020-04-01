@@ -66,13 +66,11 @@ class BranchScreen extends StatelessWidget {
                         ),
                         title: Text(_branchList[i].name),
                         onTap: () {
-                          locator<Data>().setBranchID = _branchList[i].id;
+                          locator<Data>().setBranch = _branchList[i];
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => StudentScreen(
-                                branchID: _branchList[i].id,
-                              ),
+                              builder: (context) => StudentScreen(),
                             ),
                           );
                         },

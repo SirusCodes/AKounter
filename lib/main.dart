@@ -2,6 +2,7 @@ import 'package:akounter/locator.dart';
 import 'package:akounter/provider/branch_provider.dart';
 import 'package:akounter/provider/login_provider.dart';
 import 'package:akounter/provider/student_provider.dart';
+import 'package:akounter/provider/add_entry_provider.dart';
 import 'package:akounter/widgets/auth_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -29,6 +30,8 @@ class MyApp extends StatelessWidget {
         Provider<BranchProvider>(create: (_) => BranchProvider()),
         Provider<StudentProvider>(create: (_) => StudentProvider()),
         Provider<LoginProvider>(create: (_) => LoginProvider()),
+        ChangeNotifierProvider<AddEntryProvider>(
+            create: (_) => AddEntryProvider())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

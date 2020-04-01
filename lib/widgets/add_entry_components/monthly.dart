@@ -1,5 +1,9 @@
+import 'package:akounter/locator.dart';
+import 'package:akounter/provider/add_entry_provider.dart';
 import 'package:akounter/widgets/c_textformfield.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../data.dart';
 
 class Monthly extends StatefulWidget {
   Monthly({Key key}) : super(key: key);
@@ -9,9 +13,31 @@ class Monthly extends StatefulWidget {
 }
 
 class _MonthlyState extends State<Monthly> {
+  var _student = locator<Data>();
+
+  TextEditingController _perMonth = TextEditingController();
+  TextEditingController _invoice = TextEditingController();
+
   double _slider = 1.0;
   @override
+  void initState() {
+    _perMonth.text = _student.getStudent.belt <= 3
+        ? _student.getBranch.belowGreen.toString()
+        : _student.getBranch.aboveGreen.toString();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _perMonth.dispose();
+    _invoice.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final _entryProvider =
+        Provider.of<AddEntryProvider>(context, listen: false);
     return Column(
       children: <Widget>[
         Padding(
@@ -20,14 +46,35 @@ class _MonthlyState extends State<Monthly> {
             label: "Per month",
             hint: "500",
             keyboardType: TextInputType.number,
+            controller: _perMonth,
             validator: (value) {
               if (value == null || value <= 0) {
                 return "Enter a valid Amount";
               }
               return null;
             },
+            onChanged: (value) {
+              _entryProvider.monthly(int.parse(value), _slider.toInt());
+            },
           ),
         ),
+        if (locator<Data>().getBranch.indirectPayment)
+          Padding(
+            padding:
+                const EdgeInsets.only(right: 12.0, left: 12.0, bottom: 12.0),
+            child: CTextFormField(
+              label: "Invoice",
+              hint: "123456",
+              controller: _invoice,
+              validator: (value) {
+                if (value == null || value <= 0) {
+                  return "Enter a valid Invoice Number";
+                }
+                return null;
+              },
+              onChanged: (value) => _entryProvider.invoice = value,
+            ),
+          ),
         Slider(
           label: _slider.round().toString(),
           divisions: 5,
@@ -36,6 +83,8 @@ class _MonthlyState extends State<Monthly> {
             setState(() {
               _slider = value;
             });
+
+            _entryProvider.monthly(int.parse(_perMonth.text), _slider.toInt());
           },
           min: 1,
           max: 6,

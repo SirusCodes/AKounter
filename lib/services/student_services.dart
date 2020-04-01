@@ -46,7 +46,7 @@ class StudentServices {
   void _updateDB() {
     ref = _db
         .collection("branches")
-        .document(_id.getBranchID)
+        .document(_id.getBranch.id)
         .collection("students");
   }
 }

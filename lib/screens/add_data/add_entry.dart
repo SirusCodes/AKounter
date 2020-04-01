@@ -1,10 +1,15 @@
+import 'package:akounter/provider/add_entry_provider.dart';
 import 'package:akounter/widgets/add_entry_components/dress.dart';
 import 'package:akounter/widgets/add_entry_components/equipments.dart';
 import 'package:akounter/widgets/add_entry_components/examination.dart';
 import 'package:akounter/widgets/add_entry_components/monthly.dart';
 import 'package:akounter/widgets/add_entry_components/others.dart';
+import 'package:akounter/widgets/c_textformfield.dart';
 import 'package:flutter/material.dart';
 import 'package:akounter/enums/type_payment_enum.dart';
+import 'package:provider/provider.dart';
+import '../../data.dart';
+import '../../locator.dart';
 
 class AddEntry extends StatefulWidget {
   AddEntry({Key key}) : super(key: key);
@@ -27,8 +32,18 @@ class _AddEntryState extends State<AddEntry> {
 
   PaymentType _paymentType = PaymentType.monthly;
 
+  var _entry = locator<AddEntryProvider>();
+  var _student = locator<Data>();
+
   @override
   void initState() {
+    _entry.setPending = _student.getStudent.pending;
+
+    if (_student.getStudent.belt <= 3)
+      _entry.setSubtotal = _student.getBranch.belowGreen;
+    else
+      _entry.setSubtotal = _student.getBranch.aboveGreen;
+
     _reason = _reasons[0];
     super.initState();
   }
@@ -53,21 +68,42 @@ class _AddEntryState extends State<AddEntry> {
                     width: _width,
                     child: Card(
                       elevation: 3.0,
-                      child: Column(
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Text(
-                              "Total:   ***",
-                              style: Theme.of(context).textTheme.display2,
-                            ),
-                          ),
-                          Text("Subtotal:   ***"),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text("Pending:   *"),
-                          ),
-                        ],
+                      child: Consumer<AddEntryProvider>(
+                        builder: (_, _entry, __) {
+                          return Column(
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Text(
+                                  "Total:   ${_entry.getTotal}",
+                                  style: Theme.of(context).textTheme.display2,
+                                ),
+                              ),
+                              Text("Subtotal:   ${_entry.getSubtotal}"),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text("Pending:   ${_entry.getPending}"),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: CTextFormField(
+                                  label: "Amount given",
+                                  hint: "1000",
+                                  keyboardType: TextInputType.number,
+                                  validator: (value) {
+                                    if (value == null || value == "") {
+                                      return "Enter a defined value";
+                                    }
+                                    return null;
+                                  },
+                                  onChanged: (value) {
+                                    _entry.setAmountGiven = int.parse(value);
+                                  },
+                                ),
+                              )
+                            ],
+                          );
+                        },
                       ),
                     ),
                   ),
@@ -91,6 +127,7 @@ class _AddEntryState extends State<AddEntry> {
                                 _reason = value;
                                 _changeReasons(value);
                               });
+                              _entry.setReason = _reason;
                             },
                           ),
                         ),
