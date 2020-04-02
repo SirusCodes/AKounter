@@ -47,12 +47,6 @@ class _MonthlyState extends State<Monthly> {
             hint: "500",
             keyboardType: TextInputType.number,
             controller: _perMonth,
-            validator: (value) {
-              if (value == null || value <= 0) {
-                return "Enter a valid Amount";
-              }
-              return null;
-            },
             onChanged: (value) {
               _entryProvider.monthly(int.parse(value), _slider.toInt());
             },
@@ -66,12 +60,6 @@ class _MonthlyState extends State<Monthly> {
               label: "Invoice",
               hint: "123456",
               controller: _invoice,
-              validator: (value) {
-                if (value == null || value <= 0) {
-                  return "Enter a valid Invoice Number";
-                }
-                return null;
-              },
               onChanged: (value) => _entryProvider.invoice = value,
             ),
           ),
@@ -83,7 +71,7 @@ class _MonthlyState extends State<Monthly> {
             setState(() {
               _slider = value;
             });
-
+            _entryProvider.setTotalMonth = value.toInt();
             _entryProvider.monthly(int.parse(_perMonth.text), _slider.toInt());
           },
           min: 1,

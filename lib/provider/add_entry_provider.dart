@@ -1,13 +1,14 @@
 import 'package:akounter/data.dart';
 import 'package:akounter/enums/dress_size_enum.dart';
 import 'package:akounter/locator.dart';
+import 'package:akounter/provider/student_provider.dart';
 import 'package:flutter/foundation.dart';
 
 //! may refactor it later
 
 class AddEntryProvider extends ChangeNotifier {
   static int _total = 0, _subtotal = 0, _pending = 0, _amountGiven;
-  static String _reason, _detailedReason, _invoiceNo;
+  static String _reason = "Monthly", _detailedReason, _invoiceNo;
 
   var _student = locator<Data>();
 
@@ -69,34 +70,45 @@ class AddEntryProvider extends ChangeNotifier {
   // reason and detailed reason
   set setReason(String reason) {
     _reason = reason;
-    if (reason == "Examination") {
-      examination();
-    }
+    if (reason == "Examination") examination();
   }
 
-  String get detailedReason => _detailedReason;
+  set setDetailedReason(String detailReason) {
+    _detailedReason = detailReason;
+    print(detailReason);
+  }
+
+  String get getDetailedReason => _detailedReason;
+  String get getReason => _reason;
 
   //
   // monthy
   //
+  static int _totalMonth = 1;
   void monthly(int perMonth, int totalMonth) {
-    _subtotal = perMonth * totalMonth;
-    updateAsMonthly(totalMonth);
+    _subtotal = perMonth * _totalMonth;
     updateTotal();
     print(_subtotal);
   }
 
-  updateAsMonthly(int totalM) {
-    _detailedReason = "";
-    int current = 10;
-    while (totalM > 0) {
-      _detailedReason +=
-          totalM != 1 ? _months[++current] + ", " : _months[++current];
+  // getter and setter for total months
+  int get getTotalMonth => _totalMonth;
+  set setTotalMonth(int value) {
+    _totalMonth = value;
+  }
+
+  String updateAsMonthly() {
+    String detailedReason = "";
+    int current = _student.getStudent.fees;
+
+    for (int i = 0; i < _totalMonth; i++) {
       // -1 so in next iteration it will be 0
       if (current == 11) current = -1;
-      totalM--;
+      detailedReason +=
+          _totalMonth != 1 ? _months[++current] + ", " : _months[++current];
     }
-    _reason += _student.getBranch.indirectPayment ? "($_invoiceNo)" : "";
+
+    return detailedReason;
   }
 
   // invoice
@@ -160,29 +172,34 @@ class AddEntryProvider extends ChangeNotifier {
 
   void equipment() {
     _subtotal = 0;
-    List<String> equip = [];
-    _detailedReason = "";
-    if (_gloves) {
-      _subtotal += 450;
-      equip.add("Gloves");
-    }
-    if (_kickpad) {
-      _subtotal += 550;
-      equip.add("Kickpad");
-    }
-    if (_chestguard) {
-      _subtotal += 750;
-      equip.add("Chestguard");
-    }
-    if (_footguard) {
-      _subtotal += 850;
-      equip.add("Footguard");
-    }
 
-    _detailedReason = equip.toString();
-    _detailedReason = _detailedReason.substring(1, _detailedReason.length - 1);
+    if (_gloves) _subtotal += 450;
+
+    if (_kickpad) _subtotal += 550;
+
+    if (_chestguard) _subtotal += 750;
+
+    if (_footguard) _subtotal += 850;
 
     updateTotal();
+  }
+
+  String detailEquipment() {
+    List<String> equip = [];
+    String detailedReason = "";
+
+    if (_gloves) equip.add("Gloves");
+
+    if (_kickpad) equip.add("Kickpad");
+
+    if (_chestguard) equip.add("Chestguard");
+
+    if (_footguard) equip.add("Footguard");
+
+    detailedReason = equip.toString();
+    detailedReason = detailedReason.substring(1, detailedReason.length - 1);
+
+    return detailedReason;
   }
 
   //
@@ -190,7 +207,7 @@ class AddEntryProvider extends ChangeNotifier {
   //
   DressSP _dressSP = DressSP.none;
   int _size;
-  set setSP(DressSP sp) {
+  setSP(DressSP sp) {
     _dressSP = sp;
     dress(_size);
   }
@@ -202,19 +219,11 @@ class AddEntryProvider extends ChangeNotifier {
 
   void dress(int size) {
     if (size > 11 && size < 25) _subtotal = updateAsDress(size);
-    _detailedReason = _size.toString() + " ";
-    if (_dressSP == DressSP.sp) {
-      _subtotal += 30;
-      _detailedReason += "SP";
-    }
-    if (_dressSP == DressSP.vsp) {
-      _subtotal += 60;
-      _detailedReason += "VSP";
-    }
-    if (_dressSP == DressSP.vvsp) {
-      _subtotal += 120;
-      _detailedReason += "VVSP";
-    }
+
+    if (_dressSP == DressSP.sp) _subtotal += 30;
+    if (_dressSP == DressSP.vsp) _subtotal += 60;
+    if (_dressSP == DressSP.vvsp) _subtotal += 120;
+
     updateTotal();
   }
 
@@ -226,6 +235,58 @@ class AddEntryProvider extends ChangeNotifier {
       subtotal += 30;
     }
     return subtotal;
+  }
+
+  String detailDress() {
+    String detailedReason = _size.toString() + " ";
+
+    if (_dressSP == DressSP.sp) detailedReason += "SP";
+    if (_dressSP == DressSP.vsp) detailedReason += "VSP";
+    if (_dressSP == DressSP.vvsp) detailedReason += "VVSP";
+
+    return detailedReason;
+  }
+
+  //
+  // save
+  //
+  void save() {
+    switch (_reason) {
+      case "Monthly":
+        _detailedReason = updateAsMonthly();
+        if (_student.getBranch.indirectPayment) _reason += "($_invoiceNo)";
+        break;
+      case 'Equipments':
+        _detailedReason = detailEquipment();
+        break;
+      case 'Dress':
+        _detailedReason = detailDress();
+        break;
+      case 'Card':
+        _detailedReason = "Card";
+        break;
+    }
+
+    _pending = _amountGiven - _total;
+  }
+
+  void postSave() {
+    if (_pending != _student.getStudent.pending) {
+      _student.getStudent.pending = _pending;
+      StudentProvider()
+          .updateStudent(_student.getStudent, _student.getStudent.id);
+    }
+    if (_reason.startsWith("Monthly")) {
+      int newFees = _student.getStudent.fees;
+      newFees = (newFees + _totalMonth) % 12;
+      _student.getStudent.fees = newFees;
+      StudentProvider()
+          .updateStudent(_student.getStudent, _student.getStudent.id);
+    } else if (_reason == "Examination") {
+      _student.getStudent.belt++;
+      StudentProvider()
+          .updateStudent(_student.getStudent, _student.getStudent.id);
+    }
   }
 
   // update

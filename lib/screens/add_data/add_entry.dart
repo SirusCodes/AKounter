@@ -1,11 +1,13 @@
+import 'package:akounter/models/entry_model.dart';
 import 'package:akounter/provider/add_entry_provider.dart';
-import 'package:akounter/screens/student_details.dart';
+import 'package:akounter/provider/entry_provider.dart';
 import 'package:akounter/widgets/add_entry_components/dress.dart';
 import 'package:akounter/widgets/add_entry_components/equipments.dart';
 import 'package:akounter/widgets/add_entry_components/examination.dart';
 import 'package:akounter/widgets/add_entry_components/monthly.dart';
 import 'package:akounter/widgets/add_entry_components/others.dart';
 import 'package:akounter/widgets/c_textformfield.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:akounter/enums/type_payment_enum.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +21,7 @@ class AddEntry extends StatefulWidget {
 }
 
 class _AddEntryState extends State<AddEntry> {
+  var _formKey = GlobalKey<FormState>();
   List<String> _reasons = [
     'Monthly',
     'Examination',
@@ -38,14 +41,21 @@ class _AddEntryState extends State<AddEntry> {
 
   @override
   void initState() {
+    // set pending to the value from student
     _entry.setPending = _student.getStudent.pending;
 
+    // set monthly price
     if (_student.getStudent.belt <= 3)
       _entry.setSubtotal = _student.getBranch.belowGreen;
     else
       _entry.setSubtotal = _student.getBranch.aboveGreen;
 
+    // set reason as first value
     _reason = _reasons[0];
+    _entry.setReason = _reason;
+
+    // set value of total month initially
+    _entry.setTotalMonth = 1;
     super.initState();
   }
 
@@ -56,17 +66,6 @@ class _AddEntryState extends State<AddEntry> {
       appBar: AppBar(
         elevation: 0.0,
         title: Text("Add Entry"),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.list),
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => StudentDetails(),
-              ),
-            ),
-          )
-        ],
       ),
       body: SizedBox.expand(
         child: Container(
@@ -96,21 +95,24 @@ class _AddEntryState extends State<AddEntry> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text("Pending:   ${_entry.getPending}"),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(20.0),
-                                child: CTextFormField(
-                                  label: "Amount given",
-                                  hint: "1000",
-                                  keyboardType: TextInputType.number,
-                                  validator: (value) {
-                                    if (value == null || value == "") {
-                                      return "Enter a defined value";
-                                    }
-                                    return null;
-                                  },
-                                  onChanged: (value) {
-                                    _entry.setAmountGiven = int.parse(value);
-                                  },
+                              Form(
+                                key: _formKey,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: CTextFormField(
+                                    label: "Amount given",
+                                    hint: "1000",
+                                    keyboardType: TextInputType.number,
+                                    validator: (value) {
+                                      if (value == null || value == "") {
+                                        return "Enter a defined value";
+                                      }
+                                      return null;
+                                    },
+                                    onChanged: (value) {
+                                      _entry.setAmountGiven = int.parse(value);
+                                    },
+                                  ),
                                 ),
                               )
                             ],
@@ -162,6 +164,33 @@ class _AddEntryState extends State<AddEntry> {
             ),
           ),
         ),
+      ),
+      floatingActionButton: Consumer<AddEntryProvider>(
+        builder: (_, _entry, __) {
+          final _save = Provider.of<EntryProvider>(context, listen: false);
+          return FloatingActionButton(
+            child: Icon(Icons.check),
+            splashColor: Theme.of(context).primaryColor,
+            onPressed: () {
+              if (_formKey.currentState.validate()) {
+                _entry.save();
+                _save.addEntry(
+                  EntryModel(
+                    reason: _entry.getReason,
+                    detailedReason: _entry.getDetailedReason,
+                    pending: _entry.getPending,
+                    total: _entry.getTotal,
+                    subtotal: _entry.getSubtotal,
+                    date: formatDate(DateTime.now(), [dd, "/", mm, "/", yyyy]),
+                  ),
+                );
+                print(_entry.getDetailedReason);
+                _entry.postSave();
+                Navigator.pop(context);
+              }
+            },
+          );
+        },
       ),
     );
   }

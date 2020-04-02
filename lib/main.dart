@@ -1,12 +1,14 @@
 import 'package:akounter/locator.dart';
 import 'package:akounter/provider/branch_provider.dart';
+import 'package:akounter/provider/entry_provider.dart';
 import 'package:akounter/provider/login_provider.dart';
 import 'package:akounter/provider/student_provider.dart';
-import 'package:akounter/provider/add_entry_provider.dart';
 import 'package:akounter/widgets/auth_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+
+import 'provider/add_entry_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,6 +32,7 @@ class MyApp extends StatelessWidget {
         Provider<BranchProvider>(create: (_) => BranchProvider()),
         Provider<StudentProvider>(create: (_) => StudentProvider()),
         Provider<LoginProvider>(create: (_) => LoginProvider()),
+        Provider<EntryProvider>(create: (_) => EntryProvider()),
         ChangeNotifierProvider<AddEntryProvider>(
             create: (_) => AddEntryProvider())
       ],

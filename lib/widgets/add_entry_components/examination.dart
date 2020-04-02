@@ -13,7 +13,7 @@ class Examination extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Text(
-              _entry.detailedReason,
+              _entry.getDetailedReason,
               style: Theme.of(context)
                   .textTheme
                   .display1

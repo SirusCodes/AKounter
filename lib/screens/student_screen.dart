@@ -3,6 +3,7 @@ import 'package:akounter/models/student_model.dart';
 import 'package:akounter/provider/student_provider.dart';
 import 'package:akounter/screens/add_data/add_entry.dart';
 import 'package:akounter/screens/add_data/add_students.dart';
+import 'package:akounter/screens/student_details.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -73,6 +74,15 @@ class StudentScreen extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (context) => AddEntry(),
+                          ),
+                        );
+                      },
+                      onLongPress: () {
+                        locator<Data>().setStudent = _studentList[i];
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => StudentDetails(),
                           ),
                         );
                       },

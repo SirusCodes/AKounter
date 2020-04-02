@@ -12,12 +12,12 @@ void main() {
       expect(entry.getSubtotal, 900);
     });
     test('months tests', () {
-      entry.updateAsMonthly(2);
-      expect(entry.detailedReason, "December,\ January");
+      entry.updateAsMonthly();
+      expect(entry.getDetailedReason, "December,\ January");
     });
     test('equipment test', () {
       entry.equipment();
-      expect(entry.detailedReason, "Gloves, Kickpad");
+      expect(entry.getDetailedReason, "Gloves, Kickpad");
     });
   });
 }

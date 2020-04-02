@@ -1,6 +1,10 @@
 import 'package:akounter/locator.dart';
+import 'package:akounter/models/entry_model.dart';
+import 'package:akounter/provider/entry_provider.dart';
 import 'package:akounter/screens/add_data/add_entry.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../data.dart';
 
@@ -34,11 +38,13 @@ class StudentDetails extends StatelessWidget {
   final _student = locator<Data>().getStudent;
   @override
   Widget build(BuildContext context) {
+    List<EntryModel> _entryLists = List<EntryModel>();
     return Scaffold(
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return <Widget>[
             SliverAppBar(
+              elevation: 0.0,
               actions: <Widget>[
                 IconButton(
                   icon: Icon(Icons.add_circle_outline),
@@ -53,7 +59,7 @@ class StudentDetails extends StatelessWidget {
                 ),
               ],
               pinned: true,
-              expandedHeight: 200.0,
+              expandedHeight: 150.0,
               flexibleSpace: FlexibleSpaceBar(
                 title: Text(_student.name),
                 background: Row(
@@ -78,6 +84,7 @@ class StudentDetails extends StatelessWidget {
                         ),
                       ],
                     ),
+                    SizedBox(width: 10.0),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
@@ -103,21 +110,49 @@ class StudentDetails extends StatelessWidget {
             ),
           ];
         },
-        body: ListView(
-          children: <Widget>[
-            Card(
-              elevation: 3.0,
-              child: ListTile(
-                title: Text("Dummy Entry"),
-                trailing: IconButton(
-                  icon:
-                      Icon(Icons.delete, color: Theme.of(context).accentColor),
-                  onPressed: () {},
-                ),
-                onTap: () {},
-              ),
-            ),
-          ],
+        body: Container(
+          color: Theme.of(context).primaryColor,
+          child: Consumer<EntryProvider>(
+            builder: (_, _entries, __) {
+              return StreamBuilder(
+                stream: _entries.fetchEntriesAsStream(),
+                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasData) {
+                    _entryLists = snapshot.data.documents
+                        .map((f) => EntryModel.fromJson(f.data, f.documentID))
+                        .toList();
+                    return ListView.builder(
+                      itemCount: _entryLists.length,
+                      itemBuilder: (context, int i) {
+                        return Card(
+                          elevation: 3.0,
+                          child: ListTile(
+                            title: Text(_entryLists[i].reason),
+                            subtitle: Text(_entryLists[i].detailedReason +
+                                "  " +
+                                _entryLists[i].date),
+                            // trailing: IconButton(
+                            //   icon: Icon(Icons.delete,
+                            //       color: Theme.of(context).accentColor),
+                            //   onPressed: () {},
+                            // ),
+                            onTap: () {},
+                          ),
+                        );
+                      },
+                    );
+                  } else {
+                    return Container(
+                      child: Text(
+                        "NO Entries",
+                        style: Theme.of(context).textTheme.display1,
+                      ),
+                    );
+                  }
+                },
+              );
+            },
+          ),
         ),
       ),
     );
