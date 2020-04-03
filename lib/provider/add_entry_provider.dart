@@ -1,6 +1,9 @@
 import 'package:akounter/data.dart';
 import 'package:akounter/enums/dress_size_enum.dart';
 import 'package:akounter/locator.dart';
+import 'package:akounter/models/entry_model.dart';
+import 'package:akounter/models/student_model.dart';
+import 'package:akounter/provider/entry_provider.dart';
 import 'package:akounter/provider/student_provider.dart';
 import 'package:flutter/foundation.dart';
 
@@ -98,17 +101,16 @@ class AddEntryProvider extends ChangeNotifier {
   }
 
   String updateAsMonthly() {
-    String detailedReason = "";
+    List<String> detailedReason = [];
     int current = _student.getStudent.fees;
 
     for (int i = 0; i < _totalMonth; i++) {
       // -1 so in next iteration it will be 0
       if (current == 11) current = -1;
-      detailedReason +=
-          _totalMonth != 1 ? _months[++current] + ", " : _months[++current];
+      detailedReason.add(_months[++current]);
     }
-
-    return detailedReason;
+    String str = detailedReason.toString();
+    return str.substring(1, str.length - 1);
   }
 
   // invoice
@@ -280,13 +282,26 @@ class AddEntryProvider extends ChangeNotifier {
       int newFees = _student.getStudent.fees;
       newFees = (newFees + _totalMonth) % 12;
       _student.getStudent.fees = newFees;
-      StudentProvider()
-          .updateStudent(_student.getStudent, _student.getStudent.id);
     } else if (_reason == "Examination") {
       _student.getStudent.belt++;
-      StudentProvider()
-          .updateStudent(_student.getStudent, _student.getStudent.id);
     }
+    StudentProvider()
+        .updateStudent(_student.getStudent, _student.getStudent.id);
+  }
+
+  //
+  // delete
+  //
+  void delete(EntryModel entry) {
+    StudentModel _studentmod = _student.getStudent;
+    if (entry.reason.startsWith("Monthly")) {
+      List list = entry.detailedReason.split(", ");
+      _studentmod.fees -= list.length;
+    } else if (entry.reason == "Examination") {
+      _studentmod.belt--;
+    }
+    StudentProvider().updateStudent(_studentmod, _studentmod.id);
+    EntryProvider().removeEntry(entry.id);
   }
 
   // update

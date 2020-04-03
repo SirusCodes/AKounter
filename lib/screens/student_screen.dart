@@ -21,21 +21,6 @@ class StudentScreen extends StatelessWidget {
       appBar: AppBar(
         elevation: 0.0,
         title: Text("Students"),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.add_circle_outline),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddStudent(
-                    student: StudentModel(id: null),
-                  ),
-                ),
-              );
-            },
-          )
-        ],
       ),
       body: Container(
         color: Theme.of(context).primaryColor,
@@ -99,6 +84,20 @@ class StudentScreen extends StatelessWidget {
             },
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        splashColor: Theme.of(context).primaryColor,
+        child: Icon(Icons.add),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AddStudent(
+                student: StudentModel(id: null),
+              ),
+            ),
+          );
+        },
       ),
     );
   }

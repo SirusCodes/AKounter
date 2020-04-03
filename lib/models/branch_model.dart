@@ -5,6 +5,9 @@ class BranchModel {
   int belowGreen;
   int memberDiscount;
   bool indirectPayment;
+  List instructors;
+  List instructorNames;
+  String owner;
 
   BranchModel({
     this.id,
@@ -13,6 +16,9 @@ class BranchModel {
     this.belowGreen,
     this.indirectPayment,
     this.memberDiscount,
+    this.instructors,
+    this.instructorNames,
+    this.owner,
   });
 
   BranchModel.fromJson(Map snapshot, String id)
@@ -21,7 +27,10 @@ class BranchModel {
         aboveGreen = snapshot['above_green'] ?? 0,
         belowGreen = snapshot['below_green'] ?? 0,
         memberDiscount = snapshot['member_discount'] ?? 0,
-        indirectPayment = snapshot['indirect_payment'] ?? false;
+        indirectPayment = snapshot['indirect_payment'] ?? false,
+        instructors = snapshot['instructors'] ?? [],
+        instructorNames = snapshot['instructor_names'] ?? [],
+        owner = snapshot['owner'] ?? "no owner";
 
   toJson() {
     return {
@@ -30,6 +39,9 @@ class BranchModel {
       "below_green": belowGreen,
       "member_discount": memberDiscount,
       "indirect_payment": indirectPayment,
+      "instructors": instructors,
+      "instructor_names": instructorNames,
+      "owner": owner,
     };
   }
 }

@@ -1,6 +1,6 @@
-import 'package:akounter/models/branch_model.dart';
-
+import './models/branch_model.dart';
 import './models/student_model.dart';
+import './models/user.dart';
 
 class Data {
   static BranchModel _branch;
@@ -16,4 +16,11 @@ class Data {
   }
 
   StudentModel get getStudent => _student;
+
+  static User _user;
+  set setUser(User user) {
+    _user = user;
+  }
+
+  User get getUser => _user;
 }

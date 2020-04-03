@@ -1,6 +1,8 @@
 import 'package:akounter/data.dart';
 import 'package:akounter/models/branch_model.dart';
 import 'package:akounter/provider/branch_provider.dart';
+import 'package:akounter/screens/settings/branch_settings_screen.dart';
+import 'package:akounter/widgets/navigation_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import '../locator.dart';
@@ -11,27 +13,28 @@ import 'package:flutter/material.dart';
 class BranchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    List<Widget> _screenList = [
+      StudentScreen(),
+      BranchSettingsScreen(),
+    ];
+
+    List<BottomNavigationBarItem> _itemList = [
+      BottomNavigationBarItem(
+        icon: Icon(Icons.people),
+        title: Text("Student List"),
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.settings),
+        title: Text("Branch Settings"),
+      )
+    ];
+
     List<BranchModel> _branchList;
     final _branches = Provider.of<BranchProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text("Branches"),
         elevation: 0.0,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.add_circle_outline),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddBranch(
-                    branch: BranchModel(id: null),
-                  ),
-                ),
-              );
-            },
-          )
-        ],
         automaticallyImplyLeading: false,
       ),
       body: Container(
@@ -70,7 +73,10 @@ class BranchScreen extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => StudentScreen(),
+                              builder: (context) => NavigationWidget(
+                                itemList: _itemList,
+                                screenList: _screenList,
+                              ),
                             ),
                           );
                         },
@@ -90,6 +96,20 @@ class BranchScreen extends StatelessWidget {
             },
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        splashColor: Theme.of(context).primaryColor,
+        child: Icon(Icons.add),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AddBranch(
+                branch: BranchModel(id: null),
+              ),
+            ),
+          );
+        },
       ),
     );
   }

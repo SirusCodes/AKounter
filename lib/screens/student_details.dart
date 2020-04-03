@@ -1,5 +1,6 @@
 import 'package:akounter/locator.dart';
 import 'package:akounter/models/entry_model.dart';
+import 'package:akounter/provider/add_entry_provider.dart';
 import 'package:akounter/provider/entry_provider.dart';
 import 'package:akounter/screens/add_data/add_entry.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -131,11 +132,14 @@ class StudentDetails extends StatelessWidget {
                             subtitle: Text(_entryLists[i].detailedReason +
                                 "  " +
                                 _entryLists[i].date),
-                            // trailing: IconButton(
-                            //   icon: Icon(Icons.delete,
-                            //       color: Theme.of(context).accentColor),
-                            //   onPressed: () {},
-                            // ),
+                            trailing: IconButton(
+                              icon: Icon(Icons.delete,
+                                  color: Theme.of(context).accentColor),
+                              onPressed: () {
+                                locator<AddEntryProvider>()
+                                    .delete(_entryLists[i]);
+                              },
+                            ),
                             onTap: () {},
                           ),
                         );

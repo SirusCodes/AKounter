@@ -52,6 +52,6 @@ class LoginProvider {
   }
 
   void signOutGoogle() async {
-    await _googleSignIn.signOut();
+    await _auth.signOut();
   }
 }

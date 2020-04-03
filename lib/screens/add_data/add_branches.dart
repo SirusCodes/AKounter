@@ -1,8 +1,12 @@
+import 'package:akounter/locator.dart';
 import 'package:akounter/models/branch_model.dart';
+import 'package:akounter/models/user.dart';
 import 'package:akounter/provider/branch_provider.dart';
 import 'package:akounter/widgets/c_textformfield.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../data.dart';
 
 class AddBranch extends StatefulWidget {
   const AddBranch({Key key, this.branch}) : super(key: key);
@@ -18,8 +22,13 @@ class _AddBranchState extends State<AddBranch> {
   TextEditingController _aboveGreen = TextEditingController();
   TextEditingController _member = TextEditingController();
 
+  static User _data = locator<Data>().getUser;
   bool _indirectCheck = false;
-  BranchModel _model = BranchModel();
+  BranchModel _model = BranchModel(
+    owner: _data.uid,
+    instructors: [_data.uid],
+    instructorNames: [_data.displayName],
+  );
   @override
   void initState() {
     if (widget.branch.id != null) {
@@ -110,7 +119,6 @@ class _AddBranchState extends State<AddBranch> {
                         onChanged: (bool value) {
                           setState(() {
                             _indirectCheck = value;
-                            _model.indirectPayment = value;
                           });
                         },
                         value: _indirectCheck,
@@ -133,6 +141,8 @@ class _AddBranchState extends State<AddBranch> {
         splashColor: Theme.of(context).primaryColor,
         child: Icon(Icons.check),
         onPressed: () {
+          _model.indirectPayment = _indirectCheck;
+
           if (_formKey.currentState.validate()) {
             _formKey.currentState.save();
             debugPrint("Saved");
