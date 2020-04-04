@@ -20,7 +20,7 @@ class StudentServices {
 
   Stream<QuerySnapshot> streamDataCollection() {
     _updateDB();
-    return ref.snapshots();
+    return ref.orderBy("belt").snapshots();
   }
 
   Future<DocumentSnapshot> getStudentById(String id) {

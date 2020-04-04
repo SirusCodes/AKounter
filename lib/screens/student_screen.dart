@@ -7,7 +7,6 @@ import 'package:akounter/screens/student_details.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../data.dart';
 
 class StudentScreen extends StatelessWidget {
@@ -21,6 +20,16 @@ class StudentScreen extends StatelessWidget {
       appBar: AppBar(
         elevation: 0.0,
         title: Text("Students"),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              showSearch(
+                  context: context,
+                  delegate: StudentSearch(studentList: _studentList));
+            },
+          )
+        ],
       ),
       body: Container(
         color: Theme.of(context).primaryColor,
@@ -99,6 +108,95 @@ class StudentScreen extends StatelessWidget {
           );
         },
       ),
+    );
+  }
+}
+
+//
+// search
+//
+class StudentSearch extends SearchDelegate {
+  StudentSearch({this.studentList});
+  List<StudentModel> studentList;
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(
+          Icons.clear,
+          color: Theme.of(context).primaryColor,
+        ),
+        onPressed: () {
+          query = "";
+        },
+      )
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+        icon: Icon(Icons.arrow_back),
+        onPressed: () {
+          Navigator.pop(context);
+        });
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return null;
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    List<StudentModel> _studentList = studentList
+        .where((t) => t.name.toLowerCase().startsWith(query.toLowerCase()))
+        .toList();
+    return ListView.builder(
+      itemCount: _studentList.length,
+      itemBuilder: (context, int i) {
+        return Card(
+          elevation: 3.0,
+          child: ListTile(
+            leading: IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddStudent(student: _studentList[i]),
+                  ),
+                );
+              },
+            ),
+            title: Text(_studentList[i].name),
+            onTap: () {
+              locator<Data>().setStudent = _studentList[i];
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AddEntry(),
+                ),
+              );
+            },
+            onLongPress: () {
+              locator<Data>().setStudent = _studentList[i];
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => StudentDetails(),
+                ),
+              );
+            },
+            trailing: IconButton(
+              icon: Icon(Icons.delete),
+              onPressed: () {
+                StudentProvider().removeStudent(_studentList[i].id);
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 }

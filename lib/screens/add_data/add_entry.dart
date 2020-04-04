@@ -10,6 +10,7 @@ import 'package:akounter/widgets/c_textformfield.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:akounter/enums/type_payment_enum.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:provider/provider.dart';
 import '../../data.dart';
 import '../../locator.dart';
@@ -39,6 +40,8 @@ class _AddEntryState extends State<AddEntry> {
   var _entry = locator<AddEntryProvider>();
   var _student = locator<Data>();
 
+  String _date;
+
   @override
   void initState() {
     // set pending to the value from student
@@ -56,6 +59,9 @@ class _AddEntryState extends State<AddEntry> {
 
     // set value of total month initially
     _entry.setTotalMonth = 1;
+
+    // initialize date
+    _date = formatDate(DateTime.now(), ["dd", "-", "mm", "-", "yyyy"]);
     super.initState();
   }
 
@@ -83,6 +89,20 @@ class _AddEntryState extends State<AddEntry> {
                         builder: (_, _entry, __) {
                           return Column(
                             children: <Widget>[
+                              OutlineButton(
+                                child: Text(_date),
+                                onPressed: () => DatePicker.showDatePicker(
+                                  context,
+                                  maxTime: DateTime.now(),
+                                  showTitleActions: true,
+                                  onConfirm: (DateTime date) {
+                                    setState(() {
+                                      _date = formatDate(
+                                          date, ["dd", "-", "mm", "-", "yyyy"]);
+                                    });
+                                  },
+                                ),
+                              ),
                               Padding(
                                 padding: const EdgeInsets.all(15.0),
                                 child: Text(
@@ -181,7 +201,7 @@ class _AddEntryState extends State<AddEntry> {
                     pending: _entry.getPending,
                     total: _entry.getTotal,
                     subtotal: _entry.getSubtotal,
-                    date: formatDate(DateTime.now(), [dd, "/", mm, "/", yyyy]),
+                    date: _date,
                   ),
                 );
                 print(_entry.getDetailedReason);

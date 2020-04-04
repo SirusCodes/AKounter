@@ -11,7 +11,9 @@ class Login extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          FlutterLogo(size: 200),
+          Image.asset(
+            "assets/AKounter_logo.png",
+          ),
           SizedBox(height: 100),
           OutlineButton(
             child: Padding(

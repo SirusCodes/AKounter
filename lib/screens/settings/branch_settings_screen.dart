@@ -3,6 +3,7 @@ import 'package:akounter/models/branch_model.dart';
 import 'package:akounter/models/user.dart';
 import 'package:akounter/provider/branch_provider.dart';
 import 'package:akounter/widgets/c_textformfield.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import '../../data.dart';
 
@@ -14,6 +15,7 @@ class BranchSettingsScreen extends StatefulWidget {
 }
 
 class _BranchSettingsScreenState extends State<BranchSettingsScreen> {
+  var _formKey = GlobalKey<FormState>();
   TextEditingController _idController = TextEditingController();
   TextEditingController _nameController = TextEditingController();
 
@@ -35,14 +37,30 @@ class _BranchSettingsScreenState extends State<BranchSettingsScreen> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: <Widget>[
-              CTextFormField(
-                label: "Instructor Name",
-                controller: _nameController,
-              ),
-              SizedBox(height: 10.0),
-              CTextFormField(
-                label: "Instructor Mail ID",
-                controller: _idController,
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: <Widget>[
+                    CTextFormField(
+                      label: "Instructor Name",
+                      controller: _nameController,
+                      validator: (value) {
+                        if (value.toString().isEmpty) return "Can't be empty";
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 10.0),
+                    CTextFormField(
+                      label: "Instructor Mail ID",
+                      controller: _idController,
+                      validator: (value) {
+                        if (EmailValidator.validate(value))
+                          return "Incorrect email ID";
+                        return null;
+                      },
+                    ),
+                  ],
+                ),
               ),
               SizedBox(height: 10.0),
               Flexible(
@@ -87,18 +105,21 @@ class _BranchSettingsScreenState extends State<BranchSettingsScreen> {
         splashColor: Theme.of(context).primaryColor,
         child: Icon(Icons.add),
         onPressed: () {
-          _branchInList.add(_idController.text);
-          _branchInNameList.add(_nameController.text);
+          if (_formKey.currentState.validate()) {
+            _formKey.currentState.save();
+            _branchInList.add(_idController.text);
+            _branchInNameList.add(_nameController.text);
 
-          setState(() {
-            data.instructors = _branchInList;
-            data.instructorNames = _branchInNameList;
-          });
+            setState(() {
+              data.instructors = _branchInList;
+              data.instructorNames = _branchInNameList;
+            });
 
-          BranchProvider().updateBranch(data, data.id);
+            BranchProvider().updateBranch(data, data.id);
 
-          _idController.clear();
-          _nameController.clear();
+            _idController.clear();
+            _nameController.clear();
+          }
         },
       ),
     );
