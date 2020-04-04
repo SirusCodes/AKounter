@@ -25,13 +25,12 @@ class UserSettingScreen extends StatelessWidget {
               elevation: 3.0,
               child: ListTile(
                 leading: Icon(Icons.share),
-                title: Text("Send UserID"),
+                title: Text("Send my Mail ID"),
                 onTap: () {
                   final RenderBox box = context.findRenderObject();
-                  Share.share(locator<Data>().getUser.uid,
+                  Share.share(locator<Data>().getUser.mailID,
                       sharePositionOrigin:
                           box.localToGlobal(Offset.zero) & box.size);
-                  print(locator<Data>().getUser.uid);
                 },
               ),
             ),

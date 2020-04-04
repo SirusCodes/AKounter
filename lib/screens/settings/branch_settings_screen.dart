@@ -1,5 +1,6 @@
 import 'package:akounter/locator.dart';
 import 'package:akounter/models/branch_model.dart';
+import 'package:akounter/models/user.dart';
 import 'package:akounter/provider/branch_provider.dart';
 import 'package:akounter/widgets/c_textformfield.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ class _BranchSettingsScreenState extends State<BranchSettingsScreen> {
   TextEditingController _nameController = TextEditingController();
 
   BranchModel data = locator<Data>().getBranch;
+  User _user = locator<Data>().getUser;
   @override
   Widget build(BuildContext context) {
     List _branchInList = data.instructors;
@@ -39,7 +41,7 @@ class _BranchSettingsScreenState extends State<BranchSettingsScreen> {
               ),
               SizedBox(height: 10.0),
               CTextFormField(
-                label: "Instructor ID",
+                label: "Instructor Mail ID",
                 controller: _idController,
               ),
               SizedBox(height: 10.0),
@@ -57,7 +59,9 @@ class _BranchSettingsScreenState extends State<BranchSettingsScreen> {
                         trailing: IconButton(
                           icon: Icon(Icons.delete),
                           onPressed: () {
-                            if (_branchInList.length > 1) {
+                            if (_branchInList.length > 1 &&
+                                data.owner == _user.mailID &&
+                                data.owner != _branchInList[i]) {
                               setState(() {
                                 _branchInList.removeAt(i);
                                 _branchInNameList.removeAt(i);

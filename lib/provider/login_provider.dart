@@ -10,7 +10,11 @@ class LoginProvider {
   User _userFromFirebase(FirebaseUser user) {
     return user == null
         ? null
-        : User(uid: user.uid, displayName: user.displayName);
+        : User(
+            uid: user.uid,
+            displayName: user.displayName,
+            mailID: user.email,
+          );
   }
 
   Stream<User> get onAuthStateChanged {

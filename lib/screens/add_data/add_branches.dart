@@ -25,8 +25,8 @@ class _AddBranchState extends State<AddBranch> {
   static User _data = locator<Data>().getUser;
   bool _indirectCheck = false;
   BranchModel _model = BranchModel(
-    owner: _data.uid,
-    instructors: [_data.uid],
+    owner: _data.mailID,
+    instructors: [_data.mailID],
     instructorNames: [_data.displayName],
   );
   @override
