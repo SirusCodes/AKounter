@@ -54,7 +54,7 @@ class _BranchSettingsScreenState extends State<BranchSettingsScreen> {
                       label: "Instructor Mail ID",
                       controller: _idController,
                       validator: (value) {
-                        if (EmailValidator.validate(value))
+                        if (!EmailValidator.validate(value))
                           return "Incorrect email ID";
                         return null;
                       },

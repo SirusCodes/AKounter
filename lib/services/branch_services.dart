@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../data.dart';
+import '../locator.dart';
+
 class BranchServices {
   final Firestore _db = Firestore.instance;
   final String path;
@@ -15,7 +18,10 @@ class BranchServices {
   }
 
   Stream<QuerySnapshot> streamDataCollection() {
-    return ref.snapshots();
+    print(locator<Data>().getUser.mailID);
+    return ref
+        .where("instructors", arrayContains: locator<Data>().getUser.mailID)
+        .snapshots();
   }
 
   Future<DocumentSnapshot> getBranchById(String id) {
