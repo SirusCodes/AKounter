@@ -124,7 +124,7 @@ class _AddStudentState extends State<AddStudent> {
                             onConfirm: (DateTime date) {
                               setState(() {
                                 _dobController.text = formatDate(
-                                    date, ["dd", "-", "mm", "-", "yyyy"]);
+                                    date, ["dd", "/", "mm", "/", "yyyy"]);
                               });
                             },
                           ),

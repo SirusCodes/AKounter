@@ -272,16 +272,15 @@ class AddEntryProvider extends ChangeNotifier {
     _pending = _amountGiven - _total;
   }
 
-  void postSave() {
+  void postSave(String date) {
     if (_pending != _student.getStudent.pending) {
       _student.getStudent.pending = _pending;
-      StudentProvider()
-          .updateStudent(_student.getStudent, _student.getStudent.id);
     }
     if (_reason.startsWith("Monthly")) {
       int newFees = _student.getStudent.fees;
       newFees = (newFees + _totalMonth) % 12;
       _student.getStudent.fees = newFees;
+      _student.getStudent.lastFees = date;
     } else if (_reason == "Examination") {
       _student.getStudent.belt++;
     }

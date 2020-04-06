@@ -9,6 +9,7 @@ class StudentModel {
   int belt;
   int fees;
   int pending;
+  String lastFees;
 
   StudentModel({
     this.id,
@@ -21,6 +22,7 @@ class StudentModel {
     this.belt,
     this.fees,
     this.pending,
+    this.lastFees,
   });
 
   StudentModel.fromJson(Map snapshot, String id)
@@ -33,7 +35,8 @@ class StudentModel {
         gender = snapshot["gender"] ?? "Male",
         belt = snapshot["belt"] ?? 0,
         fees = snapshot["fees"] ?? 0,
-        pending = snapshot["pending"] ?? 0;
+        pending = snapshot["pending"] ?? 0,
+        lastFees = snapshot["last_fees"] ?? "";
 
   toJson() {
     return {
@@ -46,6 +49,7 @@ class StudentModel {
       "belt": belt,
       "fees": fees,
       "pending": pending,
+      "last_fees": lastFees,
     };
   }
 }

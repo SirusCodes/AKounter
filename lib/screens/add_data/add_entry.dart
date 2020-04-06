@@ -61,7 +61,7 @@ class _AddEntryState extends State<AddEntry> {
     _entry.setTotalMonth = 1;
 
     // initialize date
-    _date = formatDate(DateTime.now(), ["dd", "-", "mm", "-", "yyyy"]);
+    _date = formatDate(DateTime.now(), ["dd", "/", "mm", "/", "yyyy"]);
     super.initState();
   }
 
@@ -98,7 +98,7 @@ class _AddEntryState extends State<AddEntry> {
                                   onConfirm: (DateTime date) {
                                     setState(() {
                                       _date = formatDate(
-                                          date, ["dd", "-", "mm", "-", "yyyy"]);
+                                          date, ["dd", "/", "mm", "/", "yyyy"]);
                                     });
                                   },
                                 ),
@@ -202,10 +202,12 @@ class _AddEntryState extends State<AddEntry> {
                     total: _entry.getTotal,
                     subtotal: _entry.getSubtotal,
                     date: _date,
+                    name: _student.getStudent.name,
+                    branch: _student.getBranch.name,
                   ),
                 );
                 print(_entry.getDetailedReason);
-                _entry.postSave();
+                _entry.postSave(_date);
                 Navigator.pop(context);
               }
             },
