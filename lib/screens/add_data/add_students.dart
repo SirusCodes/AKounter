@@ -21,6 +21,8 @@ class _AddStudentState extends State<AddStudent> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _dobController = TextEditingController();
   TextEditingController _numController = TextEditingController();
+  TextEditingController _numMotherController = TextEditingController();
+  TextEditingController _numFatherController = TextEditingController();
 
   bool _memberCheck = false, _onTrial = false;
 
@@ -140,6 +142,26 @@ class _AddStudentState extends State<AddStudent> {
                       label: "Number",
                       controller: _numController,
                       onSaved: (value) => _student.number = value,
+                    ),
+                  ),
+                  Padding(
+                    padding: _padding,
+                    child: CTextFormField(
+                      hint: "0123456789",
+                      keyboardType: TextInputType.phone,
+                      label: "Father's Number",
+                      controller: _numFatherController,
+                      onSaved: (value) => _student.fatherNum = value,
+                    ),
+                  ),
+                  Padding(
+                    padding: _padding,
+                    child: CTextFormField(
+                      hint: "0123456789",
+                      keyboardType: TextInputType.phone,
+                      label: "Mother's Number",
+                      controller: _numMotherController,
+                      onSaved: (value) => _student.motherNum = value,
                     ),
                   ),
                   Row(

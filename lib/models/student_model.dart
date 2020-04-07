@@ -2,7 +2,7 @@ class StudentModel {
   String id;
   String name;
   String dob;
-  String number;
+  String number, motherNum, fatherNum;
   bool isMember;
   bool onTrial;
   String gender;
@@ -23,6 +23,8 @@ class StudentModel {
     this.fees,
     this.pending,
     this.lastFees,
+    this.fatherNum,
+    this.motherNum,
   });
 
   StudentModel.fromJson(Map snapshot, String id)
@@ -36,7 +38,9 @@ class StudentModel {
         belt = snapshot["belt"] ?? 0,
         fees = snapshot["fees"] ?? 0,
         pending = snapshot["pending"] ?? 0,
-        lastFees = snapshot["last_fees"] ?? "";
+        lastFees = snapshot["last_fees"] ?? "",
+        fatherNum = snapshot["father_num"] ?? "",
+        motherNum = snapshot["mother_num"] ?? "";
 
   toJson() {
     return {
@@ -50,6 +54,8 @@ class StudentModel {
       "fees": fees,
       "pending": pending,
       "last_fees": lastFees,
+      "father_num": fatherNum,
+      "mother_num": motherNum,
     };
   }
 }
