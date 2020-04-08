@@ -19,6 +19,10 @@ class EntryProvider {
     return _entries.streamDataCollection();
   }
 
+  Stream<QuerySnapshot> fetchAllEntriesAsStream(String date) {
+    return _entries.streamAllEntriesCollection(date);
+  }
+
   Future<EntryModel> getEntryById(String id) async {
     var doc = await _entries.getEntryById(id);
     return EntryModel.fromJson(doc.data, doc.documentID);

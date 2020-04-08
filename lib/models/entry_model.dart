@@ -16,14 +16,14 @@ class EntryModel {
 
   EntryModel.fromJson(Map snapshot, String id)
       : this.id = id,
-        reason = snapshot["reason"],
-        detailedReason = snapshot["detailed_reason"],
-        date = snapshot["date"],
-        total = snapshot["total"],
-        subtotal = snapshot["subtotal"],
-        pending = snapshot["pending"],
-        name = snapshot['name'],
-        branch = snapshot['branch'];
+        reason = snapshot["reason"] ?? "",
+        detailedReason = snapshot["detailed_reason"] ?? "",
+        date = snapshot["date"] ?? "",
+        total = snapshot["total"] ?? 0,
+        subtotal = snapshot["subtotal"] ?? 0,
+        pending = snapshot["pending"] ?? 0,
+        name = snapshot['name'] ?? "",
+        branch = snapshot['branch'] ?? "";
 
   toJson() {
     return {

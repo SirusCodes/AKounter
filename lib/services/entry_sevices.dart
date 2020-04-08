@@ -23,6 +23,15 @@ class EntryServices {
     return ref.snapshots();
   }
 
+  Stream<QuerySnapshot> streamAllEntriesCollection(String date) {
+    return _db
+        .collectionGroup("entry")
+        .where("instructors", arrayContains: _id.getUser.mailID)
+        .where("branch", isEqualTo: _id.getBranch.name)
+        .where("date", isEqualTo: date)
+        .snapshots();
+  }
+
   Future<DocumentSnapshot> getEntryById(String id) {
     _updateDB();
     return ref.document(id).get();
@@ -44,6 +53,7 @@ class EntryServices {
   }
 
   void _updateDB() {
+    print(_id.getBranch.id);
     ref = _db
         .collection("branches")
         .document(_id.getBranch.id)

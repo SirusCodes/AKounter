@@ -1,6 +1,7 @@
 import 'package:akounter/data.dart';
 import 'package:akounter/models/branch_model.dart';
 import 'package:akounter/provider/branch_provider.dart';
+import 'package:akounter/screens/branch_entry_list.dart';
 import 'package:akounter/screens/settings/branch_settings_screen.dart';
 import 'package:akounter/widgets/navigation_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,6 +16,7 @@ class BranchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> _screenList = [
       StudentScreen(),
+      BranchEntryList(),
       BranchSettingsScreen(),
     ];
 
@@ -22,6 +24,10 @@ class BranchScreen extends StatelessWidget {
       BottomNavigationBarItem(
         icon: Icon(Icons.people),
         title: Text("Student List"),
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.library_books),
+        title: Text("Entry List"),
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.settings),
