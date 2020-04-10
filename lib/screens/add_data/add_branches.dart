@@ -3,6 +3,7 @@ import 'package:akounter/models/branch_model.dart';
 import 'package:akounter/models/user.dart';
 import 'package:akounter/provider/branch_provider.dart';
 import 'package:akounter/widgets/c_textformfield.dart';
+import 'package:akounter/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -165,6 +166,10 @@ class _AddBranchState extends State<AddBranch> {
   }
 
   void _clearAllTFF() {
+    cSnackBar(
+      context,
+      message: "${_nameController.text} is added",
+    );
     setState(() {
       _nameController.clear();
       _aboveGreen.clear();

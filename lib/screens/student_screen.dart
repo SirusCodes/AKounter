@@ -4,6 +4,7 @@ import 'package:akounter/provider/student_provider.dart';
 import 'package:akounter/screens/add_data/add_entry.dart';
 import 'package:akounter/screens/add_data/add_students.dart';
 import 'package:akounter/screens/student_details.dart';
+import 'package:akounter/widgets/snackbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -83,7 +84,20 @@ class StudentScreen extends StatelessWidget {
                       trailing: IconButton(
                         icon: Icon(Icons.delete),
                         onPressed: () {
-                          _students.removeStudent(_studentList[i].id);
+                          cSnackBar(
+                            context,
+                            message:
+                                "Do you really want to delete ${_studentList[i].name}?",
+                            button: FlatButton(
+                              onPressed: () {
+                                _students.removeStudent(_studentList[i].id);
+                              },
+                              child: Text(
+                                "Yes",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          );
                         },
                       ),
                     ),

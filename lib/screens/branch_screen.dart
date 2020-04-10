@@ -4,6 +4,7 @@ import 'package:akounter/provider/branch_provider.dart';
 import 'package:akounter/screens/branch_entry_list.dart';
 import 'package:akounter/screens/settings/branch_settings_screen.dart';
 import 'package:akounter/widgets/navigation_widget.dart';
+import 'package:akounter/widgets/snackbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import '../locator.dart';
@@ -89,7 +90,20 @@ class BranchScreen extends StatelessWidget {
                         trailing: IconButton(
                           icon: Icon(Icons.delete),
                           onPressed: () {
-                            _branches.removeBranch(_branchList[i].id);
+                            cSnackBar(
+                              context,
+                              message:
+                                  "Do you really want to delete ${_branchList[i].name}?",
+                              button: FlatButton(
+                                onPressed: () {
+                                  _branches.removeBranch(_branchList[i].id);
+                                },
+                                child: Text(
+                                  "Yes",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            );
                           },
                         ),
                       ),

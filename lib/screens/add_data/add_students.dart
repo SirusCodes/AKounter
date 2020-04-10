@@ -1,6 +1,7 @@
 import 'package:akounter/models/student_model.dart';
 import 'package:akounter/provider/student_provider.dart';
 import 'package:akounter/widgets/c_textformfield.dart';
+import 'package:akounter/widgets/snackbar.dart';
 import 'package:date_format/date_format.dart';
 import 'package:date_text_input_formatter/date_text_input_formatter.dart';
 import 'package:flutter/material.dart';
@@ -324,6 +325,10 @@ class _AddStudentState extends State<AddStudent> {
   }
 
   void _clearAllTFF() {
+    cSnackBar(
+      context,
+      message: "${_nameController.text} is added",
+    );
     setState(() {
       _nameController.clear();
       _numController.clear();

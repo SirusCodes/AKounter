@@ -3,6 +3,7 @@ import 'package:akounter/models/entry_model.dart';
 import 'package:akounter/provider/add_entry_provider.dart';
 import 'package:akounter/provider/entry_provider.dart';
 import 'package:akounter/screens/add_data/add_entry.dart';
+import 'package:akounter/widgets/snackbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -136,6 +137,10 @@ class StudentDetails extends StatelessWidget {
                               icon: Icon(Icons.delete,
                                   color: Theme.of(context).accentColor),
                               onPressed: () {
+                                cSnackBar(
+                                  context,
+                                  message: "Entry is deleted",
+                                );
                                 locator<AddEntryProvider>()
                                     .delete(_entryLists[i]);
                               },

@@ -3,6 +3,7 @@ import 'package:akounter/models/branch_model.dart';
 import 'package:akounter/models/user.dart';
 import 'package:akounter/provider/branch_provider.dart';
 import 'package:akounter/widgets/c_textformfield.dart';
+import 'package:akounter/widgets/snackbar.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import '../../data.dart';
@@ -77,9 +78,22 @@ class _BranchSettingsScreenState extends State<BranchSettingsScreen> {
                         trailing: IconButton(
                           icon: Icon(Icons.delete),
                           onPressed: () {
-                            if (_branchInList.length > 1 &&
-                                data.owner == _user.mailID &&
-                                data.owner != _branchInList[i]) {
+                            if (_branchInList.length <= 1 ||
+                                data.owner != _user.mailID) {
+                              cSnackBar(
+                                context,
+                                message: "Cannot delete owner account",
+                              );
+                            } else if (data.owner == _branchInList[i]) {
+                              cSnackBar(
+                                context,
+                                message: "You are not owner of this branch",
+                              );
+                            } else {
+                              cSnackBar(
+                                context,
+                                message: "${_branchInNameList[i]} is removed",
+                              );
                               setState(() {
                                 _branchInList.removeAt(i);
                                 _branchInNameList.removeAt(i);
@@ -87,7 +101,6 @@ class _BranchSettingsScreenState extends State<BranchSettingsScreen> {
 
                               data.instructors = _branchInList;
                               data.instructorNames = _branchInNameList;
-
                               BranchProvider().updateBranch(data, data.id);
                             }
                           },
@@ -119,7 +132,11 @@ class _BranchSettingsScreenState extends State<BranchSettingsScreen> {
 
             _idController.clear();
             _nameController.clear();
-          }
+          } else if (data.owner == _user.mailID)
+            cSnackBar(
+              context,
+              message: "You are not owner of this branch",
+            );
         },
       ),
     );
