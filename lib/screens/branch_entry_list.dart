@@ -58,10 +58,6 @@ class _BranchEntryListState extends State<BranchEntryList> {
                           },
                         ),
                       ),
-                      Text(
-                        "Total: $_total",
-                        style: Theme.of(context).textTheme.display2,
-                      )
                     ],
                   ),
                 ),
@@ -77,28 +73,42 @@ class _BranchEntryListState extends State<BranchEntryList> {
                       _entryList = snapshot.data.documents
                           .map((f) => EntryModel.fromJson(f.data, f.documentID))
                           .toList();
-                      return ListView.builder(
-                        itemCount: _entryList.length,
-                        itemBuilder: (context, int i) {
-                          return Card(
-                            elevation: 3.0,
-                            child: ListTile(
-                              title: Text(_entryList[i].name),
-                              subtitle: Text(_entryList[i].reason +
-                                  "  " +
-                                  _entryList[i].detailedReason),
-                              trailing: IconButton(
-                                icon: Icon(Icons.delete,
-                                    color: Theme.of(context).accentColor),
-                                onPressed: () {
-                                  locator<AddEntryProvider>()
-                                      .delete(_entryList[i]);
-                                },
-                              ),
-                              onTap: () {},
+
+                      _total = _entryList.fold(0, (t, e) => t + e.total);
+                      return Column(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "Total: $_total",
+                              style: Theme.of(context).textTheme.display2,
                             ),
-                          );
-                        },
+                          ),
+                          ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: _entryList.length,
+                            itemBuilder: (context, int i) {
+                              return Card(
+                                elevation: 3.0,
+                                child: ListTile(
+                                  title: Text(_entryList[i].name),
+                                  subtitle: Text(_entryList[i].reason +
+                                      "  " +
+                                      _entryList[i].detailedReason),
+                                  trailing: IconButton(
+                                    icon: Icon(Icons.delete,
+                                        color: Theme.of(context).accentColor),
+                                    onPressed: () {
+                                      locator<AddEntryProvider>()
+                                          .delete(_entryList[i]);
+                                    },
+                                  ),
+                                  onTap: () {},
+                                ),
+                              );
+                            },
+                          ),
+                        ],
                       );
                     } else {
                       return Container(

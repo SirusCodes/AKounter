@@ -15,7 +15,7 @@ class Data {
     _student = student;
   }
 
-  StudentModel get getStudent => _student;
+  StudentModel get getStudent => _student ?? StudentModel();
 
   static User _user;
   set setUser(User user) {

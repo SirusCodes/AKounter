@@ -25,8 +25,7 @@ class EntryServices {
 
   Stream<QuerySnapshot> streamAllEntriesCollection(String date) {
     return _db
-        .collectionGroup("entry")
-        .where("instructors", arrayContains: _id.getUser.mailID)
+        .collectionGroup("entries")
         .where("branch", isEqualTo: _id.getBranch.name)
         .where("date", isEqualTo: date)
         .snapshots();
@@ -59,6 +58,6 @@ class EntryServices {
         .document(_id.getBranch.id)
         .collection("students")
         .document(_id.getStudent.id)
-        .collection("entry");
+        .collection("entries");
   }
 }
