@@ -74,7 +74,20 @@ class BranchScreen extends StatelessWidget {
                             );
                           },
                         ),
-                        title: Text(_branchList[i].name),
+                        title: RichText(
+                          text: TextSpan(
+                            text: _branchList[i].name + " ",
+                            style:
+                                TextStyle(color: Theme.of(context).accentColor),
+                            children: <TextSpan>[
+                              if (_branchList[i].owner ==
+                                  locator<Data>().getUser.mailID)
+                                TextSpan(
+                                    text: "(owner)",
+                                    style: TextStyle(fontSize: 12))
+                            ],
+                          ),
+                        ),
                         onTap: () {
                           locator<Data>().setBranch = _branchList[i];
                           Navigator.push(
@@ -90,20 +103,27 @@ class BranchScreen extends StatelessWidget {
                         trailing: IconButton(
                           icon: Icon(Icons.delete),
                           onPressed: () {
-                            cSnackBar(
-                              context,
-                              message:
-                                  "Do you really want to delete ${_branchList[i].name}?",
-                              button: FlatButton(
-                                onPressed: () {
-                                  _branches.removeBranch(_branchList[i].id);
-                                },
-                                child: Text(
-                                  "Yes",
-                                  style: TextStyle(color: Colors.white),
+                            if (_branchList[i].owner ==
+                                locator<Data>().getUser.mailID) {
+                              cSnackBar(
+                                context,
+                                message:
+                                    "Do you really want to delete ${_branchList[i].name}?",
+                                button: FlatButton(
+                                  onPressed: () {
+                                    _branches.removeBranch(_branchList[i].id);
+                                  },
+                                  child: Text(
+                                    "Yes",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
                                 ),
-                              ),
-                            );
+                              );
+                            } else
+                              cSnackBar(
+                                context,
+                                message: "You are not the owner of this branch",
+                              );
                           },
                         ),
                       ),

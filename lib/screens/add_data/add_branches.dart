@@ -152,6 +152,7 @@ class _AddBranchState extends State<AddBranch> {
             else
               _branch.updateBranch(_model, _model.id);
             _clearAllTFF();
+            Navigator.pop(context);
           }
         },
       ),

@@ -1,6 +1,7 @@
 import 'package:akounter/models/entry_model.dart';
 import 'package:akounter/provider/add_entry_provider.dart';
 import 'package:akounter/provider/entry_provider.dart';
+import 'package:akounter/provider/student_provider.dart';
 import 'package:akounter/widgets/snackbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_format/date_format.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:provider/provider.dart';
 
+import '../data.dart';
 import '../locator.dart';
 
 class BranchEntryList extends StatefulWidget {
@@ -18,9 +20,13 @@ class BranchEntryList extends StatefulWidget {
 }
 
 class _BranchEntryListState extends State<BranchEntryList> {
-  List<EntryModel> _entryList;
+  List<EntryModel> _entryList = [];
   String _date;
   int _total = 0;
+
+  bool _showList = false, _isAllDeleted = false;
+
+  var _student = locator<Data>();
 
   @override
   void initState() {
@@ -67,15 +73,19 @@ class _BranchEntryListState extends State<BranchEntryList> {
             ),
             Consumer<EntryProvider>(
               builder: (_, _entries, __) {
+                final _studentProvider = Provider.of<StudentProvider>(context);
                 return StreamBuilder(
                   stream: _entries.fetchAllEntriesAsStream(_date),
                   builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if (snapshot.hasData) {
+                    if (snapshot.hasData && !_isAllDeleted) {
                       _entryList = snapshot.data.documents
                           .map((f) => EntryModel.fromJson(f.data, f.documentID))
                           .toList();
 
                       _total = _entryList.fold(0, (t, e) => t + e.total);
+                      _showList = true;
+                    }
+                    if (_showList) {
                       return Column(
                         children: <Widget>[
                           Padding(
@@ -99,15 +109,29 @@ class _BranchEntryListState extends State<BranchEntryList> {
                                   trailing: IconButton(
                                     icon: Icon(Icons.delete,
                                         color: Theme.of(context).accentColor),
-                                    onPressed: () {
+                                    onPressed: () async {
+                                      if (_student.getStudent.id !=
+                                          _entryList[i].studentID)
+                                        _student.setStudent =
+                                            await _studentProvider
+                                                .getStudentById(
+                                          _entryList[i].studentID,
+                                        );
+
+                                      locator<AddEntryProvider>()
+                                          .delete(_entryList[i]);
+
+                                      setState(() {
+                                        if (_entryList.length == 1) {
+                                          _isAllDeleted = true;
+                                          _showList = false;
+                                        }
+                                      });
+
                                       cSnackBar(
                                         context,
                                         message: "Entry is deleted",
                                       );
-                                      setState(() {
-                                        locator<AddEntryProvider>()
-                                            .delete(_entryList[i]);
-                                      });
                                     },
                                   ),
                                   onTap: () {},

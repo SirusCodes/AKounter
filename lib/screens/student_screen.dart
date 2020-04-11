@@ -44,65 +44,74 @@ class StudentScreen extends StatelessWidget {
                     .map((f) => StudentModel.fromJson(f.data, f.documentID))
                     .toList();
               }
-              return ListView.builder(
-                itemCount: _studentList.length,
-                itemBuilder: (context, int i) {
-                  return Card(
-                    elevation: 3.0,
-                    child: ListTile(
-                      leading: IconButton(
-                        icon: Icon(Icons.edit),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  AddStudent(student: _studentList[i]),
-                            ),
-                          );
-                        },
-                      ),
-                      title: Text(_studentList[i].name),
-                      onTap: () {
-                        locator<Data>().setStudent = _studentList[i];
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AddEntry(),
-                          ),
-                        );
-                      },
-                      onLongPress: () {
-                        locator<Data>().setStudent = _studentList[i];
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => StudentDetails(),
-                          ),
-                        );
-                      },
-                      trailing: IconButton(
-                        icon: Icon(Icons.delete),
-                        onPressed: () {
-                          cSnackBar(
-                            context,
-                            message:
-                                "Do you really want to delete ${_studentList[i].name}?",
-                            button: FlatButton(
+              return Column(
+                children: <Widget>[
+                  Center(child: Text("Tap and hold for student details")),
+                  Flexible(
+                    fit: FlexFit.loose,
+                    child: ListView.builder(
+                      itemCount: _studentList.length,
+                      itemBuilder: (context, int i) {
+                        return Card(
+                          elevation: 3.0,
+                          child: ListTile(
+                            leading: IconButton(
+                              icon: Icon(Icons.edit),
                               onPressed: () {
-                                _students.removeStudent(_studentList[i].id);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        AddStudent(student: _studentList[i]),
+                                  ),
+                                );
                               },
-                              child: Text(
-                                "Yes",
-                                style: TextStyle(color: Colors.white),
-                              ),
                             ),
-                          );
-                        },
-                      ),
+                            title: Text(_studentList[i].name),
+                            onTap: () {
+                              locator<Data>().setStudent = _studentList[i];
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => AddEntry(),
+                                ),
+                              );
+                            },
+                            onLongPress: () {
+                              locator<Data>().setStudent = _studentList[i];
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => StudentDetails(),
+                                ),
+                              );
+                            },
+                            trailing: IconButton(
+                              icon: Icon(Icons.delete),
+                              onPressed: () {
+                                cSnackBar(
+                                  context,
+                                  message:
+                                      "Do you really want to delete ${_studentList[i].name}?",
+                                  button: FlatButton(
+                                    onPressed: () {
+                                      _students
+                                          .removeStudent(_studentList[i].id);
+                                    },
+                                    child: Text(
+                                      "Yes",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
+                  ),
+                ],
               );
             },
           ),

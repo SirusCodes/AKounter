@@ -33,7 +33,9 @@ class CTextFormField extends StatelessWidget {
       inputFormatters: inputFormatters,
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: TextStyle(color: Theme.of(context).accentColor),
+        hintStyle: TextStyle(
+          color: Theme.of(context).splashColor,
+        ),
         labelText: label,
         labelStyle: TextStyle(color: Theme.of(context).accentColor),
         border: border(context),

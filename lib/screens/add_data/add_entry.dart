@@ -204,6 +204,7 @@ class _AddEntryState extends State<AddEntry> {
                     date: _date,
                     name: _student.getStudent.name,
                     branch: _student.getBranch.name,
+                    studentID: _student.getStudent.id,
                   ),
                 );
                 print(_entry.getDetailedReason);
