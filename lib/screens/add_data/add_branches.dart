@@ -5,6 +5,7 @@ import 'package:akounter/provider/branch_provider.dart';
 import 'package:akounter/widgets/c_textformfield.dart';
 import 'package:akounter/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../data.dart';
@@ -70,6 +71,9 @@ class _AddBranchState extends State<AddBranch> {
                       label: "Name",
                       textCapitalization: TextCapitalization.words,
                       controller: _nameController,
+                      inputFormatters: [
+                        BlacklistingTextInputFormatter(RegExp("[0-9]"))
+                      ],
                       validator: (value) =>
                           _isEmpty(value) ? "Name can't be empty!" : null,
                       onSaved: (value) {
@@ -84,6 +88,9 @@ class _AddBranchState extends State<AddBranch> {
                         keyboardType: TextInputType.number,
                         label: "Below Green",
                         controller: _belowGreen,
+                        inputFormatters: [
+                          WhitelistingTextInputFormatter.digitsOnly
+                        ],
                         validator: (value) =>
                             _isEmpty(value) ? "Value can't be empty!" : null,
                         onSaved: (value) =>
@@ -96,6 +103,9 @@ class _AddBranchState extends State<AddBranch> {
                         keyboardType: TextInputType.number,
                         label: "Above Green",
                         controller: _aboveGreen,
+                        inputFormatters: [
+                          WhitelistingTextInputFormatter.digitsOnly
+                        ],
                         validator: (value) =>
                             _isEmpty(value) ? "Value can't be empty!" : null,
                         onSaved: (value) =>
@@ -108,6 +118,9 @@ class _AddBranchState extends State<AddBranch> {
                         keyboardType: TextInputType.number,
                         label: "Member Discount",
                         controller: _member,
+                        inputFormatters: [
+                          WhitelistingTextInputFormatter.digitsOnly
+                        ],
                         validator: (value) =>
                             _isEmpty(value) ? "Value can't be empty!" : null,
                         onSaved: (value) =>

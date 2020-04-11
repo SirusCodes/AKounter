@@ -5,6 +5,7 @@ import 'package:akounter/widgets/snackbar.dart';
 import 'package:date_format/date_format.dart';
 import 'package:date_text_input_formatter/date_text_input_formatter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -94,6 +95,9 @@ class _AddStudentState extends State<AddStudent> {
                       label: "Name",
                       textCapitalization: TextCapitalization.words,
                       controller: _nameController,
+                      inputFormatters: [
+                        BlacklistingTextInputFormatter(RegExp("[0-9]"))
+                      ],
                       validator: (value) =>
                           _isEmpty(value) ? "Name can't be empty!" : null,
                       onSaved: (value) => _student.name = value,
@@ -110,6 +114,9 @@ class _AddStudentState extends State<AddStudent> {
                             keyboardType: TextInputType.number,
                             label: "DOB",
                             controller: _dobController,
+                            validator: (value) => _validateDate(value)
+                                ? "Date format is not Proper"
+                                : null,
                             inputFormatters: [
                               DateTextInputFormatter(
                                 format: ["dd", "mm", "yyyy"],
@@ -141,6 +148,12 @@ class _AddStudentState extends State<AddStudent> {
                       hint: "0123456789",
                       keyboardType: TextInputType.phone,
                       label: "Number",
+                      inputFormatters: [
+                        WhitelistingTextInputFormatter.digitsOnly
+                      ],
+                      validator: (value) => _isPhoneNumber(value)
+                          ? "Enter a proper phone number"
+                          : null,
                       controller: _numController,
                       onSaved: (value) => _student.number = value,
                     ),
@@ -151,6 +164,12 @@ class _AddStudentState extends State<AddStudent> {
                       hint: "0123456789",
                       keyboardType: TextInputType.phone,
                       label: "Father's Number",
+                      inputFormatters: [
+                        WhitelistingTextInputFormatter.digitsOnly
+                      ],
+                      validator: (value) => _isPhoneNumber(value)
+                          ? "Enter a proper phone number"
+                          : null,
                       controller: _numFatherController,
                       onSaved: (value) => _student.fatherNum = value,
                     ),
@@ -162,6 +181,12 @@ class _AddStudentState extends State<AddStudent> {
                       keyboardType: TextInputType.phone,
                       label: "Mother's Number",
                       controller: _numMotherController,
+                      inputFormatters: [
+                        WhitelistingTextInputFormatter.digitsOnly
+                      ],
+                      validator: (value) => _isPhoneNumber(value)
+                          ? "Enter a proper phone number"
+                          : null,
                       onSaved: (value) => _student.motherNum = value,
                     ),
                   ),
@@ -304,24 +329,44 @@ class _AddStudentState extends State<AddStudent> {
         onPressed: () {
           if (_formKey.currentState.validate()) {
             _formKey.currentState.save();
-            debugPrint("Saved");
-            _save();
-            if (_student.id != null)
-              _students.updateStudent(_student, _student.id);
-            else
-              _students.addStudent(_student);
-            _clearAllTFF();
+            // debugPrint("Saved");
+            // _save();
+            // if (_student.id != null)
+            //   _students.updateStudent(_student, _student.id);
+            // else
+            //   _students.addStudent(_student);
+            // _clearAllTFF();
           }
         },
       ),
     );
   }
 
-  bool _isEmpty(value) {
+  bool _isEmpty(String value) {
     if (value.toString().isEmpty) {
       return true;
     }
     return false;
+  }
+
+  bool _isPhoneNumber(String value) =>
+      value.isNotEmpty ? value.length != 10 ? true : false : false;
+
+  bool _validateDate(String value) {
+    List<String> _lengths = value.split("/");
+    if (_lengths[0].length != 2 &&
+        _lengths[1].length != 2 &&
+        _lengths[2].length != 4)
+      return false;
+    else if (int.parse(_lengths[0]) < 0 &&
+        int.parse(_lengths[0]) > 32 &&
+        int.parse(_lengths[1]) > 13 &&
+        int.parse(_lengths[1]) < 0 &&
+        int.parse(_lengths[2]) < 1950 &&
+        int.parse(_lengths[2]) > DateTime.now().year)
+      return false;
+    else
+      return true;
   }
 
   void _clearAllTFF() {

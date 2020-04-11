@@ -10,6 +10,7 @@ import 'package:akounter/widgets/c_textformfield.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:akounter/enums/type_payment_enum.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:provider/provider.dart';
 import '../../data.dart';
@@ -123,6 +124,9 @@ class _AddEntryState extends State<AddEntry> {
                                     label: "Amount given",
                                     hint: "1000",
                                     keyboardType: TextInputType.number,
+                                    inputFormatters: [
+                                      WhitelistingTextInputFormatter.digitsOnly
+                                    ],
                                     validator: (value) {
                                       if (value == null || value == "") {
                                         return "Enter a defined value";
