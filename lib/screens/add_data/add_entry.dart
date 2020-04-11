@@ -129,7 +129,7 @@ class _AddEntryState extends State<AddEntry> {
                                     ],
                                     validator: (value) {
                                       if (value == null || value == "") {
-                                        return "Enter a defined value";
+                                        return "Please enter a proper value!";
                                       }
                                       return null;
                                     },

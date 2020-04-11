@@ -9,7 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:provider/provider.dart';
 
-enum Gender { male, female }
+enum Gender { male, female, other }
 
 class AddStudent extends StatefulWidget {
   const AddStudent({Key key, this.student}) : super(key: key);
@@ -99,7 +99,7 @@ class _AddStudentState extends State<AddStudent> {
                         BlacklistingTextInputFormatter(RegExp("[0-9]"))
                       ],
                       validator: (value) =>
-                          _isEmpty(value) ? "Name can't be empty!" : null,
+                          _isEmpty(value) ? "Please enter something!" : null,
                       onSaved: (value) => _student.name = value,
                     ),
                   ),
@@ -110,12 +110,12 @@ class _AddStudentState extends State<AddStudent> {
                         Flexible(
                           fit: FlexFit.loose,
                           child: CTextFormField(
-                            hint: "DD-MM-YYYY",
+                            hint: "DD/MM/YYYY",
                             keyboardType: TextInputType.number,
                             label: "DOB",
                             controller: _dobController,
                             validator: (value) => _validateDate(value)
-                                ? "Date format is not Proper"
+                                ? "Please enter date in proper format"
                                 : null,
                             inputFormatters: [
                               DateTextInputFormatter(
@@ -152,7 +152,7 @@ class _AddStudentState extends State<AddStudent> {
                         WhitelistingTextInputFormatter.digitsOnly
                       ],
                       validator: (value) => _isPhoneNumber(value)
-                          ? "Enter a proper phone number"
+                          ? "Please enter a proper phone number"
                           : null,
                       controller: _numController,
                       onSaved: (value) => _student.number = value,
@@ -168,7 +168,7 @@ class _AddStudentState extends State<AddStudent> {
                         WhitelistingTextInputFormatter.digitsOnly
                       ],
                       validator: (value) => _isPhoneNumber(value)
-                          ? "Enter a proper phone number"
+                          ? "Please enter a proper phone number"
                           : null,
                       controller: _numFatherController,
                       onSaved: (value) => _student.fatherNum = value,
@@ -185,7 +185,7 @@ class _AddStudentState extends State<AddStudent> {
                         WhitelistingTextInputFormatter.digitsOnly
                       ],
                       validator: (value) => _isPhoneNumber(value)
-                          ? "Enter a proper phone number"
+                          ? "Please enter a proper phone number"
                           : null,
                       onSaved: (value) => _student.motherNum = value,
                     ),
@@ -252,6 +252,20 @@ class _AddStudentState extends State<AddStudent> {
                           ),
                           Text(
                             "Female",
+                            style: Theme.of(context).textTheme.display1,
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Radio(
+                            value: Gender.other,
+                            groupValue: _gender,
+                            onChanged: (Gender value) =>
+                                setState(() => _gender = value),
+                          ),
+                          Text(
+                            "Other",
                             style: Theme.of(context).textTheme.display1,
                           ),
                         ],
@@ -358,12 +372,12 @@ class _AddStudentState extends State<AddStudent> {
         _lengths[1].length != 2 &&
         _lengths[2].length != 4)
       return false;
-    else if (int.parse(_lengths[0]) < 0 &&
-        int.parse(_lengths[0]) > 32 &&
-        int.parse(_lengths[1]) > 13 &&
-        int.parse(_lengths[1]) < 0 &&
-        int.parse(_lengths[2]) < 1950 &&
-        int.parse(_lengths[2]) > DateTime.now().year)
+    else if (int.parse(_lengths[0]) > 0 &&
+        int.parse(_lengths[0]) < 32 &&
+        int.parse(_lengths[1]) < 13 &&
+        int.parse(_lengths[1]) > 0 &&
+        int.parse(_lengths[2]) > 1950 &&
+        int.parse(_lengths[2]) < DateTime.now().year)
       return false;
     else
       return true;
@@ -388,7 +402,9 @@ class _AddStudentState extends State<AddStudent> {
   void _save() {
     _student.isMember = _memberCheck;
     _student.onTrial = _onTrial;
-    _student.gender = _gender == Gender.male ? "Male" : "Female";
+    _student.gender = _gender == Gender.male
+        ? "Male"
+        : _gender == Gender.female ? "Female" : "Other";
     _student.belt = _sliderBelt.toInt();
     _student.fees = _sliderMonth.toInt();
   }

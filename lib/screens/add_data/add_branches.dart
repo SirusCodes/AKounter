@@ -75,7 +75,7 @@ class _AddBranchState extends State<AddBranch> {
                         BlacklistingTextInputFormatter(RegExp("[0-9]"))
                       ],
                       validator: (value) =>
-                          _isEmpty(value) ? "Name can't be empty!" : null,
+                          _isEmpty(value) ? "Please enter something!" : null,
                       onSaved: (value) {
                         _model.name = value;
                       },
@@ -92,7 +92,7 @@ class _AddBranchState extends State<AddBranch> {
                           WhitelistingTextInputFormatter.digitsOnly
                         ],
                         validator: (value) =>
-                            _isEmpty(value) ? "Value can't be empty!" : null,
+                            _isEmpty(value) ? "Please enter something!" : null,
                         onSaved: (value) =>
                             _model.belowGreen = int.parse(value)),
                   ),
@@ -107,7 +107,7 @@ class _AddBranchState extends State<AddBranch> {
                           WhitelistingTextInputFormatter.digitsOnly
                         ],
                         validator: (value) =>
-                            _isEmpty(value) ? "Value can't be empty!" : null,
+                            _isEmpty(value) ? "Please enter something!" : null,
                         onSaved: (value) =>
                             _model.aboveGreen = int.parse(value)),
                   ),
@@ -122,7 +122,7 @@ class _AddBranchState extends State<AddBranch> {
                           WhitelistingTextInputFormatter.digitsOnly
                         ],
                         validator: (value) =>
-                            _isEmpty(value) ? "Value can't be empty!" : null,
+                            _isEmpty(value) ? "Please enter something!" : null,
                         onSaved: (value) =>
                             _model.memberDiscount = int.parse(value)),
                   ),
