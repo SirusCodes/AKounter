@@ -329,13 +329,13 @@ class _AddStudentState extends State<AddStudent> {
         onPressed: () {
           if (_formKey.currentState.validate()) {
             _formKey.currentState.save();
-            // debugPrint("Saved");
-            // _save();
-            // if (_student.id != null)
-            //   _students.updateStudent(_student, _student.id);
-            // else
-            //   _students.addStudent(_student);
-            // _clearAllTFF();
+            debugPrint("Saved");
+            _save();
+            if (_student.id != null)
+              _students.updateStudent(_student, _student.id);
+            else
+              _students.addStudent(_student);
+            _clearAllTFF();
           }
         },
       ),
