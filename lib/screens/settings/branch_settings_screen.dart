@@ -1,3 +1,4 @@
+import 'package:akounter/provider/database_manager.dart';
 import 'package:akounter/locator.dart';
 import 'package:akounter/models/branch_model.dart';
 import 'package:akounter/models/user.dart';
@@ -6,6 +7,7 @@ import 'package:akounter/widgets/c_textformfield.dart';
 import 'package:akounter/widgets/snackbar.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../data.dart';
 
 class BranchSettingsScreen extends StatefulWidget {
@@ -22,15 +24,38 @@ class _BranchSettingsScreenState extends State<BranchSettingsScreen> {
 
   BranchModel data = locator<Data>().getBranch;
   User _user = locator<Data>().getUser;
+
   @override
   Widget build(BuildContext context) {
     List _branchInList = data.instructors;
     List _branchInNameList = data.instructorNames;
+    final _databaseManager = Provider.of<DatabaseManager>(context);
 
-    return Scaffold(
+    return
+        // LoadingOverlay(
+        //   isLoading: _databaseManager.getIndicator,
+        //   color: Theme.of(context).primaryColor,
+        //   opacity: 0.7,
+        //   progressIndicator: CircularProgressIndicator(
+        //       // value: _databaseManager.getPercent,
+        //       ),
+        // child:
+        Scaffold(
       appBar: AppBar(
         title: Text("Branch Settings"),
         elevation: 0.0,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.cloud_upload),
+            tooltip: "upload to cloud",
+            onPressed: () {
+              setState(() {
+                _databaseManager.setIndicator = true;
+              });
+              DatabaseManager.upload();
+            },
+          )
+        ],
       ),
       body: Container(
         color: Theme.of(context).primaryColor,
@@ -139,6 +164,7 @@ class _BranchSettingsScreenState extends State<BranchSettingsScreen> {
             );
         },
       ),
+      // ),
     );
   }
 }

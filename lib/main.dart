@@ -1,3 +1,4 @@
+import 'package:akounter/provider/database_manager.dart';
 import 'package:akounter/locator.dart';
 import 'package:akounter/provider/branch_provider.dart';
 import 'package:akounter/provider/entry_provider.dart';
@@ -34,7 +35,10 @@ class MyApp extends StatelessWidget {
         Provider<LoginProvider>(create: (_) => LoginProvider()),
         Provider<EntryProvider>(create: (_) => EntryProvider()),
         ChangeNotifierProvider<AddEntryProvider>(
-            create: (_) => AddEntryProvider())
+            create: (_) => AddEntryProvider()),
+        ChangeNotifierProvider<DatabaseManager>(
+          create: (_) => DatabaseManager(),
+        )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
