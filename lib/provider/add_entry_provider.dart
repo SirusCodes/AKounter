@@ -2,18 +2,22 @@ import 'package:akounter/data.dart';
 import 'package:akounter/enums/dress_size_enum.dart';
 import 'package:akounter/locator.dart';
 import 'package:akounter/models/entry_model.dart';
+import 'package:akounter/models/requirements_model.dart';
 import 'package:akounter/models/student_model.dart';
+import 'package:akounter/provider/branch_provider.dart';
 import 'package:akounter/provider/entry_provider.dart';
+import 'package:akounter/provider/requirement_provider.dart';
 import 'package:akounter/provider/student_provider.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/foundation.dart';
 
 //! may refactor it later
 
 class AddEntryProvider extends ChangeNotifier {
   static int _total = 0, _subtotal = 0, _pending = 0, _amountGiven;
-  static String _reason = "Monthly", _detailedReason, _invoiceNo;
+  static String _reason = "Monthly", _detailedReason, _invoiceNo, _reqID;
 
-  var _student = locator<Data>();
+  var _data = locator<Data>();
 
   var _belts = [
     "White",
@@ -102,7 +106,7 @@ class AddEntryProvider extends ChangeNotifier {
 
   String updateAsMonthly() {
     List<String> detailedReason = [];
-    int current = _student.getStudent.fees;
+    int current = _data.getStudent.fees;
 
     for (int i = 0; i < _totalMonth; i++) {
       // -1 so in next iteration it will be 0
@@ -122,10 +126,10 @@ class AddEntryProvider extends ChangeNotifier {
   // examination
   //
   void examination() {
-    if (_student.getStudent.belt < 8) {
+    if (_data.getStudent.belt < 8) {
       _detailedReason =
-          "${_belts[_student.getStudent.belt]} to ${_belts[_student.getStudent.belt + 1]}";
-      updateAsExam(_student.getStudent.belt);
+          "${_belts[_data.getStudent.belt]} to ${_belts[_data.getStudent.belt + 1]}";
+      updateAsExam(_data.getStudent.belt);
     } else
       _detailedReason = "Can't handle dan belts yet";
     notifyListeners();
@@ -191,11 +195,8 @@ class AddEntryProvider extends ChangeNotifier {
     String detailedReason = "";
 
     if (_gloves) equip.add("Gloves");
-
     if (_kickpad) equip.add("Kickpad");
-
     if (_chestguard) equip.add("Chestguard");
-
     if (_footguard) equip.add("Footguard");
 
     detailedReason = equip.toString();
@@ -252,14 +253,15 @@ class AddEntryProvider extends ChangeNotifier {
   //
   // save
   //
-  void save() {
+  void save(String date) {
     switch (_reason) {
       case "Monthly":
         _detailedReason = updateAsMonthly();
-        if (_student.getBranch.indirectPayment) _reason += "($_invoiceNo)";
+        if (_data.getBranch.indirectPayment) _reason += "($_invoiceNo)";
         break;
       case 'Equipments':
         _detailedReason = detailEquipment();
+        _postSaveEquip(date);
         break;
       case 'Dress':
         _detailedReason = detailDress();
@@ -272,27 +274,59 @@ class AddEntryProvider extends ChangeNotifier {
     _pending = _amountGiven - _total;
   }
 
-  void postSave(String date) {
-    if (_pending != _student.getStudent.pending) {
-      _student.getStudent.pending = _pending;
+  void postSaveStudent(String date) {
+    if (_pending != _data.getStudent.pending) {
+      _data.getStudent.pending = _pending;
     }
     if (_reason.startsWith("Monthly")) {
-      int newFees = _student.getStudent.fees;
+      int newFees = _data.getStudent.fees;
       newFees = (newFees + _totalMonth) % 12;
-      _student.getStudent.fees = newFees;
-      _student.getStudent.lastFees = date;
+      _data.getStudent.fees = newFees;
+      _data.getStudent.lastFees = date;
     } else if (_reason == "Examination") {
-      _student.getStudent.belt++;
+      _data.getStudent.belt++;
     }
-    StudentProvider()
-        .updateStudent(_student.getStudent, _student.getStudent.id);
+    StudentProvider().updateStudent(_data.getStudent, _data.getStudent.id);
   }
+
+  //! requirement update
+  String get getReqID => _reqID;
+
+  _postSaveEquip(String date) {
+    RequirementModel _model = RequirementModel();
+    _reqID = formatDate(
+      DateTime.now(),
+      [dd, "-", mm, "-", yy, "_", hh, ":", nn, ":", ss, ":", SSS],
+    );
+    for (var requirement in _detailedReason.split(", ")) {
+      _model.issued = false;
+      _model.studentId = _data.getStudent.id;
+      _model.studentName = _data.getStudent.name;
+      _model.requirementType = requirement;
+      RequirementProvider().addRequirement(_model, _reqID + "-" + requirement);
+    }
+    _updateBranchMap();
+    _gloves = _kickpad = _chestguard = _footguard = false;
+  }
+
+  _updateBranchMap() {
+    var _branch = _data.getBranch;
+
+    if (_gloves) _branch.requirements["Gloves"]++;
+    if (_kickpad) _branch.requirements["Kickpad"]++;
+    if (_chestguard) _branch.requirements["Chestguard"]++;
+    if (_footguard) _branch.requirements["Footguard"]++;
+
+    BranchProvider().updateBranch(_branch, _branch.id);
+  }
+
+  // TODO: save for dress req
 
   //
   // delete
   //
   void delete(EntryModel entry) {
-    StudentModel _studentmod = _student.getStudent;
+    StudentModel _studentmod = _data.getStudent;
     if (entry.reason.startsWith("Monthly")) {
       List list = entry.detailedReason.split(", ");
       _studentmod.fees -= list.length;
@@ -302,6 +336,10 @@ class AddEntryProvider extends ChangeNotifier {
     StudentProvider().updateStudent(_studentmod, _studentmod.id);
     EntryProvider().removeEntry(entry.id);
   }
+
+  //! TODO: delete for equipment
+
+  // TODO: delete for dress req
 
   // update
   void updateTotal() {

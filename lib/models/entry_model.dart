@@ -1,5 +1,12 @@
 class EntryModel {
-  String id, reason, detailedReason, date, name, branch, studentID;
+  String id,
+      reason,
+      detailedReason,
+      date,
+      name,
+      branch,
+      studentID,
+      requirementID;
   int total, subtotal, pending;
 
   EntryModel(
@@ -12,7 +19,8 @@ class EntryModel {
       this.pending,
       this.name,
       this.branch,
-      this.studentID});
+      this.studentID,
+      this.requirementID});
 
   EntryModel.fromJson(Map snapshot, String id)
       : this.id = id,
@@ -24,7 +32,8 @@ class EntryModel {
         pending = snapshot["pending"] ?? 0,
         name = snapshot['name'] ?? "",
         branch = snapshot['branch'] ?? "",
-        studentID = snapshot['student_id'];
+        studentID = snapshot['student_id'],
+        requirementID = snapshot["requirement_id"];
 
   toJson() {
     return {
@@ -37,6 +46,7 @@ class EntryModel {
       "name": name,
       "branch": branch,
       "student_id": studentID,
+      "requirement_id": requirementID,
     };
   }
 }

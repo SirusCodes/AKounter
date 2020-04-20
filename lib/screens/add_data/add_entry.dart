@@ -197,7 +197,7 @@ class _AddEntryState extends State<AddEntry> {
             splashColor: Theme.of(context).primaryColor,
             onPressed: () {
               if (_formKey.currentState.validate()) {
-                _entry.save();
+                _entry.save(_date);
                 _save.addEntry(
                   EntryModel(
                     reason: _entry.getReason,
@@ -209,10 +209,10 @@ class _AddEntryState extends State<AddEntry> {
                     name: _student.getStudent.name,
                     branch: _student.getBranch.name,
                     studentID: _student.getStudent.id,
+                    requirementID: _entry.getReqID,
                   ),
                 );
-                print(_entry.getDetailedReason);
-                _entry.postSave(_date);
+                _entry.postSaveStudent(_date);
                 Navigator.pop(context);
               }
             },
