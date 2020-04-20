@@ -24,23 +24,31 @@ class _AddBranchState extends State<AddBranch> {
   TextEditingController _aboveGreen = TextEditingController();
   TextEditingController _member = TextEditingController();
 
+  static const Map<String, int> req = {
+    "Gloves": 0,
+    "Kickpad": 0,
+    "Chestguard": 0,
+    "Footguard": 0,
+  };
+
   static User _data = locator<Data>().getUser;
   bool _indirectCheck = false;
   BranchModel _model = BranchModel(
     owner: _data.mailID,
     instructors: [_data.mailID],
     instructorNames: [_data.displayName],
+    requirements: req,
   );
   @override
   void initState() {
     if (widget.branch.id != null) {
-      _model = widget.branch;
-      _model.id = _model.id.toString();
-      _nameController.text = _model.name;
-      _belowGreen.text = _model.belowGreen.toString();
-      _aboveGreen.text = _model.aboveGreen.toString();
-      _member.text = _model.memberDiscount.toString();
-      _indirectCheck = _model.indirectPayment;
+      BranchModel model = widget.branch;
+      this._model.id = model.id.toString();
+      _nameController.text = model.name;
+      _belowGreen.text = model.belowGreen.toString();
+      _aboveGreen.text = model.aboveGreen.toString();
+      _member.text = model.memberDiscount.toString();
+      _indirectCheck = model.indirectPayment;
     }
     super.initState();
   }

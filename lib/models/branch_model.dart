@@ -8,6 +8,7 @@ class BranchModel {
   List instructors;
   List instructorNames;
   String owner;
+  Map<String, dynamic> requirements;
 
   BranchModel({
     this.id,
@@ -19,9 +20,10 @@ class BranchModel {
     this.instructors,
     this.instructorNames,
     this.owner,
+    this.requirements,
   });
 
-  BranchModel.fromJson(Map snapshot, String id)
+  BranchModel.fromJson(Map<String, dynamic> snapshot, String id)
       : id = id ?? '',
         name = snapshot['name'] ?? '',
         aboveGreen = snapshot['above_green'] ?? 0,
@@ -30,7 +32,8 @@ class BranchModel {
         indirectPayment = snapshot['indirect_payment'] ?? false,
         instructors = snapshot['instructors'] ?? [],
         instructorNames = snapshot['instructor_names'] ?? [],
-        owner = snapshot['owner'] ?? "no owner";
+        owner = snapshot['owner'] ?? "no owner",
+        requirements = snapshot["requirements"] ?? {};
 
   toJson() {
     return {
@@ -42,6 +45,7 @@ class BranchModel {
       "instructors": instructors,
       "instructor_names": instructorNames,
       "owner": owner,
+      "requirements": requirements,
     };
   }
 }
