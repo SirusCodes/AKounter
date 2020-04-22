@@ -18,9 +18,9 @@ class RequirementServices {
     return ref.getDocuments();
   }
 
-  Stream<QuerySnapshot> streamDataCollection() {
+  Stream<QuerySnapshot> streamDataCollection(String equip) {
     _updateDB();
-    return ref.snapshots();
+    return ref.where("requirement_type", isEqualTo: equip).snapshots();
   }
 
   Future<DocumentSnapshot> getRequirementById(String id) {

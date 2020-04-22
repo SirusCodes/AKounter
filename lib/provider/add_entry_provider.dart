@@ -17,6 +17,8 @@ class AddEntryProvider extends ChangeNotifier {
   static int _total = 0, _subtotal = 0, _pending = 0, _amountGiven;
   static String _reason = "Monthly", _detailedReason, _invoiceNo, _reqID;
 
+  String get getReqID => _reqID;
+
   var _data = locator<Data>();
 
   var _belts = [
@@ -253,7 +255,7 @@ class AddEntryProvider extends ChangeNotifier {
   //
   // save
   //
-  void save(String date) {
+  void save() {
     switch (_reason) {
       case "Monthly":
         _detailedReason = updateAsMonthly();
@@ -261,10 +263,11 @@ class AddEntryProvider extends ChangeNotifier {
         break;
       case 'Equipments':
         _detailedReason = detailEquipment();
-        _postSaveEquip(date);
+        _postSaveEquip();
         break;
       case 'Dress':
         _detailedReason = detailDress();
+        _postSaveDress();
         break;
       case 'Card':
         _detailedReason = "Card";
@@ -283,16 +286,15 @@ class AddEntryProvider extends ChangeNotifier {
       newFees = (newFees + _totalMonth) % 12;
       _data.getStudent.fees = newFees;
       _data.getStudent.lastFees = date;
+      StudentProvider().updateStudent(_data.getStudent, _data.getStudent.id);
     } else if (_reason == "Examination") {
       _data.getStudent.belt++;
+      StudentProvider().updateStudent(_data.getStudent, _data.getStudent.id);
     }
-    StudentProvider().updateStudent(_data.getStudent, _data.getStudent.id);
   }
 
   //! requirement update
-  String get getReqID => _reqID;
-
-  _postSaveEquip(String date) {
+  _postSaveEquip() {
     RequirementModel _model = RequirementModel();
     _reqID = formatDate(
       DateTime.now(),
@@ -303,12 +305,30 @@ class AddEntryProvider extends ChangeNotifier {
       _model.studentId = _data.getStudent.id;
       _model.studentName = _data.getStudent.name;
       _model.requirementType = requirement;
+      _model.dressSize = "";
       RequirementProvider().addRequirement(_model, _reqID + "-" + requirement);
     }
     _updateBranchMap();
     _gloves = _kickpad = _chestguard = _footguard = false;
   }
 
+  //! save for dress req
+  _postSaveDress() {
+    RequirementModel _model = RequirementModel();
+    _reqID = formatDate(
+      DateTime.now(),
+      [dd, "-", mm, "-", yy, "_", hh, ":", nn, ":", ss, ":", SSS],
+    );
+    _model.issued = false;
+    _model.studentId = _data.getStudent.id;
+    _model.studentName = _data.getStudent.name;
+    _model.requirementType = "Dress";
+    _model.dressSize = _detailedReason;
+    RequirementProvider().addRequirement(_model, _reqID + "-dress");
+    _updateBranchMap();
+  }
+
+  // update branch
   _updateBranchMap() {
     var _branch = _data.getBranch;
 
@@ -316,16 +336,33 @@ class AddEntryProvider extends ChangeNotifier {
     if (_kickpad) _branch.requirements["Kickpad"]++;
     if (_chestguard) _branch.requirements["Chestguard"]++;
     if (_footguard) _branch.requirements["Footguard"]++;
+    if (_reason == "Dress") _branch.requirements["Dress"]++;
 
     BranchProvider().updateBranch(_branch, _branch.id);
   }
-
-  // TODO: save for dress req
 
   //
   // delete
   //
   void delete(EntryModel entry) {
+    if (entry.detailedReason.startsWith("Monthly") ||
+        entry.reason == "Examination") {
+      _postDelete(entry);
+    } else {
+      switch (entry.reason) {
+        case "Equipments":
+          _postDeleteEquip(entry);
+          break;
+        case 'Dress':
+          _postDeleteDress(entry);
+          break;
+      }
+    }
+    EntryProvider().removeEntry(entry.id);
+  }
+
+  //! delete for monthly and examination
+  _postDelete(EntryModel entry) {
     StudentModel _studentmod = _data.getStudent;
     if (entry.reason.startsWith("Monthly")) {
       List list = entry.detailedReason.split(", ");
@@ -334,12 +371,28 @@ class AddEntryProvider extends ChangeNotifier {
       _studentmod.belt--;
     }
     StudentProvider().updateStudent(_studentmod, _studentmod.id);
+  }
+
+  //! delete for equipment
+  _postDeleteEquip(EntryModel entry) {
+    var _branch = _data.getBranch;
+    for (var equip in entry.detailedReason.split(", ")) {
+      RequirementProvider()
+          .removeRequirement(entry.requirementID + "-" + equip);
+      _branch.requirements[equip]--;
+    }
+    BranchProvider().updateBranch(_branch, _branch.id);
     EntryProvider().removeEntry(entry.id);
   }
 
-  //! TODO: delete for equipment
-
-  // TODO: delete for dress req
+  //! delete for dress req
+  _postDeleteDress(EntryModel entry) {
+    var _branch = _data.getBranch;
+    RequirementProvider().removeRequirement(entry.requirementID + "-Dress");
+    _branch.requirements["Dress"]--;
+    BranchProvider().updateBranch(_branch, _branch.id);
+    EntryProvider().removeEntry(entry.id);
+  }
 
   // update
   void updateTotal() {

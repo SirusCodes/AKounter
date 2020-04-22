@@ -3,6 +3,7 @@ import 'package:akounter/locator.dart';
 import 'package:akounter/provider/branch_provider.dart';
 import 'package:akounter/provider/entry_provider.dart';
 import 'package:akounter/provider/login_provider.dart';
+import 'package:akounter/provider/requirement_provider.dart';
 import 'package:akounter/provider/student_provider.dart';
 import 'package:akounter/widgets/auth_widget.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +39,8 @@ class MyApp extends StatelessWidget {
             create: (_) => AddEntryProvider()),
         ChangeNotifierProvider<DatabaseManager>(
           create: (_) => DatabaseManager(),
-        )
+        ),
+        Provider<RequirementProvider>(create: (_) => RequirementProvider())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

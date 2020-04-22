@@ -29,6 +29,7 @@ class _AddBranchState extends State<AddBranch> {
     "Kickpad": 0,
     "Chestguard": 0,
     "Footguard": 0,
+    "Dress": 0,
   };
 
   static User _data = locator<Data>().getUser;

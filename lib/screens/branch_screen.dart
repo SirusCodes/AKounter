@@ -2,7 +2,7 @@ import 'package:akounter/data.dart';
 import 'package:akounter/models/branch_model.dart';
 import 'package:akounter/provider/branch_provider.dart';
 import 'package:akounter/screens/branch_entry_list.dart';
-import 'package:akounter/screens/branch_requirements.dart';
+import 'package:akounter/screens/requirements/branch_requirements.dart';
 import 'package:akounter/screens/settings/branch_settings_screen.dart';
 import 'package:akounter/widgets/navigation_widget.dart';
 import 'package:akounter/widgets/snackbar.dart';

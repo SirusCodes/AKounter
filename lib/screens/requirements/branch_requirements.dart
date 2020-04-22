@@ -1,5 +1,6 @@
 import 'package:akounter/data.dart';
 import 'package:akounter/locator.dart';
+import 'package:akounter/screens/requirements/requirements_list.dart';
 import 'package:flutter/material.dart';
 
 class BranchRequirements extends StatelessWidget {
@@ -32,6 +33,8 @@ class BranchRequirements extends StatelessWidget {
                 type1: "Chestguard",
                 type2: "Footguard",
               ),
+              SizedBox(height: 20.0),
+              _requirementCards(_size, "Dress", context),
             ],
           ),
         ),
@@ -54,8 +57,9 @@ class BranchRequirements extends StatelessWidget {
     );
   }
 
-  Card _requirementCards(Size size, String type, BuildContext context) {
-    return Card(
+  RaisedButton _requirementCards(Size size, String type, BuildContext context) {
+    return RaisedButton(
+      color: Theme.of(context).primaryColor,
       child: SizedBox(
         height: size.width / 3,
         width: size.width / 3,
@@ -77,6 +81,16 @@ class BranchRequirements extends StatelessWidget {
           ],
         ),
       ),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => RequirementsList(
+              equip: type,
+            ),
+          ),
+        );
+      },
     );
   }
 }

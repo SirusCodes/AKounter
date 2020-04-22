@@ -197,7 +197,7 @@ class _AddEntryState extends State<AddEntry> {
             splashColor: Theme.of(context).primaryColor,
             onPressed: () {
               if (_formKey.currentState.validate()) {
-                _entry.save(_date);
+                _entry.save();
                 _save.addEntry(
                   EntryModel(
                     reason: _entry.getReason,

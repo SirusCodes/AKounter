@@ -15,8 +15,8 @@ class RequirementProvider {
     return requirements;
   }
 
-  Stream<QuerySnapshot> fetchRequirementsAsStream() {
-    return _requirements.streamDataCollection();
+  Stream<QuerySnapshot> fetchRequirementsAsStream(String equip) {
+    return _requirements.streamDataCollection(equip);
   }
 
   Future<RequirementModel> getRequirementById(String id) async {
