@@ -1,3 +1,4 @@
+import 'package:akounter/models/requirements_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../data.dart';
 import '../locator.dart';
@@ -41,6 +42,22 @@ class RequirementServices {
   Future<void> updateRequirement(Map data, String id) {
     _updateDB();
     return ref.document(id).updateData(data);
+  }
+
+  batchedUpdateRequirements(List<RequirementModel> list) {
+    _updateDB();
+    var _batch = _db.batch();
+    int writes = 0;
+    for (var item in list) {
+      if (writes <= 500) {
+        writes++;
+        _batch.updateData(ref.document(item.id), item.toJson());
+      } else {
+        writes = 0;
+        _batch.commit();
+      }
+    }
+    if (writes <= 500) _batch.commit();
   }
 
   void _updateDB() {
