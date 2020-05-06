@@ -1,7 +1,9 @@
 class RequirementModel {
   String id, studentId, studentName, requirementType, dressSize;
   bool issued;
+  String issuedDate;
   RequirementModel({
+    this.issuedDate,
     this.id,
     this.requirementType,
     this.studentId,
@@ -16,7 +18,8 @@ class RequirementModel {
         studentId = snapshot["student_id"],
         studentName = snapshot["student_name"],
         issued = snapshot["issued"],
-        dressSize = snapshot["dress_size"];
+        dressSize = snapshot["dress_size"],
+        issuedDate = snapshot["issued_date"] ?? "";
 
   toJson() {
     return {
@@ -25,6 +28,7 @@ class RequirementModel {
       "student_name": studentName,
       "issued": issued,
       "dress_size": dressSize,
+      "issued_date": issuedDate ?? "",
     };
   }
 }

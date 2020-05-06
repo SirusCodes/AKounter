@@ -207,7 +207,7 @@ class _AddEntryState extends State<AddEntry> {
                     subtotal: _entry.getSubtotal,
                     date: _date,
                     name: _student.getStudent.name,
-                    branch: _student.getBranch.name,
+                    branch: _student.getBranch.id,
                     studentID: _student.getStudent.id,
                     requirementID: _entry.getReqID,
                   ),

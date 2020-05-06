@@ -26,7 +26,7 @@ class EntryServices {
   Stream<QuerySnapshot> streamAllEntriesCollection(String date) {
     return _db
         .collectionGroup("entries")
-        .where("branch", isEqualTo: _id.getBranch.name)
+        .where("branch", isEqualTo: _id.getBranch.id)
         .where("date", isEqualTo: date)
         .snapshots();
   }

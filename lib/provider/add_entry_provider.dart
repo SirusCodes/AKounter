@@ -375,6 +375,7 @@ class AddEntryProvider extends ChangeNotifier {
 
   //! delete for equipment
   _postDeleteEquip(EntryModel entry) {
+    //! TODO: check if any of the equipment is issued
     var _branch = _data.getBranch;
     for (var equip in entry.detailedReason.split(", ")) {
       RequirementProvider()

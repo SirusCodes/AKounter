@@ -107,8 +107,13 @@ class _BranchEntryListState extends State<BranchEntryList> {
                                       "  " +
                                       _entryList[i].detailedReason),
                                   trailing: IconButton(
-                                    icon: Icon(Icons.delete,
-                                        color: Theme.of(context).accentColor),
+                                    icon: _entryList[i].reason != "Equipments"
+                                        ? Icon(
+                                            Icons.delete,
+                                            color:
+                                                Theme.of(context).accentColor,
+                                          )
+                                        : Container(),
                                     onPressed: () async {
                                       if (_student.getStudent.id !=
                                           _entryList[i].studentID)

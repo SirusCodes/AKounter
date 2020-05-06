@@ -24,7 +24,7 @@ class _AddBranchState extends State<AddBranch> {
   TextEditingController _aboveGreen = TextEditingController();
   TextEditingController _member = TextEditingController();
 
-  static const Map<String, int> req = {
+  static Map<String, dynamic> req = {
     "Gloves": 0,
     "Kickpad": 0,
     "Chestguard": 0,
@@ -50,6 +50,7 @@ class _AddBranchState extends State<AddBranch> {
       _aboveGreen.text = model.aboveGreen.toString();
       _member.text = model.memberDiscount.toString();
       _indirectCheck = model.indirectPayment;
+      req = model.requirements;
     }
     super.initState();
   }

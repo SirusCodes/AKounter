@@ -368,10 +368,14 @@ class _AddStudentState extends State<AddStudent> {
 
   bool _validateDate(String value) {
     List<String> _lengths = value.split("/");
+    // if empty then validate
+    if (value.isEmpty) return false;
+    // if length is not correct
     if (_lengths[0].length != 2 &&
         _lengths[1].length != 2 &&
         _lengths[2].length != 4)
       return false;
+    // if date length checker
     else if (int.parse(_lengths[0]) > 0 &&
         int.parse(_lengths[0]) < 32 &&
         int.parse(_lengths[1]) < 13 &&

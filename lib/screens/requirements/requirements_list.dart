@@ -77,7 +77,7 @@ class RequirementsList extends StatelessWidget {
                     icon: Icon(Icons.check),
                     splashColor: Theme.of(context).primaryColor,
                     onPressed: () {
-                      check.uploadChanges();
+                      check.uploadChanges(equip);
                     },
                   )
                 : Container();
