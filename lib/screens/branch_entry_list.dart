@@ -42,7 +42,8 @@ class _BranchEntryListState extends State<BranchEntryList> {
         elevation: 0.0,
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+        padding:
+            const EdgeInsets.symmetric(horizontal: 15.0).copyWith(top: 15.0),
         child: Column(
           children: <Widget>[
             Card(

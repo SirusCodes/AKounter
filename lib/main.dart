@@ -1,16 +1,16 @@
-import 'package:akounter/provider/database_manager.dart';
-import 'package:akounter/locator.dart';
-import 'package:akounter/provider/branch_provider.dart';
-import 'package:akounter/provider/entry_provider.dart';
-import 'package:akounter/provider/login_provider.dart';
-import 'package:akounter/provider/requirement_provider.dart';
-import 'package:akounter/provider/student_provider.dart';
-import 'package:akounter/widgets/auth_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import 'locator.dart';
 import 'provider/add_entry_provider.dart';
+import 'provider/branch_provider.dart';
+import 'provider/database_manager.dart';
+import 'provider/entry_provider.dart';
+import 'provider/login_provider.dart';
+import 'provider/requirement_provider.dart';
+import 'provider/student_provider.dart';
+import 'widgets/auth_widget.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,9 +19,8 @@ Future<void> main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
-      statusBarColor: Colors.white,
-      systemNavigationBarColor: Colors.white,
-      systemNavigationBarIconBrightness: Brightness.dark,
+      statusBarColor: Colors.transparent,
+      systemNavigationBarColor: Colors.grey[100],
     ),
   );
 }
@@ -47,8 +46,15 @@ class MyApp extends StatelessWidget {
         title: 'AKounter',
         theme: ThemeData(
           accentColor: Colors.black,
-          primaryColor: Colors.white,
+          primaryColor: Colors.red[800],
           splashColor: Colors.black26,
+          bottomNavigationBarTheme: BottomNavigationBarThemeData(
+            elevation: 5.0,
+            backgroundColor: Colors.grey[100],
+          ),
+          floatingActionButtonTheme: FloatingActionButtonThemeData(
+            backgroundColor: Colors.blue[800],
+          ),
           cardTheme: CardTheme(elevation: 3.0),
           textTheme: TextTheme(
             headline4: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w700),

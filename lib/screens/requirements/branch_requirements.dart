@@ -13,30 +13,27 @@ class BranchRequirements extends StatelessWidget {
         title: Text(_branch.name + " requirements"),
         elevation: 0.0,
       ),
-      body: Container(
-        color: Theme.of(context).primaryColor,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              _rowReqCards(
-                _size,
-                context,
-                type1: "Gloves",
-                type2: "Kickpad",
-              ),
-              SizedBox(height: 20.0),
-              _rowReqCards(
-                _size,
-                context,
-                type1: "Chestguard",
-                type2: "Footguard",
-              ),
-              SizedBox(height: 20.0),
-              _requirementCards(_size, "Dress", context),
-            ],
-          ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            _rowReqCards(
+              _size,
+              context,
+              type1: "Gloves",
+              type2: "Kickpad",
+            ),
+            SizedBox(height: 20.0),
+            _rowReqCards(
+              _size,
+              context,
+              type1: "Chestguard",
+              type2: "Footguard",
+            ),
+            SizedBox(height: 20.0),
+            _requirementCards(_size, "Dress", context),
+          ],
         ),
       ),
     );
@@ -57,9 +54,8 @@ class BranchRequirements extends StatelessWidget {
     );
   }
 
-  RaisedButton _requirementCards(Size size, String type, BuildContext context) {
+  Widget _requirementCards(Size size, String type, BuildContext context) {
     return RaisedButton(
-      color: Theme.of(context).primaryColor,
       child: SizedBox(
         height: size.width / 3,
         width: size.width / 3,

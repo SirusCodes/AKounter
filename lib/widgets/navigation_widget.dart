@@ -15,11 +15,7 @@ class _NavigationWidgetState extends State<NavigationWidget> {
     return Scaffold(
       body: widget.screenList[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Theme.of(context).accentColor,
-        unselectedItemColor: Theme.of(context).splashColor,
         items: widget.itemList,
-        backgroundColor: Theme.of(context).primaryColor,
-        elevation: 0.0,
         currentIndex: _currentIndex,
         onTap: (index) {
           setState(() {

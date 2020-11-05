@@ -1,14 +1,15 @@
-import 'package:akounter/provider/database_manager.dart';
-import 'package:akounter/locator.dart';
-import 'package:akounter/models/branch_model.dart';
-import 'package:akounter/models/user.dart';
-import 'package:akounter/provider/branch_provider.dart';
-import 'package:akounter/widgets/c_textformfield.dart';
-import 'package:akounter/widgets/snackbar.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../data.dart';
+import '../../locator.dart';
+import '../../models/branch_model.dart';
+import '../../models/user.dart';
+import '../../provider/branch_provider.dart';
+import '../../provider/database_manager.dart';
+import '../../widgets/c_textformfield.dart';
+import '../../widgets/snackbar.dart';
 
 class BranchSettingsScreen extends StatefulWidget {
   const BranchSettingsScreen({Key key}) : super(key: key);
@@ -57,91 +58,87 @@ class _BranchSettingsScreenState extends State<BranchSettingsScreen> {
           )
         ],
       ),
-      body: Container(
-        color: Theme.of(context).primaryColor,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: <Widget>[
-              Form(
-                key: _formKey,
-                child: Column(
-                  children: <Widget>[
-                    CTextFormField(
-                      label: "Instructor Name",
-                      controller: _nameController,
-                      validator: (value) {
-                        if (value.toString().isEmpty) return "Can't be empty";
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 10.0),
-                    CTextFormField(
-                      label: "Instructor Mail ID",
-                      controller: _idController,
-                      validator: (value) {
-                        if (!EmailValidator.validate(value))
-                          return "Incorrect email ID";
-                        return null;
-                      },
-                    ),
-                  ],
-                ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: <Widget>[
+            Form(
+              key: _formKey,
+              child: Column(
+                children: <Widget>[
+                  CTextFormField(
+                    label: "Instructor Name",
+                    controller: _nameController,
+                    validator: (value) {
+                      if (value.toString().isEmpty) return "Can't be empty";
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 10.0),
+                  CTextFormField(
+                    label: "Instructor Mail ID",
+                    controller: _idController,
+                    validator: (value) {
+                      if (!EmailValidator.validate(value))
+                        return "Incorrect email ID";
+                      return null;
+                    },
+                  ),
+                ],
               ),
-              SizedBox(height: 10.0),
-              Flexible(
-                fit: FlexFit.loose,
-                child: ListView.builder(
-                  itemCount: _branchInList.length,
-                  itemBuilder: (context, int i) {
-                    return Card(
-                      elevation: 3.0,
-                      child: ListTile(
-                        leading: Icon(Icons.person),
-                        title: Text(_branchInNameList[i]),
-                        subtitle: Text(_branchInList[i]),
-                        trailing: IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () {
-                            if (_branchInList.length <= 1 ||
-                                data.owner != _user.mailID) {
-                              cSnackBar(
-                                context,
-                                message: "Cannot delete owner account",
-                              );
-                            } else if (data.owner == _branchInList[i]) {
-                              cSnackBar(
-                                context,
-                                message: "You are not owner of this branch",
-                              );
-                            } else {
-                              cSnackBar(
-                                context,
-                                message: "${_branchInNameList[i]} is removed",
-                              );
-                              setState(() {
-                                _branchInList.removeAt(i);
-                                _branchInNameList.removeAt(i);
-                              });
+            ),
+            SizedBox(height: 10.0),
+            Flexible(
+              fit: FlexFit.loose,
+              child: ListView.builder(
+                itemCount: _branchInList.length,
+                itemBuilder: (context, int i) {
+                  return Card(
+                    elevation: 3.0,
+                    child: ListTile(
+                      leading: Icon(Icons.person),
+                      title: Text(_branchInNameList[i]),
+                      subtitle: Text(_branchInList[i]),
+                      trailing: IconButton(
+                        icon: Icon(Icons.delete),
+                        onPressed: () {
+                          if (_branchInList.length <= 1 ||
+                              data.owner != _user.mailID) {
+                            cSnackBar(
+                              context,
+                              message: "Cannot delete owner account",
+                            );
+                          } else if (data.owner == _branchInList[i]) {
+                            cSnackBar(
+                              context,
+                              message: "You are not owner of this branch",
+                            );
+                          } else {
+                            cSnackBar(
+                              context,
+                              message: "${_branchInNameList[i]} is removed",
+                            );
+                            setState(() {
+                              _branchInList.removeAt(i);
+                              _branchInNameList.removeAt(i);
+                            });
 
-                              data.instructors = _branchInList;
-                              data.instructorNames = _branchInNameList;
-                              BranchProvider().updateBranch(data, data.id);
-                            }
-                          },
-                        ),
+                            data.instructors = _branchInList;
+                            data.instructorNames = _branchInNameList;
+                            BranchProvider().updateBranch(data, data.id);
+                          }
+                        },
                       ),
-                    );
-                  },
-                ),
-              )
-            ],
-          ),
+                    ),
+                  );
+                },
+              ),
+            )
+          ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        splashColor: Theme.of(context).primaryColor,
-        child: Icon(Icons.add),
+      floatingActionButton: FloatingActionButton.extended(
+        label: Text("Add Instructor"),
         onPressed: () {
           if (_formKey.currentState.validate()) {
             _formKey.currentState.save();

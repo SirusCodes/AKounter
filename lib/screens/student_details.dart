@@ -44,170 +44,166 @@ class StudentDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     List<EntryModel> _entryLists = List<EntryModel>();
     return Scaffold(
-      body: Container(
-        color: Theme.of(context).primaryColor,
-        child: Column(
-          children: <Widget>[
-            Flexible(
-              fit: FlexFit.loose,
-              child: NestedScrollView(
-                headerSliverBuilder:
-                    (BuildContext context, bool innerBoxIsScrolled) {
-                  return <Widget>[
-                    SliverAppBar(
-                      elevation: 0.0,
-                      actions: <Widget>[
-                        IconButton(
-                          icon: Icon(Icons.book),
-                          onPressed: () => Navigator.push(
+      body: Column(
+        children: <Widget>[
+          Flexible(
+            fit: FlexFit.loose,
+            child: NestedScrollView(
+              headerSliverBuilder:
+                  (BuildContext context, bool innerBoxIsScrolled) {
+                return <Widget>[
+                  SliverAppBar(
+                    elevation: 0.0,
+                    actions: <Widget>[
+                      IconButton(
+                        icon: Icon(Icons.book),
+                        onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => StudentRequirementsList())),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.add_circle_outline),
+                        onPressed: () {
+                          Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (_) => StudentRequirementsList())),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.add_circle_outline),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => AddEntry()));
-                          },
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.call),
-                          onPressed: () => launch("tel:${_student.number}"),
-                        ),
-                      ],
-                      pinned: true,
-                      expandedHeight: 150.0,
-                      flexibleSpace: FlexibleSpaceBar(
-                        title: Text(_student.name),
-                        background: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  "Number : ${_student.number}",
-                                  style: TextStyle(
-                                    color: Theme.of(context).accentColor,
-                                    fontSize: 16.0,
-                                  ),
+                                  builder: (context) => AddEntry()));
+                        },
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.call),
+                        onPressed: () => launch("tel:${_student.number}"),
+                      ),
+                    ],
+                    pinned: true,
+                    expandedHeight: 150.0,
+                    flexibleSpace: FlexibleSpaceBar(
+                      title: Text(_student.name),
+                      background: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                "Number : ${_student.number}",
+                                style: TextStyle(
+                                  color: Theme.of(context).accentColor,
+                                  fontSize: 16.0,
                                 ),
-                                Text(
-                                  "Member : ${_student.gender}",
-                                  style: TextStyle(
-                                    color: Theme.of(context).accentColor,
-                                    fontSize: 16.0,
-                                  ),
+                              ),
+                              Text(
+                                "Member : ${_student.gender}",
+                                style: TextStyle(
+                                  color: Theme.of(context).accentColor,
+                                  fontSize: 16.0,
                                 ),
-                              ],
-                            ),
-                            SizedBox(width: 10.0),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  "Belt : ${_belts[_student.belt]}",
-                                  style: TextStyle(
-                                    color: Theme.of(context).accentColor,
-                                    fontSize: 16.0,
-                                  ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(width: 10.0),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                "Belt : ${_belts[_student.belt]}",
+                                style: TextStyle(
+                                  color: Theme.of(context).accentColor,
+                                  fontSize: 16.0,
                                 ),
-                                Text(
-                                  "Fees Till : ${_months[_student.fees]}",
-                                  style: TextStyle(
-                                    color: Theme.of(context).accentColor,
-                                    fontSize: 16.0,
-                                  ),
+                              ),
+                              Text(
+                                "Fees Till : ${_months[_student.fees]}",
+                                style: TextStyle(
+                                  color: Theme.of(context).accentColor,
+                                  fontSize: 16.0,
                                 ),
-                              ],
-                            )
-                          ],
-                        ),
+                              ),
+                            ],
+                          )
+                        ],
                       ),
                     ),
-                  ];
-                },
-                body: Consumer<EntryProvider>(
-                  builder: (_, _entries, __) {
-                    return StreamBuilder(
-                      stream: _entries.fetchEntriesAsStream(),
-                      builder:
-                          (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                        if (snapshot.hasData) {
-                          _entryLists = snapshot.data.documents
-                              .map((f) =>
-                                  EntryModel.fromJson(f.data, f.documentID))
-                              .toList();
-                          return ListView.builder(
-                            itemCount: _entryLists.length,
-                            itemBuilder: (context, int i) {
-                              return Card(
-                                elevation: 3.0,
-                                child: ListTile(
-                                  title: Text(_entryLists[i].reason),
-                                  subtitle: Text(_entryLists[i].detailedReason +
-                                      "  " +
-                                      _entryLists[i].date),
-                                  trailing: IconButton(
-                                    icon: Icon(Icons.delete,
-                                        color: Theme.of(context).accentColor),
-                                    onPressed: () {
-                                      cSnackBar(
-                                        context,
-                                        message: "Entry is deleted",
-                                      );
-                                      locator<AddEntryProvider>()
-                                          .delete(_entryLists[i]);
-                                    },
-                                  ),
-                                  onTap: () {},
+                  ),
+                ];
+              },
+              body: Consumer<EntryProvider>(
+                builder: (_, _entries, __) {
+                  return StreamBuilder(
+                    stream: _entries.fetchEntriesAsStream(),
+                    builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                      if (snapshot.hasData) {
+                        _entryLists = snapshot.data.documents
+                            .map((f) =>
+                                EntryModel.fromJson(f.data, f.documentID))
+                            .toList();
+                        return ListView.builder(
+                          itemCount: _entryLists.length,
+                          itemBuilder: (context, int i) {
+                            return Card(
+                              elevation: 3.0,
+                              child: ListTile(
+                                title: Text(_entryLists[i].reason),
+                                subtitle: Text(_entryLists[i].detailedReason +
+                                    "  " +
+                                    _entryLists[i].date),
+                                trailing: IconButton(
+                                  icon: Icon(Icons.delete,
+                                      color: Theme.of(context).accentColor),
+                                  onPressed: () {
+                                    cSnackBar(
+                                      context,
+                                      message: "Entry is deleted",
+                                    );
+                                    locator<AddEntryProvider>()
+                                        .delete(_entryLists[i]);
+                                  },
                                 ),
-                              );
-                            },
-                          );
-                        } else {
-                          return Container(
-                            child: Text(
-                              "NO Entries",
-                              style: Theme.of(context).textTheme.headline4,
-                            ),
-                          );
-                        }
-                      },
-                    );
-                  },
+                                onTap: () {},
+                              ),
+                            );
+                          },
+                        );
+                      } else {
+                        return Container(
+                          child: Text(
+                            "NO Entries",
+                            style: Theme.of(context).textTheme.headline4,
+                          ),
+                        );
+                      }
+                    },
+                  );
+                },
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: RichText(
+                text: TextSpan(
+                  text: "Made with ❤ by ",
+                  style: TextStyle(color: Theme.of(context).accentColor),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: "Darshan",
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () => launch(
+                            "https://www.linkedin.com/in/darshan-rander-b28a3b193/"),
+                    ),
+                  ],
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: RichText(
-                  text: TextSpan(
-                    text: "Made with ❤ by ",
-                    style: TextStyle(color: Theme.of(context).accentColor),
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: "Darshan",
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () => launch(
-                              "https://www.linkedin.com/in/darshan-rander-b28a3b193/"),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            )
-          ],
-        ),
+          )
+        ],
       ),
     );
   }

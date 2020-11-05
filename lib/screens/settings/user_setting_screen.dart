@@ -17,35 +17,32 @@ class UserSettingScreen extends StatelessWidget {
         title: Text("Settings"),
         elevation: 0.0,
       ),
-      body: Container(
-        color: Theme.of(context).primaryColor,
-        child: ListView(
-          children: <Widget>[
-            Card(
-              elevation: 3.0,
-              child: ListTile(
-                leading: Icon(Icons.share),
-                title: Text("Share my E-Mail ID"),
-                onTap: () {
-                  final RenderBox box = context.findRenderObject();
-                  Share.share(locator<Data>().getUser.mailID,
-                      sharePositionOrigin:
-                          box.localToGlobal(Offset.zero) & box.size);
-                },
-              ),
+      body: ListView(
+        children: <Widget>[
+          Card(
+            elevation: 3.0,
+            child: ListTile(
+              leading: Icon(Icons.share),
+              title: Text("Share my E-Mail ID"),
+              onTap: () {
+                final RenderBox box = context.findRenderObject();
+                Share.share(locator<Data>().getUser.mailID,
+                    sharePositionOrigin:
+                        box.localToGlobal(Offset.zero) & box.size);
+              },
             ),
-            Card(
-              elevation: 3.0,
-              child: ListTile(
-                leading: Icon(Icons.exit_to_app),
-                title: Text("Sign Out (${locator<Data>().getUser.mailID})"),
-                onTap: () {
-                  _auth.signOutGoogle();
-                },
-              ),
+          ),
+          Card(
+            elevation: 3.0,
+            child: ListTile(
+              leading: Icon(Icons.exit_to_app),
+              title: Text("Sign Out (${locator<Data>().getUser.mailID})"),
+              onTap: () {
+                _auth.signOutGoogle();
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

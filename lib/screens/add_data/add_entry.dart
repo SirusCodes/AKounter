@@ -75,116 +75,113 @@ class _AddEntryState extends State<AddEntry> {
         title: Text("Add Entry"),
       ),
       body: SizedBox.expand(
-        child: Container(
-          color: Theme.of(context).primaryColor,
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Column(
-                children: <Widget>[
-                  SizedBox(
-                    width: _width,
-                    child: Card(
-                      elevation: 3.0,
-                      child: Consumer<AddEntryProvider>(
-                        builder: (_, _entry, __) {
-                          return Column(
-                            children: <Widget>[
-                              OutlineButton(
-                                child: Text(_date),
-                                onPressed: () => DatePicker.showDatePicker(
-                                  context,
-                                  maxTime: DateTime.now(),
-                                  showTitleActions: true,
-                                  onConfirm: (DateTime date) {
-                                    setState(() {
-                                      _date = formatDate(
-                                          date, ["dd", "/", "mm", "/", "yyyy"]);
-                                    });
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Column(
+              children: <Widget>[
+                SizedBox(
+                  width: _width,
+                  child: Card(
+                    elevation: 3.0,
+                    child: Consumer<AddEntryProvider>(
+                      builder: (_, _entry, __) {
+                        return Column(
+                          children: <Widget>[
+                            OutlineButton(
+                              child: Text(_date),
+                              onPressed: () => DatePicker.showDatePicker(
+                                context,
+                                maxTime: DateTime.now(),
+                                showTitleActions: true,
+                                onConfirm: (DateTime date) {
+                                  setState(() {
+                                    _date = formatDate(
+                                        date, ["dd", "/", "mm", "/", "yyyy"]);
+                                  });
+                                },
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Text(
+                                "Total:   ${_entry.getTotal}",
+                                style: Theme.of(context).textTheme.headline3,
+                              ),
+                            ),
+                            Text("Subtotal:   ${_entry.getSubtotal}"),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text("Pending:   ${_entry.getPending}"),
+                            ),
+                            Form(
+                              key: _formKey,
+                              child: Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: CTextFormField(
+                                  label: "Amount given",
+                                  hint: "1000",
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly
+                                  ],
+                                  validator: (value) {
+                                    if (value == null || value == "") {
+                                      return "Please enter a proper value!";
+                                    }
+                                    return null;
+                                  },
+                                  onChanged: (value) {
+                                    _entry.setAmountGiven = int.parse(value);
                                   },
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(15.0),
-                                child: Text(
-                                  "Total:   ${_entry.getTotal}",
-                                  style: Theme.of(context).textTheme.headline3,
-                                ),
-                              ),
-                              Text("Subtotal:   ${_entry.getSubtotal}"),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text("Pending:   ${_entry.getPending}"),
-                              ),
-                              Form(
-                                key: _formKey,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(20.0),
-                                  child: CTextFormField(
-                                    label: "Amount given",
-                                    hint: "1000",
-                                    keyboardType: TextInputType.number,
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.digitsOnly
-                                    ],
-                                    validator: (value) {
-                                      if (value == null || value == "") {
-                                        return "Please enter a proper value!";
-                                      }
-                                      return null;
-                                    },
-                                    onChanged: (value) {
-                                      _entry.setAmountGiven = int.parse(value);
-                                    },
-                                  ),
-                                ),
-                              )
-                            ],
-                          );
-                        },
+                            )
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: _width,
+                  child: Card(
+                    elevation: 3.0,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(
+                        child: DropdownButton(
+                          value: _reason,
+                          items: _reasons
+                              .map((f) => DropdownMenuItem(
+                                    value: f,
+                                    child: Text(f),
+                                  ))
+                              .toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              _reason = value;
+                              _changeReasons(value);
+                            });
+                            _entry.setReason = _reason;
+                          },
+                        ),
                       ),
                     ),
                   ),
-                  SizedBox(
-                    width: _width,
-                    child: Card(
-                      elevation: 3.0,
+                ),
+                SizedBox(
+                  width: _width,
+                  child: Card(
+                    child: Center(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Center(
-                          child: DropdownButton(
-                            value: _reason,
-                            items: _reasons
-                                .map((f) => DropdownMenuItem(
-                                      value: f,
-                                      child: Text(f),
-                                    ))
-                                .toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                _reason = value;
-                                _changeReasons(value);
-                              });
-                              _entry.setReason = _reason;
-                            },
-                          ),
-                        ),
+                        child: _typeBlock(),
                       ),
                     ),
                   ),
-                  SizedBox(
-                    width: _width,
-                    child: Card(
-                      child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: _typeBlock(),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
@@ -192,9 +189,8 @@ class _AddEntryState extends State<AddEntry> {
       floatingActionButton: Consumer<AddEntryProvider>(
         builder: (_, _entry, __) {
           final _save = Provider.of<EntryProvider>(context, listen: false);
-          return FloatingActionButton(
-            child: Icon(Icons.check),
-            splashColor: Theme.of(context).primaryColor,
+          return FloatingActionButton.extended(
+            label: Text("Save"),
             onPressed: () {
               if (_formKey.currentState.validate()) {
                 _entry.save();

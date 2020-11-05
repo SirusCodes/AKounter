@@ -20,53 +20,49 @@ class RequirementsList extends StatelessWidget {
           elevation: 0.0,
           title: Text(equip),
         ),
-        body: Container(
-          color: Theme.of(context).primaryColor,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: StreamBuilder(
-              stream: _requirements.fetchRequirementsAsStream(equip),
-              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.hasData) {
-                  _requirementList = snapshot.data.documents
-                      .map((f) =>
-                          RequirementModel.fromJson(f.data, f.documentID))
-                      .toList();
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: StreamBuilder(
+            stream: _requirements.fetchRequirementsAsStream(equip),
+            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.hasData) {
+                _requirementList = snapshot.data.documents
+                    .map((f) => RequirementModel.fromJson(f.data, f.documentID))
+                    .toList();
 
-                  RequirementsListProvider().setList = _requirementList;
+                RequirementsListProvider().setList = _requirementList;
 
-                  return Consumer<RequirementsListProvider>(
-                    builder: (_, list, __) {
-                      return ListView.builder(
-                        itemCount: _requirementList.length,
-                        itemBuilder: (context, int i) {
-                          return Card(
-                            elevation: 3.0,
-                            child: ListTile(
-                              title: _requirementList[i].requirementType !=
-                                      "Dress"
-                                  ? Text(_requirementList[i].studentName)
-                                  : Text(_requirementList[i].studentName +
-                                      " (${_requirementList[i].dressSize.trim()})"),
-                              trailing: IconButton(
-                                icon: Icon(
-                                  Icons.check_circle,
-                                  color: list.getColor(i, context),
-                                ),
-                                onPressed: () => list.changeIssued(i),
+                return Consumer<RequirementsListProvider>(
+                  builder: (_, list, __) {
+                    return ListView.builder(
+                      itemCount: _requirementList.length,
+                      itemBuilder: (context, int i) {
+                        return Card(
+                          elevation: 3.0,
+                          child: ListTile(
+                            title: _requirementList[i].requirementType !=
+                                    "Dress"
+                                ? Text(_requirementList[i].studentName)
+                                : Text(_requirementList[i].studentName +
+                                    " (${_requirementList[i].dressSize.trim()})"),
+                            trailing: IconButton(
+                              icon: Icon(
+                                Icons.check_circle,
+                                color: list.getColor(i, context),
                               ),
+                              onPressed: () => list.changeIssued(i),
                             ),
-                          );
-                        },
-                      );
-                    },
-                  );
-                }
-                return Center(
-                  child: CircularProgressIndicator(),
+                          ),
+                        );
+                      },
+                    );
+                  },
                 );
-              },
-            ),
+              }
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            },
           ),
         ),
         floatingActionButton: Consumer<RequirementsListProvider>(

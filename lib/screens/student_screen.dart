@@ -1,14 +1,15 @@
-import 'package:akounter/locator.dart';
-import 'package:akounter/models/student_model.dart';
-import 'package:akounter/provider/student_provider.dart';
-import 'package:akounter/screens/add_data/add_entry.dart';
-import 'package:akounter/screens/add_data/add_students.dart';
-import 'package:akounter/screens/student_details.dart';
-import 'package:akounter/widgets/snackbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../data.dart';
+import '../locator.dart';
+import '../models/student_model.dart';
+import '../provider/student_provider.dart';
+import '../widgets/snackbar.dart';
+import 'add_data/add_entry.dart';
+import 'add_data/add_students.dart';
+import 'student_details.dart';
 
 class StudentScreen extends StatelessWidget {
   const StudentScreen({Key key}) : super(key: key);
@@ -32,94 +33,89 @@ class StudentScreen extends StatelessWidget {
           )
         ],
       ),
-      body: Container(
-        color: Theme.of(context).primaryColor,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: StreamBuilder(
-            stream: _students.fetchStudentesAsStream(),
-            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (snapshot.hasData) {
-                _studentList = snapshot.data.documents
-                    .map((f) => StudentModel.fromJson(f.data, f.documentID))
-                    .toList();
-              }
-              return Column(
-                children: <Widget>[
-                  Center(child: Text("Tap and hold for student details")),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: ListView.builder(
-                      itemCount: _studentList.length,
-                      itemBuilder: (context, int i) {
-                        return Card(
-                          elevation: 3.0,
-                          child: ListTile(
-                            leading: IconButton(
-                              icon: Icon(Icons.edit),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        AddStudent(student: _studentList[i]),
-                                  ),
-                                );
-                              },
-                            ),
-                            title: Text(_studentList[i].name),
-                            onTap: () {
-                              locator<Data>().setStudent = _studentList[i];
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: StreamBuilder(
+          stream: _students.fetchStudentesAsStream(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.hasData) {
+              _studentList = snapshot.data.documents
+                  .map((f) => StudentModel.fromJson(f.data, f.documentID))
+                  .toList();
+            }
+            return Column(
+              children: <Widget>[
+                Center(child: Text("Tap and hold for student details")),
+                Flexible(
+                  fit: FlexFit.loose,
+                  child: ListView.builder(
+                    itemCount: _studentList.length,
+                    itemBuilder: (context, int i) {
+                      return Card(
+                        elevation: 3.0,
+                        child: ListTile(
+                          leading: IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => AddEntry(),
+                                  builder: (context) =>
+                                      AddStudent(student: _studentList[i]),
                                 ),
                               );
                             },
-                            onLongPress: () {
-                              locator<Data>().setStudent = _studentList[i];
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => StudentDetails(),
-                                ),
-                              );
-                            },
-                            trailing: IconButton(
-                              icon: Icon(Icons.delete),
-                              onPressed: () {
-                                cSnackBar(
-                                  context,
-                                  message:
-                                      "Do you really want to delete ${_studentList[i].name}?",
-                                  button: FlatButton(
-                                    onPressed: () {
-                                      _students
-                                          .removeStudent(_studentList[i].id);
-                                    },
-                                    child: Text(
-                                      "Yes",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
                           ),
-                        );
-                      },
-                    ),
+                          title: Text(_studentList[i].name),
+                          onTap: () {
+                            locator<Data>().setStudent = _studentList[i];
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AddEntry(),
+                              ),
+                            );
+                          },
+                          onLongPress: () {
+                            locator<Data>().setStudent = _studentList[i];
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => StudentDetails(),
+                              ),
+                            );
+                          },
+                          trailing: IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () {
+                              cSnackBar(
+                                context,
+                                message:
+                                    "Do you really want to delete ${_studentList[i].name}?",
+                                button: FlatButton(
+                                  onPressed: () {
+                                    _students.removeStudent(_studentList[i].id);
+                                  },
+                                  child: Text(
+                                    "Yes",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                ],
-              );
-            },
-          ),
+                ),
+              ],
+            );
+          },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        splashColor: Theme.of(context).primaryColor,
-        child: Icon(Icons.add),
+      floatingActionButton: FloatingActionButton.extended(
+        label: Text("Add Student"),
         onPressed: () {
           Navigator.push(
             context,

@@ -79,261 +79,254 @@ class _AddStudentState extends State<AddStudent> {
         title: Text("Add Student"),
         elevation: 0.0,
       ),
-      body: SizedBox.expand(
-        child: Container(
-          color: Theme.of(context).primaryColor,
-          child: SingleChildScrollView(
-            child: Form(
-              key: _formKey,
-              child: Column(
+      body: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: _padding,
+                child: CTextFormField(
+                  hint: "Name Surname",
+                  keyboardType: TextInputType.text,
+                  label: "Name",
+                  textCapitalization: TextCapitalization.words,
+                  controller: _nameController,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.deny(RegExp("[0-9]"))
+                  ],
+                  validator: (value) =>
+                      _isEmpty(value) ? "Please enter something!" : null,
+                  onSaved: (value) => _student.name = value,
+                ),
+              ),
+              Padding(
+                padding: _padding,
+                child: Row(
+                  children: <Widget>[
+                    Flexible(
+                      fit: FlexFit.loose,
+                      child: CTextFormField(
+                        hint: "DD/MM/YYYY",
+                        keyboardType: TextInputType.number,
+                        label: "DOB",
+                        controller: _dobController,
+                        validator: (value) => _validateDate(value)
+                            ? "Please enter date in proper format"
+                            : null,
+                        inputFormatters: [
+                          DateTextInputFormatter(
+                            format: ["dd", "mm", "yyyy"],
+                          )
+                        ],
+                        onSaved: (value) => _student.dob = value,
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.date_range),
+                      onPressed: () => DatePicker.showDatePicker(
+                        context,
+                        maxTime: DateTime.now(),
+                        showTitleActions: true,
+                        onConfirm: (DateTime date) {
+                          setState(() {
+                            _dobController.text = formatDate(
+                                date, ["dd", "/", "mm", "/", "yyyy"]);
+                          });
+                        },
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Padding(
+                padding: _padding,
+                child: CTextFormField(
+                  hint: "0123456789",
+                  keyboardType: TextInputType.phone,
+                  label: "Number",
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  validator: (value) => _isPhoneNumber(value)
+                      ? "Please enter a proper phone number"
+                      : null,
+                  controller: _numController,
+                  onSaved: (value) => _student.number = value,
+                ),
+              ),
+              Padding(
+                padding: _padding,
+                child: CTextFormField(
+                  hint: "0123456789",
+                  keyboardType: TextInputType.phone,
+                  label: "Father's Number",
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  validator: (value) => _isPhoneNumber(value)
+                      ? "Please enter a proper phone number"
+                      : null,
+                  controller: _numFatherController,
+                  onSaved: (value) => _student.fatherNum = value,
+                ),
+              ),
+              Padding(
+                padding: _padding,
+                child: CTextFormField(
+                  hint: "0123456789",
+                  keyboardType: TextInputType.phone,
+                  label: "Mother's Number",
+                  controller: _numMotherController,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  validator: (value) => _isPhoneNumber(value)
+                      ? "Please enter a proper phone number"
+                      : null,
+                  onSaved: (value) => _student.motherNum = value,
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  Padding(
-                    padding: _padding,
-                    child: CTextFormField(
-                      hint: "Name Surname",
-                      keyboardType: TextInputType.text,
-                      label: "Name",
-                      textCapitalization: TextCapitalization.words,
-                      controller: _nameController,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.deny(RegExp("[0-9]"))
-                      ],
-                      validator: (value) =>
-                          _isEmpty(value) ? "Please enter something!" : null,
-                      onSaved: (value) => _student.name = value,
-                    ),
+                  Checkbox(
+                    onChanged: (bool value) {
+                      setState(() {
+                        _memberCheck = value;
+                      });
+                    },
+                    value: _memberCheck,
                   ),
-                  Padding(
-                    padding: _padding,
-                    child: Row(
-                      children: <Widget>[
-                        Flexible(
-                          fit: FlexFit.loose,
-                          child: CTextFormField(
-                            hint: "DD/MM/YYYY",
-                            keyboardType: TextInputType.number,
-                            label: "DOB",
-                            controller: _dobController,
-                            validator: (value) => _validateDate(value)
-                                ? "Please enter date in proper format"
-                                : null,
-                            inputFormatters: [
-                              DateTextInputFormatter(
-                                format: ["dd", "mm", "yyyy"],
-                              )
-                            ],
-                            onSaved: (value) => _student.dob = value,
-                          ),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.date_range),
-                          onPressed: () => DatePicker.showDatePicker(
-                            context,
-                            maxTime: DateTime.now(),
-                            showTitleActions: true,
-                            onConfirm: (DateTime date) {
-                              setState(() {
-                                _dobController.text = formatDate(
-                                    date, ["dd", "/", "mm", "/", "yyyy"]);
-                              });
-                            },
-                          ),
-                        )
-                      ],
-                    ),
+                  Text(
+                    "Is Member",
+                    style:
+                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600),
                   ),
-                  Padding(
-                    padding: _padding,
-                    child: CTextFormField(
-                      hint: "0123456789",
-                      keyboardType: TextInputType.phone,
-                      label: "Number",
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      validator: (value) => _isPhoneNumber(value)
-                          ? "Please enter a proper phone number"
-                          : null,
-                      controller: _numController,
-                      onSaved: (value) => _student.number = value,
-                    ),
+                  Checkbox(
+                    onChanged: (bool value) {
+                      setState(() {
+                        _onTrial = value;
+                      });
+                    },
+                    value: _onTrial,
                   ),
-                  Padding(
-                    padding: _padding,
-                    child: CTextFormField(
-                      hint: "0123456789",
-                      keyboardType: TextInputType.phone,
-                      label: "Father's Number",
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      validator: (value) => _isPhoneNumber(value)
-                          ? "Please enter a proper phone number"
-                          : null,
-                      controller: _numFatherController,
-                      onSaved: (value) => _student.fatherNum = value,
-                    ),
-                  ),
-                  Padding(
-                    padding: _padding,
-                    child: CTextFormField(
-                      hint: "0123456789",
-                      keyboardType: TextInputType.phone,
-                      label: "Mother's Number",
-                      controller: _numMotherController,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      validator: (value) => _isPhoneNumber(value)
-                          ? "Please enter a proper phone number"
-                          : null,
-                      onSaved: (value) => _student.motherNum = value,
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Checkbox(
-                        onChanged: (bool value) {
-                          setState(() {
-                            _memberCheck = value;
-                          });
-                        },
-                        value: _memberCheck,
-                      ),
-                      Text(
-                        "Is Member",
-                        style: TextStyle(
-                            fontSize: 16.0, fontWeight: FontWeight.w600),
-                      ),
-                      Checkbox(
-                        onChanged: (bool value) {
-                          setState(() {
-                            _onTrial = value;
-                          });
-                        },
-                        value: _onTrial,
-                      ),
-                      Text(
-                        "On Trial",
-                        style: TextStyle(
-                            fontSize: 16.0, fontWeight: FontWeight.w600),
-                      )
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Text(
-                        "Gender:",
-                        style: Theme.of(context).textTheme.headline4,
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Radio(
-                            value: Gender.male,
-                            groupValue: _gender,
-                            onChanged: (Gender value) =>
-                                setState(() => _gender = value),
-                          ),
-                          Text(
-                            "Male",
-                            style: Theme.of(context).textTheme.headline4,
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Radio(
-                            value: Gender.female,
-                            groupValue: _gender,
-                            onChanged: (Gender value) =>
-                                setState(() => _gender = value),
-                          ),
-                          Text(
-                            "Female",
-                            style: Theme.of(context).textTheme.headline4,
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Radio(
-                            value: Gender.other,
-                            groupValue: _gender,
-                            onChanged: (Gender value) =>
-                                setState(() => _gender = value),
-                          ),
-                          Text(
-                            "Other",
-                            style: Theme.of(context).textTheme.headline4,
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                  Padding(
-                    padding: _padding.copyWith(left: 0.0, right: 0.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(left: 25.0),
-                          child: Text(
-                            "Belt:",
-                            style: Theme.of(context).textTheme.headline4,
-                          ),
-                        ),
-                        Slider(
-                          label: _belts[_sliderBelt.round()],
-                          divisions: 9,
-                          value: _sliderBelt,
-                          onChanged: (value) {
-                            setState(() {
-                              _sliderBelt = value;
-                            });
-                          },
-                          min: 0,
-                          max: 9,
-                          activeColor: Theme.of(context).accentColor,
-                          inactiveColor: Theme.of(context).splashColor,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: _padding.copyWith(left: 0.0, right: 0.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(left: 25.0),
-                          child: Text(
-                            "Fees paid till:",
-                            style: Theme.of(context).textTheme.headline4,
-                          ),
-                        ),
-                        Slider(
-                          label: _months[_sliderMonth.round()],
-                          divisions: 11,
-                          value: _sliderMonth,
-                          onChanged: (value) {
-                            setState(() {
-                              _sliderMonth = value;
-                            });
-                          },
-                          min: 0,
-                          max: 11,
-                          activeColor: Theme.of(context).accentColor,
-                          inactiveColor: Theme.of(context).splashColor,
-                        ),
-                      ],
-                    ),
-                  ),
+                  Text(
+                    "On Trial",
+                    style:
+                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600),
+                  )
                 ],
               ),
-            ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Text(
+                    "Gender:",
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Radio(
+                        value: Gender.male,
+                        groupValue: _gender,
+                        onChanged: (Gender value) =>
+                            setState(() => _gender = value),
+                      ),
+                      Text(
+                        "Male",
+                        style: Theme.of(context).textTheme.headline4,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Radio(
+                        value: Gender.female,
+                        groupValue: _gender,
+                        onChanged: (Gender value) =>
+                            setState(() => _gender = value),
+                      ),
+                      Text(
+                        "Female",
+                        style: Theme.of(context).textTheme.headline4,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Radio(
+                        value: Gender.other,
+                        groupValue: _gender,
+                        onChanged: (Gender value) =>
+                            setState(() => _gender = value),
+                      ),
+                      Text(
+                        "Other",
+                        style: Theme.of(context).textTheme.headline4,
+                      ),
+                    ],
+                  )
+                ],
+              ),
+              Padding(
+                padding: _padding.copyWith(left: 0.0, right: 0.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(left: 25.0),
+                      child: Text(
+                        "Belt:",
+                        style: Theme.of(context).textTheme.headline4,
+                      ),
+                    ),
+                    Slider(
+                      label: _belts[_sliderBelt.round()],
+                      divisions: 9,
+                      value: _sliderBelt,
+                      onChanged: (value) {
+                        setState(() {
+                          _sliderBelt = value;
+                        });
+                      },
+                      min: 0,
+                      max: 9,
+                      activeColor: Theme.of(context).primaryColor,
+                      inactiveColor: Theme.of(context).splashColor,
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: _padding.copyWith(left: 0.0, right: 0.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(left: 25.0),
+                      child: Text(
+                        "Fees paid till:",
+                        style: Theme.of(context).textTheme.headline4,
+                      ),
+                    ),
+                    Slider(
+                      label: _months[_sliderMonth.round()],
+                      divisions: 11,
+                      value: _sliderMonth,
+                      onChanged: (value) {
+                        setState(() {
+                          _sliderMonth = value;
+                        });
+                      },
+                      min: 0,
+                      max: 11,
+                      activeColor: Theme.of(context).primaryColor,
+                      inactiveColor: Theme.of(context).splashColor,
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Theme.of(context).accentColor,
-        splashColor: Theme.of(context).primaryColor,
-        child: Icon(Icons.check),
+      floatingActionButton: FloatingActionButton.extended(
+        label: Text("Save"),
         onPressed: () {
           if (_formKey.currentState.validate()) {
             _formKey.currentState.save();

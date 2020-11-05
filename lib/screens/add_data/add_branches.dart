@@ -66,104 +66,91 @@ class _AddBranchState extends State<AddBranch> {
         elevation: 0.0,
       ),
       body: SizedBox.expand(
-        child: Container(
-          color: Theme.of(context).primaryColor,
-          child: SingleChildScrollView(
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: _padding,
-                    child: CTextFormField(
-                      hint: "Name",
-                      keyboardType: TextInputType.text,
-                      label: "Name",
-                      textCapitalization: TextCapitalization.words,
-                      controller: _nameController,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.deny(RegExp("[0-9]"))
-                      ],
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: _padding,
+                  child: CTextFormField(
+                    hint: "Name",
+                    keyboardType: TextInputType.text,
+                    label: "Name",
+                    textCapitalization: TextCapitalization.words,
+                    controller: _nameController,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.deny(RegExp("[0-9]"))
+                    ],
+                    validator: (value) =>
+                        _isEmpty(value) ? "Please enter something!" : null,
+                    onSaved: (value) {
+                      _model.name = value;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: _padding,
+                  child: CTextFormField(
+                      hint: "400",
+                      keyboardType: TextInputType.number,
+                      label: "Below Green",
+                      controller: _belowGreen,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       validator: (value) =>
                           _isEmpty(value) ? "Please enter something!" : null,
-                      onSaved: (value) {
-                        _model.name = value;
+                      onSaved: (value) => _model.belowGreen = int.parse(value)),
+                ),
+                Padding(
+                  padding: _padding,
+                  child: CTextFormField(
+                      hint: "500",
+                      keyboardType: TextInputType.number,
+                      label: "Above Green",
+                      controller: _aboveGreen,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      validator: (value) =>
+                          _isEmpty(value) ? "Please enter something!" : null,
+                      onSaved: (value) => _model.aboveGreen = int.parse(value)),
+                ),
+                Padding(
+                  padding: _padding,
+                  child: CTextFormField(
+                      hint: "50",
+                      keyboardType: TextInputType.number,
+                      label: "Member Discount",
+                      controller: _member,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      validator: (value) =>
+                          _isEmpty(value) ? "Please enter something!" : null,
+                      onSaved: (value) =>
+                          _model.memberDiscount = int.parse(value)),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    Checkbox(
+                      onChanged: (bool value) {
+                        setState(() {
+                          _indirectCheck = value;
+                        });
                       },
+                      value: _indirectCheck,
                     ),
-                  ),
-                  Padding(
-                    padding: _padding,
-                    child: CTextFormField(
-                        hint: "400",
-                        keyboardType: TextInputType.number,
-                        label: "Below Green",
-                        controller: _belowGreen,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
-                        validator: (value) =>
-                            _isEmpty(value) ? "Please enter something!" : null,
-                        onSaved: (value) =>
-                            _model.belowGreen = int.parse(value)),
-                  ),
-                  Padding(
-                    padding: _padding,
-                    child: CTextFormField(
-                        hint: "500",
-                        keyboardType: TextInputType.number,
-                        label: "Above Green",
-                        controller: _aboveGreen,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
-                        validator: (value) =>
-                            _isEmpty(value) ? "Please enter something!" : null,
-                        onSaved: (value) =>
-                            _model.aboveGreen = int.parse(value)),
-                  ),
-                  Padding(
-                    padding: _padding,
-                    child: CTextFormField(
-                        hint: "50",
-                        keyboardType: TextInputType.number,
-                        label: "Member Discount",
-                        controller: _member,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
-                        validator: (value) =>
-                            _isEmpty(value) ? "Please enter something!" : null,
-                        onSaved: (value) =>
-                            _model.memberDiscount = int.parse(value)),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Checkbox(
-                        onChanged: (bool value) {
-                          setState(() {
-                            _indirectCheck = value;
-                          });
-                        },
-                        value: _indirectCheck,
-                      ),
-                      Text(
-                        "Indirect Payment   ",
-                        style: TextStyle(
-                            fontSize: 16.0, fontWeight: FontWeight.w600),
-                      )
-                    ],
-                  ),
-                ],
-              ),
+                    Text(
+                      "Indirect Payment   ",
+                      style: TextStyle(
+                          fontSize: 16.0, fontWeight: FontWeight.w600),
+                    )
+                  ],
+                ),
+              ],
             ),
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Theme.of(context).accentColor,
-        splashColor: Theme.of(context).primaryColor,
-        child: Icon(Icons.check),
+      floatingActionButton: FloatingActionButton.extended(
+        label: Text("Save"),
         onPressed: () {
           _model.indirectPayment = _indirectCheck;
 
