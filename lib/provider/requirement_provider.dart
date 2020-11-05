@@ -10,7 +10,7 @@ class RequirementProvider {
   Future<List<RequirementModel>> fetchRequirements() async {
     var result = await _requirements.getDataCollection();
     requirements = result.documents
-        .map((doc) => RequirementModel.fromJson(doc.data, doc.documentID))
+        .map((doc) => RequirementModel.fromJson(doc.data(), doc.id))
         .toList();
     return requirements;
   }
@@ -25,7 +25,7 @@ class RequirementProvider {
 
   Future<RequirementModel> getRequirementById(String id) async {
     var doc = await _requirements.getRequirementById(id);
-    return RequirementModel.fromJson(doc.data, doc.documentID);
+    return RequirementModel.fromJson(doc.data(), doc.id);
   }
 
   Future removeRequirement(String id) async {

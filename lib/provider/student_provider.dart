@@ -10,7 +10,7 @@ class StudentProvider {
   Future<List<StudentModel>> fetchStudentes() async {
     var result = await _students.getDataCollection();
     products = result.documents
-        .map((doc) => StudentModel.fromJson(doc.data, doc.documentID))
+        .map((doc) => StudentModel.fromJson(doc.data(), doc.id))
         .toList();
     return products;
   }
@@ -21,7 +21,7 @@ class StudentProvider {
 
   Future<StudentModel> getStudentById(String id) async {
     var doc = await _students.getStudentById(id);
-    return StudentModel.fromJson(doc.data, doc.documentID);
+    return StudentModel.fromJson(doc.data(), doc.id);
   }
 
   Future removeStudent(String id) async {

@@ -3,19 +3,19 @@ import '../data.dart';
 import '../locator.dart';
 
 class StudentServices {
-  Firestore _db = Firestore.instance;
+  FirebaseFirestore _db = FirebaseFirestore.instance;
   CollectionReference ref;
 
   var _id = locator<Data>();
 
   StudentServices() {
-    _db.settings(persistenceEnabled: true);
+    FirebaseFirestore.instance.settings = Settings(persistenceEnabled: true);
     _updateDB();
   }
 
   Future<QuerySnapshot> getDataCollection() {
     _updateDB();
-    return ref.getDocuments();
+    return ref.get();
   }
 
   Stream<QuerySnapshot> streamDataCollection() {
@@ -25,12 +25,12 @@ class StudentServices {
 
   Future<DocumentSnapshot> getStudentById(String id) {
     _updateDB();
-    return ref.document(id).get();
+    return ref.doc(id).get();
   }
 
   Future<void> removeStudent(String id) {
     _updateDB();
-    return ref.document(id).delete();
+    return ref.doc(id).delete();
   }
 
   Future<DocumentReference> addStudent(Map data) {
@@ -40,13 +40,11 @@ class StudentServices {
 
   Future<void> updateStudent(Map data, String id) {
     _updateDB();
-    return ref.document(id).updateData(data);
+    return ref.doc(id).updateData(data);
   }
 
   void _updateDB() {
-    ref = _db
-        .collection("branches")
-        .document(_id.getBranch.id)
-        .collection("students");
+    ref =
+        _db.collection("branches").doc(_id.getBranch.id).collection("students");
   }
 }

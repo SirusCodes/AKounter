@@ -10,7 +10,7 @@ class EntryProvider {
   Future<List<EntryModel>> fetchEntries() async {
     var result = await _entries.getDataCollection();
     entries = result.documents
-        .map((doc) => EntryModel.fromJson(doc.data, doc.documentID))
+        .map((doc) => EntryModel.fromJson(doc.data(), doc.id))
         .toList();
     return entries;
   }
@@ -25,7 +25,7 @@ class EntryProvider {
 
   Future<EntryModel> getEntryById(String id) async {
     var doc = await _entries.getEntryById(id);
-    return EntryModel.fromJson(doc.data, doc.documentID);
+    return EntryModel.fromJson(doc.data(), doc.id);
   }
 
   Future removeEntry(String id) async {

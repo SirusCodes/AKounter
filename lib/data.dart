@@ -1,6 +1,6 @@
 import './models/branch_model.dart';
 import './models/student_model.dart';
-import './models/user.dart';
+import 'models/user_model.dart';
 
 class Data {
   static BranchModel _branch;
@@ -17,10 +17,10 @@ class Data {
 
   StudentModel get getStudent => _student ?? StudentModel();
 
-  static User _user;
-  set setUser(User user) {
+  static UserModel _user;
+  set setUser(UserModel user) {
     _user = user;
   }
 
-  User get getUser => _user;
+  UserModel get getUser => _user;
 }

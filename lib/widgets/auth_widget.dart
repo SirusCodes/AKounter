@@ -1,5 +1,5 @@
 import 'package:akounter/locator.dart';
-import 'package:akounter/models/user.dart';
+import 'package:akounter/models/user_model.dart';
 import 'package:akounter/provider/login_provider.dart';
 import 'package:akounter/screens/branch_screen.dart';
 import 'package:akounter/screens/settings/user_setting_screen.dart';
@@ -27,7 +27,7 @@ class AuthWidget extends StatelessWidget {
     final screenList = [BranchScreen(), UserSettingScreen()];
 
     final _auth = Provider.of<LoginProvider>(context, listen: false);
-    return StreamBuilder<User>(
+    return StreamBuilder<UserModel>(
       stream: _auth.onAuthStateChanged,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {

@@ -56,8 +56,8 @@ class BranchScreen extends StatelessWidget {
                 stream: _branches.fetchBranchesAsStream(),
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasData) {
-                    _branchList = snapshot.data.documents
-                        .map((f) => BranchModel.fromJson(f.data, f.documentID))
+                    _branchList = snapshot.data.docs
+                        .map((f) => BranchModel.fromJson(f.data(), f.id))
                         .toList();
 
                     return ListView.builder(

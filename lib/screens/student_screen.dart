@@ -39,8 +39,8 @@ class StudentScreen extends StatelessWidget {
           stream: _students.fetchStudentesAsStream(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasData) {
-              _studentList = snapshot.data.documents
-                  .map((f) => StudentModel.fromJson(f.data, f.documentID))
+              _studentList = snapshot.data.docs
+                  .map((f) => StudentModel.fromJson(f.data(), f.id))
                   .toList();
             }
             return Column(

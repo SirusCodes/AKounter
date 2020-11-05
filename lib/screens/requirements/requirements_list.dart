@@ -26,8 +26,8 @@ class RequirementsList extends StatelessWidget {
             stream: _requirements.fetchRequirementsAsStream(equip),
             builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (snapshot.hasData) {
-                _requirementList = snapshot.data.documents
-                    .map((f) => RequirementModel.fromJson(f.data, f.documentID))
+                _requirementList = snapshot.data.docs
+                    .map((f) => RequirementModel.fromJson(f.data(), f.id))
                     .toList();
 
                 RequirementsListProvider().setList = _requirementList;

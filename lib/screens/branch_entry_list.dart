@@ -79,8 +79,8 @@ class _BranchEntryListState extends State<BranchEntryList> {
                   stream: _entries.fetchAllEntriesAsStream(_date),
                   builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                     if (snapshot.hasData && !_isAllDeleted) {
-                      _entryList = snapshot.data.documents
-                          .map((f) => EntryModel.fromJson(f.data, f.documentID))
+                      _entryList = snapshot.data.docs
+                          .map((f) => EntryModel.fromJson(f.data(), f.id))
                           .toList();
 
                       _total = _entryList.fold(0, (t, e) => t + e.total);

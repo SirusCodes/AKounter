@@ -4,17 +4,17 @@ import '../data.dart';
 import '../locator.dart';
 
 class BranchServices {
-  final Firestore _db = Firestore.instance;
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
   final String path;
   CollectionReference ref;
 
   BranchServices(this.path) {
+    FirebaseFirestore.instance.settings = Settings(persistenceEnabled: true);
     ref = _db.collection(path);
-    _db.settings(persistenceEnabled: true);
   }
 
   Future<QuerySnapshot> getDataCollection() {
-    return ref.getDocuments();
+    return ref.get();
   }
 
   Stream<QuerySnapshot> streamDataCollection() {
@@ -25,11 +25,11 @@ class BranchServices {
   }
 
   Future<DocumentSnapshot> getBranchById(String id) {
-    return ref.document(id).get();
+    return ref.doc(id).get();
   }
 
   Future<void> removeBranch(String id) {
-    return ref.document(id).delete();
+    return ref.doc(id).delete();
   }
 
   Future<DocumentReference> addBranch(Map data) {
@@ -37,6 +37,6 @@ class BranchServices {
   }
 
   Future<void> updateBranch(Map data, String id) {
-    return ref.document(id).updateData(data);
+    return ref.doc(id).updateData(data);
   }
 }

@@ -3,19 +3,19 @@ import '../data.dart';
 import '../locator.dart';
 
 class EntryServices {
-  Firestore _db = Firestore.instance;
+  FirebaseFirestore _db = FirebaseFirestore.instance;
   CollectionReference ref;
 
   var _id = locator<Data>();
 
   EntryServices() {
-    _db.settings(persistenceEnabled: true);
+    FirebaseFirestore.instance.settings = Settings(persistenceEnabled: true);
     _updateDB();
   }
 
   Future<QuerySnapshot> getDataCollection() {
     _updateDB();
-    return ref.getDocuments();
+    return ref.get();
   }
 
   Stream<QuerySnapshot> streamDataCollection() {
@@ -31,14 +31,26 @@ class EntryServices {
         .snapshots();
   }
 
+  Future<QuerySnapshot> entriesBetween(DateTime startDate, DateTime endDate) {
+    return _db
+        .collectionGroup("entries")
+        .where("branch", isEqualTo: _id.getBranch.id)
+        .where(
+          "date",
+          isGreaterThanOrEqualTo: startDate,
+          isLessThan: endDate,
+        )
+        .get();
+  }
+
   Future<DocumentSnapshot> getEntryById(String id) {
     _updateDB();
-    return ref.document(id).get();
+    return ref.doc(id).get();
   }
 
   Future<void> removeEntry(String id) {
     _updateDB();
-    return ref.document(id).delete();
+    return ref.doc(id).delete();
   }
 
   Future<DocumentReference> addEntry(Map data) {
@@ -48,16 +60,16 @@ class EntryServices {
 
   Future<void> updateEntry(Map data, String id) {
     _updateDB();
-    return ref.document(id).updateData(data);
+    return ref.doc(id).update(data);
   }
 
   void _updateDB() {
     print(_id.getBranch.id);
     ref = _db
         .collection("branches")
-        .document(_id.getBranch.id)
+        .doc(_id.getBranch.id)
         .collection("students")
-        .document(_id.getStudent.id)
+        .doc(_id.getStudent.id)
         .collection("entries");
   }
 }

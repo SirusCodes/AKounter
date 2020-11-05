@@ -9,8 +9,8 @@ class BranchProvider {
 
   Future<List<BranchModel>> fetchBranches() async {
     var result = await _branches.getDataCollection();
-    products = result.documents
-        .map((doc) => BranchModel.fromJson(doc.data, doc.documentID))
+    products = result.docs
+        .map((doc) => BranchModel.fromJson(doc.data(), doc.id))
         .toList();
     return products;
   }
@@ -21,7 +21,7 @@ class BranchProvider {
 
   Future<BranchModel> getBranchById(String id) async {
     var doc = await _branches.getBranchById(id);
-    return BranchModel.fromJson(doc.data, doc.documentID);
+    return BranchModel.fromJson(doc.data(), doc.id);
   }
 
   Future removeBranch(String id) async {

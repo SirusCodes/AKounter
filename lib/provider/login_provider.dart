@@ -1,4 +1,4 @@
-import 'package:akounter/models/user.dart';
+import 'package:akounter/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -7,18 +7,18 @@ class LoginProvider {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-  User _userFromFirebase(FirebaseUser user) {
+  UserModel _userFromFirebase(User user) {
     return user == null
         ? null
-        : User(
+        : UserModel(
             uid: user.uid,
             displayName: user.displayName,
             mailID: user.email,
           );
   }
 
-  Stream<User> get onAuthStateChanged {
-    return _auth.onAuthStateChanged.map(_userFromFirebase);
+  Stream<UserModel> get onAuthStateChanged {
+    return _auth.authStateChanges().map(_userFromFirebase);
   }
 
   Future<void> signInWithGoogle() async {
@@ -30,17 +30,17 @@ class LoginProvider {
           await googleSignInAccount.authentication;
       if (googleSignInAuth.accessToken != null &&
           googleSignInAuth.idToken != null) {
-        final AuthCredential credential = GoogleAuthProvider.getCredential(
+        final AuthCredential credential = GoogleAuthProvider.credential(
           accessToken: googleSignInAuth.accessToken,
           idToken: googleSignInAuth.idToken,
         );
-        final AuthResult authResult =
+        final UserCredential authResult =
             await _auth.signInWithCredential(credential);
-        final FirebaseUser user = authResult.user;
+        final User user = authResult.user;
         assert(!user.isAnonymous);
         assert(await user.getIdToken() != null);
 
-        final FirebaseUser currentUser = await _auth.currentUser();
+        final User currentUser = _auth.currentUser;
         assert(user.uid == currentUser.uid);
 
         return _userFromFirebase(user);

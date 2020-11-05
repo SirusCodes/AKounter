@@ -22,8 +22,8 @@ class StudentRequirementsList extends StatelessWidget {
           stream: _req.fetchRequirementsAsStreamIssued(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasData) {
-              _reqList = snapshot.data.documents
-                  .map((f) => RequirementModel.fromJson(f.data, f.documentID))
+              _reqList = snapshot.data.docs
+                  .map((f) => RequirementModel.fromJson(f.data(), f.id))
                   .toList();
             }
             return ListView.builder(

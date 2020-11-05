@@ -134,9 +134,8 @@ class StudentDetails extends StatelessWidget {
                     stream: _entries.fetchEntriesAsStream(),
                     builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (snapshot.hasData) {
-                        _entryLists = snapshot.data.documents
-                            .map((f) =>
-                                EntryModel.fromJson(f.data, f.documentID))
+                        _entryLists = snapshot.data.docs
+                            .map((f) => EntryModel.fromJson(f.data(), f.id))
                             .toList();
                         return ListView.builder(
                           itemCount: _entryLists.length,

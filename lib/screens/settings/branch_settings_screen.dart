@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../../data.dart';
 import '../../locator.dart';
 import '../../models/branch_model.dart';
-import '../../models/user.dart';
+import '../../models/user_model.dart';
 import '../../provider/branch_provider.dart';
 import '../../provider/database_manager.dart';
 import '../../widgets/c_textformfield.dart';
@@ -24,7 +24,7 @@ class _BranchSettingsScreenState extends State<BranchSettingsScreen> {
   TextEditingController _nameController = TextEditingController();
 
   BranchModel data = locator<Data>().getBranch;
-  User _user = locator<Data>().getUser;
+  UserModel _user = locator<Data>().getUser;
 
   @override
   Widget build(BuildContext context) {

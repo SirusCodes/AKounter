@@ -1,6 +1,6 @@
 import 'package:akounter/locator.dart';
 import 'package:akounter/models/branch_model.dart';
-import 'package:akounter/models/user.dart';
+import 'package:akounter/models/user_model.dart';
 import 'package:akounter/provider/branch_provider.dart';
 import 'package:akounter/widgets/c_textformfield.dart';
 import 'package:akounter/widgets/snackbar.dart';
@@ -32,7 +32,7 @@ class _AddBranchState extends State<AddBranch> {
     "Dress": 0,
   };
 
-  static User _data = locator<Data>().getUser;
+  static UserModel _data = locator<Data>().getUser;
   bool _indirectCheck = false;
   BranchModel _model = BranchModel(
     owner: _data.mailID,
