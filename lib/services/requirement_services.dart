@@ -27,6 +27,14 @@ class RequirementServices {
         .snapshots();
   }
 
+  Stream<QuerySnapshot> streamDataCollectionIssued() {
+    _updateDB();
+    return ref
+        .where("issued", isEqualTo: true)
+        .where("student_id", isEqualTo: _id.getStudent.id)
+        .snapshots();
+  }
+
   Future<DocumentSnapshot> getRequirementById(String id) {
     _updateDB();
     return ref.document(id).get();

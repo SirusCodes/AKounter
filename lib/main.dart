@@ -51,8 +51,8 @@ class MyApp extends StatelessWidget {
           splashColor: Colors.black26,
           cardTheme: CardTheme(elevation: 3.0),
           textTheme: TextTheme(
-            display1: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w700),
-            display2: TextStyle(
+            headline4: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w700),
+            headline3: TextStyle(
               fontSize: 25.0,
               fontWeight: FontWeight.bold,
               color: Colors.black,

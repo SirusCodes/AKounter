@@ -16,7 +16,7 @@ class Examination extends StatelessWidget {
               _entry.getDetailedReason,
               style: Theme.of(context)
                   .textTheme
-                  .display1
+                  .headline4
                   .copyWith(color: Colors.black),
             ),
           ),

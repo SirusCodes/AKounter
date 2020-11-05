@@ -3,6 +3,7 @@ import 'package:akounter/models/entry_model.dart';
 import 'package:akounter/provider/add_entry_provider.dart';
 import 'package:akounter/provider/entry_provider.dart';
 import 'package:akounter/screens/add_data/add_entry.dart';
+import 'package:akounter/screens/requirements/student_requirements_list.dart';
 import 'package:akounter/widgets/snackbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/gestures.dart';
@@ -56,6 +57,13 @@ class StudentDetails extends StatelessWidget {
                     SliverAppBar(
                       elevation: 0.0,
                       actions: <Widget>[
+                        IconButton(
+                          icon: Icon(Icons.book),
+                          onPressed: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => StudentRequirementsList())),
+                        ),
                         IconButton(
                           icon: Icon(Icons.add_circle_outline),
                           onPressed: () {
@@ -164,7 +172,7 @@ class StudentDetails extends StatelessWidget {
                           return Container(
                             child: Text(
                               "NO Entries",
-                              style: Theme.of(context).textTheme.display1,
+                              style: Theme.of(context).textTheme.headline4,
                             ),
                           );
                         }

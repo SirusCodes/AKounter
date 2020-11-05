@@ -108,7 +108,7 @@ class _AddEntryState extends State<AddEntry> {
                                 padding: const EdgeInsets.all(15.0),
                                 child: Text(
                                   "Total:   ${_entry.getTotal}",
-                                  style: Theme.of(context).textTheme.display2,
+                                  style: Theme.of(context).textTheme.headline3,
                                 ),
                               ),
                               Text("Subtotal:   ${_entry.getSubtotal}"),
@@ -125,7 +125,7 @@ class _AddEntryState extends State<AddEntry> {
                                     hint: "1000",
                                     keyboardType: TextInputType.number,
                                     inputFormatters: [
-                                      WhitelistingTextInputFormatter.digitsOnly
+                                      FilteringTextInputFormatter.digitsOnly
                                     ],
                                     validator: (value) {
                                       if (value == null || value == "") {

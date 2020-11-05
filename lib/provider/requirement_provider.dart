@@ -19,6 +19,10 @@ class RequirementProvider {
     return _requirements.streamDataCollection(equip);
   }
 
+  Stream<QuerySnapshot> fetchRequirementsAsStreamIssued() {
+    return _requirements.streamDataCollectionIssued();
+  }
+
   Future<RequirementModel> getRequirementById(String id) async {
     var doc = await _requirements.getRequirementById(id);
     return RequirementModel.fromJson(doc.data, doc.documentID);

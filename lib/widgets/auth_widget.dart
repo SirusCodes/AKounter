@@ -16,11 +16,11 @@ class AuthWidget extends StatelessWidget {
     final itemList = [
       BottomNavigationBarItem(
         icon: Icon(Icons.home),
-        title: Text("Branch"),
+        label: "Branch",
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.person),
-        title: Text("Settings"),
+        label: "Settings",
       )
     ];
 

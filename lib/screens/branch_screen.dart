@@ -25,15 +25,15 @@ class BranchScreen extends StatelessWidget {
     List<BottomNavigationBarItem> _itemList = [
       BottomNavigationBarItem(
         icon: Icon(Icons.people),
-        title: Text("Student List"),
+        label: "Student List",
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.library_books),
-        title: Text("Entry List"),
+        label: "Entry List",
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.settings),
-        title: Text("Branch Settings"),
+        label: "Branch Settings",
       )
     ];
 

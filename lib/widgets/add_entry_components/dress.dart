@@ -38,7 +38,7 @@ class _DressState extends State<Dress> {
               SizedBox(width: 10.0),
               // Text(
               //   "Size : **",
-              //   style: Theme.of(context).textTheme.display1,
+              //   style: Theme.of(context).textTheme.headline4,
               // ),
             ],
           ),

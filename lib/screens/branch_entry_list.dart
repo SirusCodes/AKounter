@@ -92,7 +92,7 @@ class _BranchEntryListState extends State<BranchEntryList> {
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
                               "Total: $_total",
-                              style: Theme.of(context).textTheme.display2,
+                              style: Theme.of(context).textTheme.headline3,
                             ),
                           ),
                           ListView.builder(
@@ -150,7 +150,7 @@ class _BranchEntryListState extends State<BranchEntryList> {
                       return Container(
                         child: Text(
                           "NO Entries",
-                          style: Theme.of(context).textTheme.display1,
+                          style: Theme.of(context).textTheme.headline4,
                         ),
                       );
                     }

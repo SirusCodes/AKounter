@@ -68,14 +68,14 @@ class BranchRequirements extends StatelessWidget {
           children: <Widget>[
             Text(
               type,
-              style: Theme.of(context).textTheme.display2,
+              style: Theme.of(context).textTheme.headline3,
               overflow: TextOverflow.ellipsis,
             ),
             Text(
               _branch.requirements[type].toString(),
               style: Theme.of(context)
                   .textTheme
-                  .display1
+                  .headline4
                   .copyWith(fontSize: size.width / 7),
             ),
           ],

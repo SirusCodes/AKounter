@@ -82,7 +82,7 @@ class _AddBranchState extends State<AddBranch> {
                       textCapitalization: TextCapitalization.words,
                       controller: _nameController,
                       inputFormatters: [
-                        BlacklistingTextInputFormatter(RegExp("[0-9]"))
+                        FilteringTextInputFormatter.deny(RegExp("[0-9]"))
                       ],
                       validator: (value) =>
                           _isEmpty(value) ? "Please enter something!" : null,
@@ -99,7 +99,7 @@ class _AddBranchState extends State<AddBranch> {
                         label: "Below Green",
                         controller: _belowGreen,
                         inputFormatters: [
-                          WhitelistingTextInputFormatter.digitsOnly
+                          FilteringTextInputFormatter.digitsOnly
                         ],
                         validator: (value) =>
                             _isEmpty(value) ? "Please enter something!" : null,
@@ -114,7 +114,7 @@ class _AddBranchState extends State<AddBranch> {
                         label: "Above Green",
                         controller: _aboveGreen,
                         inputFormatters: [
-                          WhitelistingTextInputFormatter.digitsOnly
+                          FilteringTextInputFormatter.digitsOnly
                         ],
                         validator: (value) =>
                             _isEmpty(value) ? "Please enter something!" : null,
@@ -129,7 +129,7 @@ class _AddBranchState extends State<AddBranch> {
                         label: "Member Discount",
                         controller: _member,
                         inputFormatters: [
-                          WhitelistingTextInputFormatter.digitsOnly
+                          FilteringTextInputFormatter.digitsOnly
                         ],
                         validator: (value) =>
                             _isEmpty(value) ? "Please enter something!" : null,

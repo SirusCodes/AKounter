@@ -96,7 +96,7 @@ class _AddStudentState extends State<AddStudent> {
                       textCapitalization: TextCapitalization.words,
                       controller: _nameController,
                       inputFormatters: [
-                        BlacklistingTextInputFormatter(RegExp("[0-9]"))
+                        FilteringTextInputFormatter.deny(RegExp("[0-9]"))
                       ],
                       validator: (value) =>
                           _isEmpty(value) ? "Please enter something!" : null,
@@ -148,9 +148,7 @@ class _AddStudentState extends State<AddStudent> {
                       hint: "0123456789",
                       keyboardType: TextInputType.phone,
                       label: "Number",
-                      inputFormatters: [
-                        WhitelistingTextInputFormatter.digitsOnly
-                      ],
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       validator: (value) => _isPhoneNumber(value)
                           ? "Please enter a proper phone number"
                           : null,
@@ -164,9 +162,7 @@ class _AddStudentState extends State<AddStudent> {
                       hint: "0123456789",
                       keyboardType: TextInputType.phone,
                       label: "Father's Number",
-                      inputFormatters: [
-                        WhitelistingTextInputFormatter.digitsOnly
-                      ],
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       validator: (value) => _isPhoneNumber(value)
                           ? "Please enter a proper phone number"
                           : null,
@@ -181,9 +177,7 @@ class _AddStudentState extends State<AddStudent> {
                       keyboardType: TextInputType.phone,
                       label: "Mother's Number",
                       controller: _numMotherController,
-                      inputFormatters: [
-                        WhitelistingTextInputFormatter.digitsOnly
-                      ],
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       validator: (value) => _isPhoneNumber(value)
                           ? "Please enter a proper phone number"
                           : null,
@@ -226,7 +220,7 @@ class _AddStudentState extends State<AddStudent> {
                     children: <Widget>[
                       Text(
                         "Gender:",
-                        style: Theme.of(context).textTheme.display1,
+                        style: Theme.of(context).textTheme.headline4,
                       ),
                       Row(
                         children: <Widget>[
@@ -238,7 +232,7 @@ class _AddStudentState extends State<AddStudent> {
                           ),
                           Text(
                             "Male",
-                            style: Theme.of(context).textTheme.display1,
+                            style: Theme.of(context).textTheme.headline4,
                           ),
                         ],
                       ),
@@ -252,7 +246,7 @@ class _AddStudentState extends State<AddStudent> {
                           ),
                           Text(
                             "Female",
-                            style: Theme.of(context).textTheme.display1,
+                            style: Theme.of(context).textTheme.headline4,
                           ),
                         ],
                       ),
@@ -266,7 +260,7 @@ class _AddStudentState extends State<AddStudent> {
                           ),
                           Text(
                             "Other",
-                            style: Theme.of(context).textTheme.display1,
+                            style: Theme.of(context).textTheme.headline4,
                           ),
                         ],
                       )
@@ -281,7 +275,7 @@ class _AddStudentState extends State<AddStudent> {
                           padding: EdgeInsets.only(left: 25.0),
                           child: Text(
                             "Belt:",
-                            style: Theme.of(context).textTheme.display1,
+                            style: Theme.of(context).textTheme.headline4,
                           ),
                         ),
                         Slider(
@@ -310,7 +304,7 @@ class _AddStudentState extends State<AddStudent> {
                           padding: EdgeInsets.only(left: 25.0),
                           child: Text(
                             "Fees paid till:",
-                            style: Theme.of(context).textTheme.display1,
+                            style: Theme.of(context).textTheme.headline4,
                           ),
                         ),
                         Slider(
@@ -363,8 +357,11 @@ class _AddStudentState extends State<AddStudent> {
     return false;
   }
 
-  bool _isPhoneNumber(String value) =>
-      value.isNotEmpty ? value.length != 10 ? true : false : false;
+  bool _isPhoneNumber(String value) => value.isNotEmpty
+      ? value.length != 10
+          ? true
+          : false
+      : false;
 
   bool _validateDate(String value) {
     List<String> _lengths = value.split("/");
@@ -408,7 +405,9 @@ class _AddStudentState extends State<AddStudent> {
     _student.onTrial = _onTrial;
     _student.gender = _gender == Gender.male
         ? "Male"
-        : _gender == Gender.female ? "Female" : "Other";
+        : _gender == Gender.female
+            ? "Female"
+            : "Other";
     _student.belt = _sliderBelt.toInt();
     _student.fees = _sliderMonth.toInt();
   }
