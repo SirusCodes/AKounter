@@ -11,6 +11,19 @@ import 'add_data/add_entry.dart';
 import 'add_data/add_students.dart';
 import 'student_details.dart';
 
+List<Color> beltColors = [
+  Colors.grey[200],
+  Colors.orange,
+  Colors.yellow,
+  Colors.green,
+  Colors.blue,
+  Colors.purple,
+  Colors.brown,
+  Colors.grey[700],
+  Colors.yellowAccent,
+  Colors.black,
+];
+
 class StudentScreen extends StatelessWidget {
   const StudentScreen({Key key}) : super(key: key);
 
@@ -52,7 +65,7 @@ class StudentScreen extends StatelessWidget {
                     itemCount: _studentList.length,
                     itemBuilder: (context, int i) {
                       return Card(
-                        elevation: 3.0,
+                        elevation: 5.0,
                         child: ListTile(
                           leading: IconButton(
                             icon: Icon(Icons.edit),
@@ -86,7 +99,10 @@ class StudentScreen extends StatelessWidget {
                             );
                           },
                           trailing: IconButton(
-                            icon: Icon(Icons.delete),
+                            icon: Icon(
+                              Icons.delete,
+                              color: beltColors[_studentList[i].belt],
+                            ),
                             onPressed: () {
                               cSnackBar(
                                 context,
