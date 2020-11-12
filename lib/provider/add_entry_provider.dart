@@ -277,7 +277,7 @@ class AddEntryProvider extends ChangeNotifier {
     _pending = _amountGiven - _total;
   }
 
-  void postSaveStudent(String date) {
+  void postSaveStudent(DateTime date) {
     if (_pending != _data.getStudent.pending) {
       _data.getStudent.pending = _pending;
     }

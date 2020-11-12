@@ -9,7 +9,7 @@ class RequirementProvider {
 
   Future<List<RequirementModel>> fetchRequirements() async {
     var result = await _requirements.getDataCollection();
-    requirements = result.documents
+    requirements = result.docs
         .map((doc) => RequirementModel.fromJson(doc.data(), doc.id))
         .toList();
     return requirements;

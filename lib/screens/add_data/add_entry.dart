@@ -41,7 +41,7 @@ class _AddEntryState extends State<AddEntry> {
   var _entry = locator<AddEntryProvider>();
   var _student = locator<Data>();
 
-  String _date;
+  DateTime _date;
 
   @override
   void initState() {
@@ -62,7 +62,7 @@ class _AddEntryState extends State<AddEntry> {
     _entry.setTotalMonth = 1;
 
     // initialize date
-    _date = formatDate(DateTime.now(), ["dd", "/", "mm", "/", "yyyy"]);
+    _date = DateTime.now();
     super.initState();
   }
 
@@ -89,15 +89,19 @@ class _AddEntryState extends State<AddEntry> {
                         return Column(
                           children: <Widget>[
                             OutlineButton(
-                              child: Text(_date),
+                              child: Text(
+                                formatDate(
+                                  _date,
+                                  ["dd", "/", "mm", "/", "yyyy"],
+                                ),
+                              ),
                               onPressed: () => DatePicker.showDatePicker(
                                 context,
                                 maxTime: DateTime.now(),
                                 showTitleActions: true,
                                 onConfirm: (DateTime date) {
                                   setState(() {
-                                    _date = formatDate(
-                                        date, ["dd", "/", "mm", "/", "yyyy"]);
+                                    _date = date;
                                   });
                                 },
                               ),

@@ -1,3 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../extensions/date_extention.dart';
+
 class StudentModel {
   String id;
   String name;
@@ -9,7 +13,7 @@ class StudentModel {
   int belt;
   int fees;
   int pending;
-  String lastFees;
+  DateTime lastFees;
 
   StudentModel({
     this.id,
@@ -38,7 +42,7 @@ class StudentModel {
         belt = snapshot["belt"] ?? 0,
         fees = snapshot["fees"] ?? 0,
         pending = snapshot["pending"] ?? 0,
-        lastFees = snapshot["last_fees"] ?? "",
+        lastFees = (snapshot["last_fees"] as Timestamp).toDate(),
         fatherNum = snapshot["father_num"] ?? "",
         motherNum = snapshot["mother_num"] ?? "";
 
@@ -53,7 +57,7 @@ class StudentModel {
       "belt": belt,
       "fees": fees,
       "pending": pending,
-      "last_fees": lastFees,
+      "last_fees": (lastFees ?? DateTime.now()).toTimestamp(),
       "father_num": fatherNum,
       "mother_num": motherNum,
     };

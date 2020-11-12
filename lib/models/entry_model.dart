@@ -1,32 +1,30 @@
-class EntryModel {
-  String id,
-      reason,
-      detailedReason,
-      date,
-      name,
-      branch,
-      studentID,
-      requirementID;
-  int total, subtotal, pending;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../extensions/date_extention.dart';
 
-  EntryModel(
-      {this.id,
-      this.reason,
-      this.detailedReason,
-      this.date,
-      this.total,
-      this.subtotal,
-      this.pending,
-      this.name,
-      this.branch,
-      this.studentID,
-      this.requirementID});
+class EntryModel {
+  String id, reason, detailedReason, name, branch, studentID, requirementID;
+  int total, subtotal, pending;
+  DateTime date;
+
+  EntryModel({
+    this.id,
+    this.reason,
+    this.detailedReason,
+    this.date,
+    this.total,
+    this.subtotal,
+    this.pending,
+    this.name,
+    this.branch,
+    this.studentID,
+    this.requirementID,
+  });
 
   EntryModel.fromJson(Map snapshot, String id)
       : this.id = id,
         reason = snapshot["reason"] ?? "",
         detailedReason = snapshot["detailed_reason"] ?? "",
-        date = snapshot["date"] ?? "",
+        date = (snapshot["date"] as Timestamp).toDate(),
         total = snapshot["total"] ?? 0,
         subtotal = snapshot["subtotal"] ?? 0,
         pending = snapshot["pending"] ?? 0,
@@ -39,7 +37,7 @@ class EntryModel {
     return {
       "reason": reason,
       "detailed_reason": detailedReason,
-      "date": date,
+      "date": date.toTimestamp(),
       "total": total,
       "subtotal": subtotal,
       "pending": pending,

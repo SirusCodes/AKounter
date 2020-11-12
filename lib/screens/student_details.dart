@@ -6,6 +6,7 @@ import 'package:akounter/screens/add_data/add_entry.dart';
 import 'package:akounter/screens/requirements/student_requirements_list.dart';
 import 'package:akounter/widgets/snackbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -144,9 +145,14 @@ class StudentDetails extends StatelessWidget {
                               elevation: 3.0,
                               child: ListTile(
                                 title: Text(_entryLists[i].reason),
-                                subtitle: Text(_entryLists[i].detailedReason +
-                                    "  " +
-                                    _entryLists[i].date),
+                                subtitle: Text(
+                                  _entryLists[i].detailedReason +
+                                      "  " +
+                                      formatDate(
+                                        _entryLists[i].date,
+                                        ["dd", "/", "mm", "/", "yyyy"],
+                                      ),
+                                ),
                                 trailing: IconButton(
                                   icon: Icon(Icons.delete,
                                       color: Theme.of(context).accentColor),

@@ -40,7 +40,7 @@ class StudentServices {
 
   Future<void> updateStudent(Map data, String id) {
     _updateDB();
-    return ref.doc(id).updateData(data);
+    return ref.doc(id).update(data);
   }
 
   void _updateDB() {

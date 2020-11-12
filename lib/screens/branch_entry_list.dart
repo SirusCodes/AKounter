@@ -1,8 +1,3 @@
-import 'package:akounter/models/entry_model.dart';
-import 'package:akounter/provider/add_entry_provider.dart';
-import 'package:akounter/provider/entry_provider.dart';
-import 'package:akounter/provider/student_provider.dart';
-import 'package:akounter/widgets/snackbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +6,11 @@ import 'package:provider/provider.dart';
 
 import '../data.dart';
 import '../locator.dart';
+import '../models/entry_model.dart';
+import '../provider/add_entry_provider.dart';
+import '../provider/entry_provider.dart';
+import '../provider/student_provider.dart';
+import '../widgets/snackbar.dart';
 
 class BranchEntryList extends StatefulWidget {
   const BranchEntryList({Key key}) : super(key: key);
@@ -21,7 +21,7 @@ class BranchEntryList extends StatefulWidget {
 
 class _BranchEntryListState extends State<BranchEntryList> {
   List<EntryModel> _entryList = [];
-  String _date;
+  DateTime _date;
   int _total = 0;
 
   bool _showList = false, _isAllDeleted = false;
@@ -30,7 +30,7 @@ class _BranchEntryListState extends State<BranchEntryList> {
 
   @override
   void initState() {
-    _date = formatDate(DateTime.now(), ["dd", "/", "mm", "/", "yyyy"]);
+    _date = DateTime.now();
     super.initState();
   }
 
@@ -53,15 +53,15 @@ class _BranchEntryListState extends State<BranchEntryList> {
                   child: Column(
                     children: <Widget>[
                       OutlineButton(
-                        child: Text(_date),
+                        child: Text(
+                            formatDate(_date, ["dd", "/", "mm", "/", "yyyy"])),
                         onPressed: () => DatePicker.showDatePicker(
                           context,
                           maxTime: DateTime.now(),
                           showTitleActions: true,
                           onConfirm: (DateTime date) {
                             setState(() {
-                              _date = formatDate(
-                                  date, ["dd", "/", "mm", "/", "yyyy"]);
+                              _date = date;
                             });
                           },
                         ),

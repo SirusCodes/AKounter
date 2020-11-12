@@ -1,6 +1,8 @@
-import 'package:akounter/models/entry_model.dart';
-import 'package:akounter/services/entry_sevices.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../extensions/date_extention.dart';
+import '../models/entry_model.dart';
+import '../services/entry_sevices.dart';
 
 class EntryProvider {
   EntryServices _entries = EntryServices();
@@ -9,7 +11,19 @@ class EntryProvider {
 
   Future<List<EntryModel>> fetchEntries() async {
     var result = await _entries.getDataCollection();
-    entries = result.documents
+    entries = result.docs
+        .map((doc) => EntryModel.fromJson(doc.data(), doc.id))
+        .toList();
+    return entries;
+  }
+
+  Future<List<EntryModel>> fetchEntriesBetween(
+      DateTime startDate, DateTime endDate) async {
+    var result = await _entries.entriesBetween(
+      startDate.toTimestamp(),
+      endDate.toTimestamp(),
+    );
+    entries = result.docs
         .map((doc) => EntryModel.fromJson(doc.data(), doc.id))
         .toList();
     return entries;
@@ -19,8 +33,8 @@ class EntryProvider {
     return _entries.streamDataCollection();
   }
 
-  Stream<QuerySnapshot> fetchAllEntriesAsStream(String date) {
-    return _entries.streamAllEntriesCollection(date);
+  Stream<QuerySnapshot> fetchAllEntriesAsStream(DateTime date) {
+    return _entries.streamAllEntriesCollection(date.toTimestamp());
   }
 
   Future<EntryModel> getEntryById(String id) async {

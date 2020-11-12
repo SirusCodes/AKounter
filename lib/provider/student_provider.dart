@@ -9,7 +9,7 @@ class StudentProvider {
 
   Future<List<StudentModel>> fetchStudentes() async {
     var result = await _students.getDataCollection();
-    products = result.documents
+    products = result.docs
         .map((doc) => StudentModel.fromJson(doc.data(), doc.id))
         .toList();
     return products;

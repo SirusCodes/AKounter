@@ -37,6 +37,6 @@ class BranchServices {
   }
 
   Future<void> updateBranch(Map data, String id) {
-    return ref.doc(id).updateData(data);
+    return ref.doc(id).update(data);
   }
 }

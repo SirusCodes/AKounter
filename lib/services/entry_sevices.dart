@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../data.dart';
 import '../locator.dart';
 
@@ -23,7 +24,7 @@ class EntryServices {
     return ref.snapshots();
   }
 
-  Stream<QuerySnapshot> streamAllEntriesCollection(String date) {
+  Stream<QuerySnapshot> streamAllEntriesCollection(Timestamp date) {
     return _db
         .collectionGroup("entries")
         .where("branch", isEqualTo: _id.getBranch.id)
@@ -31,7 +32,7 @@ class EntryServices {
         .snapshots();
   }
 
-  Future<QuerySnapshot> entriesBetween(DateTime startDate, DateTime endDate) {
+  Future<QuerySnapshot> entriesBetween(Timestamp startDate, Timestamp endDate) {
     return _db
         .collectionGroup("entries")
         .where("branch", isEqualTo: _id.getBranch.id)
