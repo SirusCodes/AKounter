@@ -1,13 +1,13 @@
-import 'package:akounter/models/student_model.dart';
-import 'package:akounter/provider/student_provider.dart';
-import 'package:akounter/widgets/c_textformfield.dart';
-import 'package:akounter/widgets/snackbar.dart';
-import 'package:date_format/date_format.dart';
+import 'package:date_format/date_format.dart' as df;
 import 'package:date_text_input_formatter/date_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:provider/provider.dart';
+
+import '../../models/student_model.dart';
+import '../../provider/student_provider.dart';
+import '../../widgets/c_textformfield.dart';
+import '../../widgets/snackbar.dart';
 
 enum Gender { male, female, other }
 
@@ -59,6 +59,9 @@ class _AddStudentState extends State<AddStudent> {
     "November",
     "December"
   ];
+
+  DateTime _date = DateTime.now();
+
   @override
   void initState() {
     _sliderBelt = 0.0;
@@ -123,19 +126,8 @@ class _AddStudentState extends State<AddStudent> {
                       ),
                     ),
                     IconButton(
-                      icon: Icon(Icons.date_range),
-                      onPressed: () => DatePicker.showDatePicker(
-                        context,
-                        maxTime: DateTime.now(),
-                        showTitleActions: true,
-                        onConfirm: (DateTime date) {
-                          setState(() {
-                            _dobController.text = formatDate(
-                                date, ["dd", "/", "mm", "/", "yyyy"]);
-                          });
-                        },
-                      ),
-                    )
+                        icon: Icon(Icons.date_range),
+                        onPressed: () => _showDatePicker())
                   ],
                 ),
               ),
@@ -341,6 +333,27 @@ class _AddStudentState extends State<AddStudent> {
         },
       ),
     );
+  }
+
+  Future<void> _showDatePicker() async {
+    final today = DateTime.now();
+    final selectedDate = await showDatePicker(
+      context: context,
+      firstDate: DateTime(today.year - 100),
+      initialDate: _date,
+      lastDate: today,
+      locale: Locale("en", "in"),
+    );
+
+    if (selectedDate != _date && selectedDate != null) {
+      setState(() {
+        _dobController.text = df.formatDate(
+          selectedDate,
+          ["dd", "/", "mm", "/", "yyyy"],
+        );
+        _date = selectedDate;
+      });
+    }
   }
 
   bool _isEmpty(String value) {

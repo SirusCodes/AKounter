@@ -1,4 +1,6 @@
+import 'package:akounter/models/student_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:uuid/uuid.dart';
 import '../data.dart';
 import '../locator.dart';
 
@@ -41,6 +43,16 @@ class StudentServices {
   Future<void> updateStudent(Map data, String id) {
     _updateDB();
     return ref.doc(id).update(data);
+  }
+
+  Future<void> transactionStudent(List<StudentModel> list) {
+    Uuid _uuid = Uuid();
+    WriteBatch batch = FirebaseFirestore.instance.batch();
+    for (final model in list) {
+      print(ref.doc(_uuid.v1()));
+      batch.set(ref.doc(_uuid.v1()), model.toJson());
+    }
+    return batch.commit();
   }
 
   void _updateDB() {

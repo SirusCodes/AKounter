@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../data.dart';
@@ -55,16 +54,7 @@ class _BranchEntryListState extends State<BranchEntryList> {
                       OutlineButton(
                         child: Text(
                             formatDate(_date, ["dd", "/", "mm", "/", "yyyy"])),
-                        onPressed: () => DatePicker.showDatePicker(
-                          context,
-                          maxTime: DateTime.now(),
-                          showTitleActions: true,
-                          onConfirm: (DateTime date) {
-                            setState(() {
-                              _date = date;
-                            });
-                          },
-                        ),
+                        onPressed: () => _showDatePicker(),
                       ),
                     ],
                   ),
@@ -163,5 +153,21 @@ class _BranchEntryListState extends State<BranchEntryList> {
         ),
       ),
     );
+  }
+
+  Future<void> _showDatePicker() async {
+    final today = DateTime.now();
+    final selectedDate = await showDatePicker(
+      context: context,
+      firstDate: DateTime(today.year, today.month - 1, today.day),
+      initialDate: _date,
+      lastDate: today,
+    );
+
+    if (selectedDate != _date && selectedDate != null) {
+      setState(() {
+        _date = selectedDate;
+      });
+    }
   }
 }

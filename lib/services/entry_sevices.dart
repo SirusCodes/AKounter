@@ -36,11 +36,8 @@ class EntryServices {
     return _db
         .collectionGroup("entries")
         .where("branch", isEqualTo: _id.getBranch.id)
-        .where(
-          "date",
-          isGreaterThanOrEqualTo: startDate,
-          isLessThan: endDate,
-        )
+        .where("reason", isEqualTo: "Monthly")
+        .where("",arrayContainsAny: [])
         .get();
   }
 

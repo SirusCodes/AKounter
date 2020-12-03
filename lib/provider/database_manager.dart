@@ -8,7 +8,6 @@ import 'package:flutter/foundation.dart';
 class DatabaseManager extends ChangeNotifier {
   File file;
   List lists;
-  StudentModel _student;
   StudentProvider _studentProvider = StudentProvider();
   int value;
   int total;
@@ -46,31 +45,23 @@ class DatabaseManager extends ChangeNotifier {
   }
 
   _upload() {
+    List<StudentModel> uList = [];
     for (var list in lists) {
-      Future.delayed(Duration(seconds: 1), () {
-        this._student = StudentModel(
-          name: list[0],
-          dob: list[1],
-          number: list[2].toString(),
-          fatherNum: list[3].toString(),
-          motherNum: list[4].toString(),
-          gender: list[5],
-          belt: _getBelt(list[6]),
-          fees: _getFees(list[7]),
-          lastFees: list[8],
-          isMember: false,
-          onTrial: false,
-          pending: 0,
-        );
-        if (list[0].toString().isNotEmpty)
-          _studentProvider.addStudent(_student);
-        value++;
-        // percent = (value / total).toDouble();
-        notifyListeners();
-      });
+      uList.add(StudentModel(
+        name: list[0],
+        dob: list[1],
+        number: list[2].toString(),
+        fatherNum: list[3].toString(),
+        motherNum: list[4].toString(),
+        gender: list[5],
+        belt: _getBelt(list[6]),
+        fees: _getFees(list[7]),
+        isMember: false,
+        onTrial: false,
+        pending: 0,
+      ));
     }
-    _showIndicator = false;
-    notifyListeners();
+    _studentProvider.transactionStudent(uList);
   }
 
   int _getBelt(String belt) {

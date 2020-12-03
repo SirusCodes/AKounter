@@ -11,7 +11,6 @@ import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:akounter/enums/type_payment_enum.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:provider/provider.dart';
 import '../../data.dart';
 import '../../locator.dart';
@@ -95,16 +94,7 @@ class _AddEntryState extends State<AddEntry> {
                                   ["dd", "/", "mm", "/", "yyyy"],
                                 ),
                               ),
-                              onPressed: () => DatePicker.showDatePicker(
-                                context,
-                                maxTime: DateTime.now(),
-                                showTitleActions: true,
-                                onConfirm: (DateTime date) {
-                                  setState(() {
-                                    _date = date;
-                                  });
-                                },
-                              ),
+                              onPressed: _showDatePicker,
                             ),
                             Padding(
                               padding: const EdgeInsets.all(15.0),
@@ -220,6 +210,22 @@ class _AddEntryState extends State<AddEntry> {
         },
       ),
     );
+  }
+
+  Future<void> _showDatePicker() async {
+    final today = DateTime.now();
+    final selectedDate = await showDatePicker(
+      context: context,
+      firstDate: DateTime(today.year, today.month - 1, today.day),
+      initialDate: _date,
+      lastDate: today,
+    );
+
+    if (selectedDate != _date && selectedDate != null) {
+      setState(() {
+        _date = selectedDate;
+      });
+    }
   }
 
   void _changeReasons(String value) {

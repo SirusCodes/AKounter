@@ -55,6 +55,10 @@ class _BranchSettingsScreenState extends State<BranchSettingsScreen> {
               });
               DatabaseManager.upload();
             },
+          ),
+          IconButton(
+            icon: Icon(Icons.cloud_download),
+            onPressed: () {},
           )
         ],
       ),

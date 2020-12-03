@@ -38,4 +38,8 @@ class StudentProvider {
     await _students.addStudent(_student.toJson());
     return;
   }
+
+  Future<void> transactionStudent(List<StudentModel> list) {
+    return _students.transactionStudent(list);
+  }
 }
