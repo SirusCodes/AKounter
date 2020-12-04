@@ -200,9 +200,10 @@ class _AddEntryState extends State<AddEntry> {
                     branch: _student.getBranch.id,
                     studentID: _student.getStudent.id,
                     requirementID: _entry.getReqID,
+                    monthsPaid: _entry.getMonthRange,
                   ),
                 );
-                _entry.postSaveStudent(_date);
+                // _entry.postSaveStudent(_date);
                 Navigator.pop(context);
               }
             },

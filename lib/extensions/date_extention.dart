@@ -7,3 +7,19 @@ extension ConvertToTimestamp on DateTime {
         DateTime.parse(DateFormat("yyyy-MM-dd").format(this)),
       );
 }
+
+extension CopyWithDate on DateTime {
+  DateTime copyWith({year, month, day}) => DateTime(
+        year ?? this.year,
+        month ?? this.month,
+        day ?? this.day,
+      );
+}
+
+extension FormatDate on DateTime {
+  DateTime trimDate() => DateTime(
+        this.year,
+        this.month,
+        1,
+      );
+}

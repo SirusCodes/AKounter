@@ -5,6 +5,7 @@ class EntryModel {
   String id, reason, detailedReason, name, branch, studentID, requirementID;
   int total, subtotal, pending;
   DateTime date;
+  List<DateTime> monthsPaid;
 
   EntryModel({
     this.id,
@@ -18,6 +19,7 @@ class EntryModel {
     this.branch,
     this.studentID,
     this.requirementID,
+    this.monthsPaid,
   });
 
   EntryModel.fromJson(Map snapshot, String id)
@@ -31,6 +33,9 @@ class EntryModel {
         name = snapshot['name'] ?? "",
         branch = snapshot['branch'] ?? "",
         studentID = snapshot['student_id'],
+        monthsPaid = (snapshot['months_paid'] as List)
+            .map((e) => (e as Timestamp).toDate())
+            .toList(),
         requirementID = snapshot["requirement_id"];
 
   toJson() {
@@ -44,6 +49,7 @@ class EntryModel {
       "name": name,
       "branch": branch,
       "student_id": studentID,
+      "months_paid": monthsPaid.map((e) => e.toTimestamp()).toList(),
       "requirement_id": requirementID,
     };
   }

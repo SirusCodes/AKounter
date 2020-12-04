@@ -55,7 +55,7 @@ class DatabaseManager extends ChangeNotifier {
         motherNum: list[4].toString(),
         gender: list[5],
         belt: _getBelt(list[6]),
-        fees: _getFees(list[7]),
+        fees: list[7],
         isMember: false,
         onTrial: false,
         pending: 0,

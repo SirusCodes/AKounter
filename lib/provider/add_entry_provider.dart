@@ -1,23 +1,27 @@
-import 'package:akounter/data.dart';
-import 'package:akounter/enums/dress_size_enum.dart';
-import 'package:akounter/locator.dart';
-import 'package:akounter/models/entry_model.dart';
-import 'package:akounter/models/requirements_model.dart';
-import 'package:akounter/models/student_model.dart';
-import 'package:akounter/provider/branch_provider.dart';
-import 'package:akounter/provider/entry_provider.dart';
-import 'package:akounter/provider/requirement_provider.dart';
-import 'package:akounter/provider/student_provider.dart';
+import '../data.dart';
+import '../enums/dress_size_enum.dart';
+import '../locator.dart';
+import '../models/entry_model.dart';
+import '../models/requirements_model.dart';
+import '../models/student_model.dart';
+import 'branch_provider.dart';
+import 'entry_provider.dart';
+import 'requirement_provider.dart';
+import 'student_provider.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/foundation.dart';
+import '../extensions/date_extention.dart';
 
 //! may refactor it later
 
 class AddEntryProvider extends ChangeNotifier {
   static int _total = 0, _subtotal = 0, _pending = 0, _amountGiven;
   static String _reason = "Monthly", _detailedReason, _invoiceNo, _reqID;
+  static List<DateTime> monthRange = [];
 
   String get getReqID => _reqID;
+
+  List<DateTime> getMonthRange = monthRange;
 
   var _data = locator<Data>();
 
@@ -108,7 +112,7 @@ class AddEntryProvider extends ChangeNotifier {
 
   String updateAsMonthly() {
     List<String> detailedReason = [];
-    int current = _data.getStudent.fees;
+    int current = _data.getStudent.fees.month - 1;
 
     for (int i = 0; i < _totalMonth; i++) {
       // -1 so in next iteration it will be 0
@@ -260,6 +264,7 @@ class AddEntryProvider extends ChangeNotifier {
       case "Monthly":
         _detailedReason = updateAsMonthly();
         if (_data.getBranch.indirectPayment) _reason += "($_invoiceNo)";
+        _getMonthRange();
         break;
       case 'Equipments':
         _detailedReason = detailEquipment();
@@ -277,15 +282,22 @@ class AddEntryProvider extends ChangeNotifier {
     _pending = _amountGiven - _total;
   }
 
+  void _getMonthRange() {
+    var _date = _data.getStudent.fees;
+    monthRange.clear();
+    for (var i = 0; i < _totalMonth; i++) {
+      _date = _date.copyWith(month: _date.month + 1);
+      monthRange.add(_date);
+    }
+    postSaveStudent(_date);
+  }
+
   void postSaveStudent(DateTime date) {
     if (_pending != _data.getStudent.pending) {
       _data.getStudent.pending = _pending;
     }
     if (_reason.startsWith("Monthly")) {
-      int newFees = _data.getStudent.fees;
-      newFees = (newFees + _totalMonth) % 12;
-      _data.getStudent.fees = newFees;
-      _data.getStudent.lastFees = date;
+      _data.getStudent.fees = monthRange.last;
       StudentProvider().updateStudent(_data.getStudent, _data.getStudent.id);
     } else if (_reason == "Examination") {
       _data.getStudent.belt++;
@@ -366,7 +378,8 @@ class AddEntryProvider extends ChangeNotifier {
     StudentModel _studentmod = _data.getStudent;
     if (entry.reason.startsWith("Monthly")) {
       List list = entry.detailedReason.split(", ");
-      _studentmod.fees -= list.length;
+      _studentmod.fees = _studentmod.fees
+          .copyWith(month: _studentmod.fees.month - list.length);
     } else if (entry.reason == "Examination") {
       _studentmod.belt--;
     }

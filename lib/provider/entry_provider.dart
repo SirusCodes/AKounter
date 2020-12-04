@@ -17,11 +17,9 @@ class EntryProvider {
     return entries;
   }
 
-  Future<List<EntryModel>> fetchEntriesBetween(
-      DateTime startDate, DateTime endDate) async {
+  Future<List<EntryModel>> fetchEntriesBetween(List<DateTime> dateRange) async {
     var result = await _entries.entriesBetween(
-      startDate.toTimestamp(),
-      endDate.toTimestamp(),
+      dateRange.map((e) => e.toTimestamp()).toList(),
     );
     entries = result.docs
         .map((doc) => EntryModel.fromJson(doc.data(), doc.id))

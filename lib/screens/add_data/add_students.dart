@@ -8,6 +8,7 @@ import '../../models/student_model.dart';
 import '../../provider/student_provider.dart';
 import '../../widgets/c_textformfield.dart';
 import '../../widgets/snackbar.dart';
+import '../../extensions/date_extention.dart';
 
 enum Gender { male, female, other }
 
@@ -30,7 +31,7 @@ class _AddStudentState extends State<AddStudent> {
 
   Gender _gender = Gender.male;
 
-  double _sliderBelt, _sliderMonth;
+  double _sliderBelt;
 
   StudentModel _student = StudentModel(pending: 0);
   var _belts = [
@@ -60,12 +61,12 @@ class _AddStudentState extends State<AddStudent> {
     "December"
   ];
 
-  DateTime _date = DateTime.now();
+  DateTime _dobDate = DateTime.now();
+  DateTime _feesDate = DateTime.now();
 
   @override
   void initState() {
     _sliderBelt = 0.0;
-    _sliderMonth = (DateTime.now().month - 1).ceilToDouble();
     if (widget.student.id != null) {
       _student = widget.student;
       _update();
@@ -126,8 +127,20 @@ class _AddStudentState extends State<AddStudent> {
                       ),
                     ),
                     IconButton(
-                        icon: Icon(Icons.date_range),
-                        onPressed: () => _showDatePicker())
+                      icon: Icon(Icons.date_range),
+                      onPressed: () async {
+                        final selectedDate = await _showDatePicker(_dobDate);
+                        if (selectedDate != _dobDate && selectedDate != null) {
+                          setState(() {
+                            _dobController.text = df.formatDate(
+                              selectedDate,
+                              ["dd", "/", "mm", "/", "yyyy"],
+                            );
+                            _dobDate = selectedDate;
+                          });
+                        }
+                      },
+                    )
                   ],
                 ),
               ),
@@ -285,30 +298,33 @@ class _AddStudentState extends State<AddStudent> {
                 ),
               ),
               Padding(
-                padding: _padding.copyWith(left: 0.0, right: 0.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(left: 25.0),
-                      child: Text(
-                        "Fees paid till:",
-                        style: Theme.of(context).textTheme.headline4,
-                      ),
+                padding: _padding,
+                child: Row(
+                  children: [
+                    Text(
+                      "Fees paid till:  ",
+                      style: Theme.of(context).textTheme.headline4,
                     ),
-                    Slider(
-                      label: _months[_sliderMonth.round()],
-                      divisions: 11,
-                      value: _sliderMonth,
-                      onChanged: (value) {
-                        setState(() {
-                          _sliderMonth = value;
-                        });
+                    RaisedButton(
+                      child: Text(
+                        df.formatDate(
+                          _feesDate,
+                          ["mm", "/", "yyyy"],
+                        ),
+                      ),
+                      onPressed: () async {
+                        final selectedDate = await _showDatePicker(
+                          _feesDate,
+                          DateTime.now().copyWith(
+                            year: DateTime.now().year + 1,
+                          ),
+                        );
+                        if (selectedDate != _feesDate && selectedDate != null) {
+                          setState(() {
+                            _feesDate = selectedDate;
+                          });
+                        }
                       },
-                      min: 0,
-                      max: 11,
-                      activeColor: Theme.of(context).primaryColor,
-                      inactiveColor: Theme.of(context).splashColor,
                     ),
                   ],
                 ),
@@ -335,25 +351,15 @@ class _AddStudentState extends State<AddStudent> {
     );
   }
 
-  Future<void> _showDatePicker() async {
+  Future<DateTime> _showDatePicker(initialDate, [lastDate]) async {
     final today = DateTime.now();
-    final selectedDate = await showDatePicker(
+    return await showDatePicker(
       context: context,
       firstDate: DateTime(today.year - 100),
-      initialDate: _date,
-      lastDate: today,
+      initialDate: initialDate,
+      lastDate: lastDate ?? today,
       locale: Locale("en", "in"),
     );
-
-    if (selectedDate != _date && selectedDate != null) {
-      setState(() {
-        _dobController.text = df.formatDate(
-          selectedDate,
-          ["dd", "/", "mm", "/", "yyyy"],
-        );
-        _date = selectedDate;
-      });
-    }
   }
 
   bool _isEmpty(String value) {
@@ -399,9 +405,9 @@ class _AddStudentState extends State<AddStudent> {
       _nameController.clear();
       _numController.clear();
       _dobController.clear();
+
       _memberCheck = false;
       _sliderBelt = 0.0;
-      _sliderMonth = (DateTime.now().month - 1).ceilToDouble();
       _gender = Gender.male;
     });
   }
@@ -414,8 +420,9 @@ class _AddStudentState extends State<AddStudent> {
         : _gender == Gender.female
             ? "Female"
             : "Other";
+
+    _student.fees = _feesDate;
     _student.belt = _sliderBelt.toInt();
-    _student.fees = _sliderMonth.toInt();
   }
 
   @override
@@ -430,9 +437,9 @@ class _AddStudentState extends State<AddStudent> {
     _nameController.text = _student.name;
     _numController.text = _student.number;
     _dobController.text = _student.dob;
+    _feesDate = _student.fees;
     _memberCheck = _student.isMember;
     _sliderBelt = _student.belt.toDouble();
-    _sliderMonth = _student.fees.toDouble();
     _gender = _student.gender == "Male" ? Gender.male : Gender.female;
   }
 }

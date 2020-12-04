@@ -11,9 +11,8 @@ class StudentModel {
   bool onTrial;
   String gender;
   int belt;
-  int fees;
+  DateTime fees;
   int pending;
-  DateTime lastFees;
 
   StudentModel({
     this.id,
@@ -26,7 +25,6 @@ class StudentModel {
     this.belt,
     this.fees,
     this.pending,
-    this.lastFees,
     this.fatherNum,
     this.motherNum,
   });
@@ -40,9 +38,8 @@ class StudentModel {
         onTrial = snapshot["on_trial"] ?? false,
         gender = snapshot["gender"] ?? "Male",
         belt = snapshot["belt"] ?? 0,
-        fees = snapshot["fees"] ?? 0,
         pending = snapshot["pending"] ?? 0,
-        lastFees = (snapshot["last_fees"] as Timestamp).toDate(),
+        fees = (snapshot["fees"] as Timestamp).toDate(),
         fatherNum = snapshot["father_num"] ?? "",
         motherNum = snapshot["mother_num"] ?? "";
 
@@ -55,9 +52,8 @@ class StudentModel {
       "on_trial": onTrial,
       "gender": gender,
       "belt": belt,
-      "fees": fees,
       "pending": pending,
-      "last_fees": (lastFees ?? DateTime.now()).toTimestamp(),
+      "fees": (fees ?? DateTime.now()).trimDate().toTimestamp(),
       "father_num": fatherNum,
       "mother_num": motherNum,
     };

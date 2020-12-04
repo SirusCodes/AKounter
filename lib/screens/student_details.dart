@@ -115,7 +115,12 @@ class StudentDetails extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                "Fees Till : ${_months[_student.fees]}",
+                                // This might look weird but it is because of linting
+                                "Fees Till : ${formatDate(_student.fees, [
+                                  mm,
+                                  "/",
+                                  yyyy
+                                ])}",
                                 style: TextStyle(
                                   color: Theme.of(context).accentColor,
                                   fontSize: 16.0,
