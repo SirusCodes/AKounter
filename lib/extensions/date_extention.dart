@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
 
@@ -14,6 +15,20 @@ extension CopyWithDate on DateTime {
         month ?? this.month,
         day ?? this.day,
       );
+}
+
+extension DateRangeList on DateTimeRange {
+  List<DateTime> toList() {
+    List<DateTime> result = [];
+    DateTime start = this.start.trimDate();
+    DateTime end = this.end.trimDate();
+
+    while (start.compareTo(end) <= 0) {
+      result.add(start);
+      start = start.copyWith(month: start.month + 1);
+    }
+    return result;
+  }
 }
 
 extension FormatDate on DateTime {

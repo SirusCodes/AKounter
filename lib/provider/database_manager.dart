@@ -1,9 +1,22 @@
 import 'dart:io';
-import 'package:akounter/models/student_model.dart';
-import 'package:akounter/provider/student_provider.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+import '../locator.dart';
+import '../models/entry_model.dart';
+import '../models/excel_model.dart';
+import '../models/student_model.dart';
+import 'entry_provider.dart';
+import 'student_provider.dart';
 import 'package:csv/csv.dart';
+import 'package:date_format/date_format.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import '../extensions/date_extention.dart';
+
+import '../data.dart';
 
 class DatabaseManager extends ChangeNotifier {
   File file;
@@ -26,18 +39,19 @@ class DatabaseManager extends ChangeNotifier {
     _getFile();
     value = 0;
   }
+
   _getFile() async {
     file = await FilePicker.getFile(
         type: FileType.custom, allowedExtensions: ["csv"]);
     if (file != null)
-      _convertCsv();
+      _convertFromCsv();
     else {
       _showIndicator = false;
       notifyListeners();
     }
   }
 
-  _convertCsv() async {
+  _convertFromCsv() async {
     String data = await file.readAsString();
     lists = CsvToListConverter(shouldParseNumbers: true).convert(data);
     total = lists.length;
@@ -64,83 +78,97 @@ class DatabaseManager extends ChangeNotifier {
     _studentProvider.transactionStudent(uList);
   }
 
-  int _getBelt(String belt) {
-    int num;
-    switch (belt) {
-      case "White":
-        num = 0;
-        break;
-      case 'Orange':
-        num = 1;
-        break;
-      case 'Yellow':
-        num = 2;
-        break;
-      case 'Green':
-        num = 3;
-        break;
-      case 'Blue':
-        num = 4;
-        break;
-      case 'Purple':
-        num = 5;
-        break;
-      case 'Brown 3':
-        num = 6;
-        break;
-      case 'Brown 2':
-        num = 7;
-        break;
-      case 'Brown 1':
-        num = 8;
-        break;
-      case 'Black':
-        num = 9;
-        break;
+  Future<String> saveToCsv(DateTimeRange dateRange) async {
+    final dateList = dateRange.toList();
+
+    EntryProvider _entryProvider = EntryProvider();
+    final result = await _entryProvider.fetchEntriesBetween(dateList);
+    Map<String, ExcelModel> data = {};
+    for (final model in result) {
+      data.update(
+        model.studentID,
+        (value) => value.copyWith(dates: [...value.dates, ...model.monthsPaid]),
+        ifAbsent: () => data[model.studentID] = ExcelModel(
+          model.name,
+          model.monthsPaid,
+        ),
+      );
     }
-    return num;
+
+    List<List> csvList = [_header(dateList)];
+    for (final map in data.entries) {
+      List<String> row = [map.value.name];
+      final dates = map.value.dates;
+      for (final date in dateList) {
+        if (dates.contains(date))
+          row.add("Paid");
+        else
+          row.add("Not Paid");
+      }
+      csvList.add(row);
+    }
+
+    final branch = locator<Data>().getBranch;
+
+    String convertedCsv = ListToCsvConverter().convert(csvList);
+    final start = formatDate(dateRange.start, [MM]);
+    final last = formatDate(dateRange.end, [MM]);
+    String fileName = "${branch.name}_$start-$last.csv";
+    String dirPath = await _checkWritePermissionNGetDirPath();
+
+    if (dirPath != null) {
+      File file = File("$dirPath$fileName");
+      file.writeAsStringSync(convertedCsv);
+      return file.path;
+    }
+    return null;
   }
 
-  int _getFees(list) {
-    int num;
-    switch (list) {
-      case "january":
-        num = 0;
-        break;
-      case 'febuary':
-        num = 1;
-        break;
-      case 'march':
-        num = 2;
-        break;
-      case 'april':
-        num = 3;
-        break;
-      case 'may':
-        num = 4;
-        break;
-      case 'June':
-        num = 5;
-        break;
-      case 'July':
-        num = 6;
-        break;
-      case 'August':
-        num = 7;
-        break;
-      case 'September':
-        num = 8;
-        break;
-      case 'October':
-        num = 9;
-        break;
-      case 'November':
-        num = 10;
-        break;
-      case 'December':
-        num = 11;
-        break;
+  Future<String> _checkWritePermissionNGetDirPath() async {
+    final storagePerm = Permission.storage;
+    final status = await storagePerm.status;
+    if (status.isDenied)
+      storagePerm.request();
+    else if (status.isGranted || status.isUndetermined) {
+      final baseDir = await getExternalStorageDirectory();
+      final dirPath = await Directory(
+        '${baseDir.path}/${locator<Data>().getBranch.name}/',
+      ).create(recursive: true);
+
+      return dirPath.path;
+    } else if (status.isPermanentlyDenied) openAppSettings();
+  }
+
+  List<String> _header(List<DateTime> dateRange) {
+    List<String> headers = ["Name"];
+    for (final date in dateRange)
+      headers.add(formatDate(date, [MM, "-", yyyy]));
+    return headers;
+  }
+
+  int _getBelt(String belt) {
+    switch (belt) {
+      case "White":
+        return 0;
+      case 'Orange':
+        return 1;
+      case 'Yellow':
+        return 2;
+      case 'Green':
+        return 3;
+      case 'Blue':
+        return 4;
+      case 'Purple':
+        return 5;
+      case 'Brown 3':
+        return 6;
+      case 'Brown 2':
+        return 7;
+      case 'Brown 1':
+        return 8;
+      case 'Black':
+        return 9;
     }
-    return num;
+    return 0;
   }
 }

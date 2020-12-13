@@ -2,6 +2,8 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../extensions/date_extention.dart';
+
 import '../../data.dart';
 import '../../locator.dart';
 import '../../models/branch_model.dart';
@@ -58,7 +60,31 @@ class _BranchSettingsScreenState extends State<BranchSettingsScreen> {
           ),
           IconButton(
             icon: Icon(Icons.cloud_download),
-            onPressed: () {},
+            onPressed: () async {
+              final selectedDateRange = await showDateRangePicker(
+                context: context,
+                firstDate: DateTime(2020, 1, 1),
+                lastDate: DateTime.now().copyWith(
+                  year: DateTime.now().year + 1,
+                ),
+                initialDateRange: DateTimeRange(
+                  start: DateTime.now().copyWith(
+                    month: DateTime.now().month - 1,
+                  ),
+                  end: DateTime.now(),
+                ),
+              );
+              if (selectedDateRange != null) {
+                final path =
+                    await DatabaseManager().saveToCsv(selectedDateRange);
+
+                if (path != null) {
+                  cSnackBar(context, message: "File saved at $path");
+                } else {
+                  cSnackBar(context, message: "Error saving file");
+                }
+              }
+            },
           )
         ],
       ),
