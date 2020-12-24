@@ -33,12 +33,25 @@ class EntryServices {
         .snapshots();
   }
 
-  Future<QuerySnapshot> entriesBetween(List<Timestamp> dateRange) {
+  Future<QuerySnapshot> entriesForMonths(List<Timestamp> dateRange) {
     return _db
         .collectionGroup("entries")
         .where("branch", isEqualTo: _id.getBranch.id)
         .where("reason", isEqualTo: "Monthly")
         .where("months_paid", arrayContainsAny: dateRange)
+        .get();
+  }
+
+  Future<QuerySnapshot> entriesBetween(Timestamp start, Timestamp end) {
+    return _db
+        .collectionGroup("entries")
+        .where("branch", isEqualTo: _id.getBranch.id)
+        .where("reason", isEqualTo: "Monthly")
+        .where(
+          "date",
+          isGreaterThanOrEqualTo: start,
+          isLessThanOrEqualTo: end,
+        )
         .get();
   }
 

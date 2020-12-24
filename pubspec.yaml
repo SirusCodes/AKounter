@@ -19,16 +19,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  android_intent: ^0.3.7+7
-  cloud_firestore: ^0.14.2
+  cloud_firestore: ^0.14.4
   csv: ^4.1.0
   cupertino_icons: ^0.1.2
   date_format: ^1.0.8
   date_text_input_formatter: ^0.0.2
   email_validator: ^1.0.4
-  file_picker: ^1.6.2
+  # file_picker: ^2.1.4
   firebase_auth: ^0.18.2
-  firebase_core: ^0.5.1
+  firebase_core: ^0.5.3
   flushbar: ^1.10.4
   get_it: ^4.0.1
   google_sign_in: ^4.5.6

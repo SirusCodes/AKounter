@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 import '../extensions/date_extention.dart';
 import '../models/entry_model.dart';
@@ -17,9 +18,24 @@ class EntryProvider {
     return entries;
   }
 
-  Future<List<EntryModel>> fetchEntriesBetween(List<DateTime> dateRange) async {
-    var result = await _entries.entriesBetween(
+  Future<List<EntryModel>> fetchEntriesForMonths(
+    List<DateTime> dateRange,
+  ) async {
+    var result = await _entries.entriesForMonths(
       dateRange.map((e) => e.toTimestamp()).toList(),
+    );
+    entries = result.docs
+        .map((doc) => EntryModel.fromJson(doc.data(), doc.id))
+        .toList();
+    return entries;
+  }
+
+  Future<List<EntryModel>> fetchEntriesBetweenMonths(
+    DateTimeRange dateRange,
+  ) async {
+    var result = await _entries.entriesBetween(
+      dateRange.start.toTimestamp(),
+      dateRange.end.toTimestamp(),
     );
     entries = result.docs
         .map((doc) => EntryModel.fromJson(doc.data(), doc.id))

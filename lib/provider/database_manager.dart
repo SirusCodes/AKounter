@@ -1,22 +1,21 @@
 import 'dart:io';
+
+import 'package:csv/csv.dart';
+import 'package:date_format/date_format.dart';
+// import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../data.dart';
+import '../extensions/date_extention.dart';
 import '../locator.dart';
 import '../models/entry_model.dart';
 import '../models/excel_model.dart';
 import '../models/student_model.dart';
 import 'entry_provider.dart';
 import 'student_provider.dart';
-import 'package:csv/csv.dart';
-import 'package:date_format/date_format.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import '../extensions/date_extention.dart';
-
-import '../data.dart';
 
 class DatabaseManager extends ChangeNotifier {
   File file;
@@ -41,14 +40,15 @@ class DatabaseManager extends ChangeNotifier {
   }
 
   _getFile() async {
-    file = await FilePicker.getFile(
-        type: FileType.custom, allowedExtensions: ["csv"]);
-    if (file != null)
-      _convertFromCsv();
-    else {
-      _showIndicator = false;
-      notifyListeners();
-    }
+    // final FilePickerResult result = await FilePicker.platform
+    //     .pickFiles(type: FileType.custom, allowedExtensions: ["csv"]);
+    // if (result != null) {
+    //   file = File(result.paths.first);
+    //   _convertFromCsv();
+    // } else {
+    //   _showIndicator = false;
+    //   notifyListeners();
+    // }
   }
 
   _convertFromCsv() async {
@@ -78,22 +78,13 @@ class DatabaseManager extends ChangeNotifier {
     _studentProvider.transactionStudent(uList);
   }
 
-  Future<String> saveToCsv(DateTimeRange dateRange) async {
+  Future<String> monthlyBalanceSheet(DateTimeRange dateRange) async {
     final dateList = dateRange.toList();
 
     EntryProvider _entryProvider = EntryProvider();
-    final result = await _entryProvider.fetchEntriesBetween(dateList);
-    Map<String, ExcelModel> data = {};
-    for (final model in result) {
-      data.update(
-        model.studentID,
-        (value) => value.copyWith(dates: [...value.dates, ...model.monthsPaid]),
-        ifAbsent: () => data[model.studentID] = ExcelModel(
-          model.name,
-          model.monthsPaid,
-        ),
-      );
-    }
+    final result = await _entryProvider.fetchEntriesForMonths(dateList);
+
+    Map<String, ExcelModel> data = _rawDataToExcelModel(result);
 
     List<List> csvList = [_header(dateList)];
     for (final map in data.entries) {
@@ -108,6 +99,40 @@ class DatabaseManager extends ChangeNotifier {
       csvList.add(row);
     }
 
+    return await _writeToFile(csvList, dateRange);
+  }
+
+  Future<String> monthlyRecord(DateTimeRange dateTimeRange) async {
+    EntryProvider _entryProvider = EntryProvider();
+    final result =
+        await _entryProvider.fetchEntriesBetweenMonths(dateTimeRange);
+
+    List<List> csvList = [
+      ["Name", "Date", "Months", "Amount"]
+    ];
+    for (final model in result) {
+      final date = formatDate(model.date, [dd, "-", MM, "-", yyyy]);
+      List<dynamic> row = [model.name, date];
+
+      final dates =
+          model.monthsPaid.map((e) => formatDate(e, [MM, "-", yyyy])).toList();
+
+      final dateStr = dates.toString();
+
+      row.add(dateStr.substring(1, dateStr.length - 1));
+
+      row.add(model.subtotal);
+
+      csvList.add(row);
+    }
+
+    return await _writeToFile(csvList, dateTimeRange);
+  }
+
+  Future<String> _writeToFile(
+    List<List> csvList,
+    DateTimeRange dateRange,
+  ) async {
     final branch = locator<Data>().getBranch;
 
     String convertedCsv = ListToCsvConverter().convert(csvList);
@@ -122,6 +147,25 @@ class DatabaseManager extends ChangeNotifier {
       return file.path;
     }
     return null;
+  }
+
+  Map<String, ExcelModel> _rawDataToExcelModel(List<EntryModel> result) {
+    Map<String, ExcelModel> data = {};
+    for (final model in result) {
+      data.update(
+        model.studentID,
+        (value) => value.copyWith(
+          dates: [...value.dates, ...model.monthsPaid],
+          totalPaid: value.totalPaid + model.total + model.pending,
+        ),
+        ifAbsent: () => data[model.studentID] = ExcelModel(
+          model.name,
+          model.monthsPaid,
+          model.subtotal,
+        ),
+      );
+    }
+    return data;
   }
 
   Future<String> _checkWritePermissionNGetDirPath() async {

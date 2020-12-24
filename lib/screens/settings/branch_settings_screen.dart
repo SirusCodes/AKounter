@@ -76,7 +76,7 @@ class _BranchSettingsScreenState extends State<BranchSettingsScreen> {
               );
               if (selectedDateRange != null) {
                 final path =
-                    await DatabaseManager().saveToCsv(selectedDateRange);
+                    await DatabaseManager().monthlyRecord(selectedDateRange);
 
                 if (path != null) {
                   cSnackBar(context, message: "File saved at $path");
