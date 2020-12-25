@@ -10,7 +10,7 @@ class StudentRequirementsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _req = Provider.of<RequirementProvider>(context);
-    List<RequirementModel> _reqList = List<RequirementModel>();
+    List<RequirementModel> _reqList = [];
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,

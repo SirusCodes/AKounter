@@ -46,20 +46,6 @@ class _AddStudentState extends State<AddStudent> {
     "Brown 1",
     "Black"
   ];
-  var _months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December"
-  ];
 
   DateTime _dobDate = DateTime.now();
   DateTime _feesDate = DateTime.now();

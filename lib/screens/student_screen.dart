@@ -30,7 +30,7 @@ class StudentScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _students = Provider.of<StudentProvider>(context);
-    List<StudentModel> _studentList = List<StudentModel>();
+    List<StudentModel> _studentList = [];
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,

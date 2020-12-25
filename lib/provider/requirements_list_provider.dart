@@ -10,10 +10,9 @@ import 'package:flutter/material.dart';
 import '../data.dart';
 
 class RequirementsListProvider extends ChangeNotifier {
-  static List<RequirementModel> _requirementsList,
-      _changedList = List<RequirementModel>();
+  static List<RequirementModel> _requirementsList, _changedList = [];
 
-  static List<String> _changedListID = List<String>();
+  static List<String> _changedListID = [];
 
   static bool _showButton;
 

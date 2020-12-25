@@ -12,7 +12,7 @@ class RequirementsList extends StatelessWidget {
   Widget build(BuildContext context) {
     final _requirements = Provider.of<RequirementProvider>(context);
     RequirementsListProvider().init();
-    List<RequirementModel> _requirementList = List<RequirementModel>();
+    List<RequirementModel> _requirementList = [];
     return ChangeNotifierProvider<RequirementsListProvider>(
       create: (_) => RequirementsListProvider(),
       child: Scaffold(

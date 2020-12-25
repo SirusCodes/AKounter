@@ -26,24 +26,11 @@ class StudentDetails extends StatelessWidget {
     "Brown 1",
     "Black"
   ];
-  final _months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December"
-  ];
+
   final _student = locator<Data>().getStudent;
   @override
   Widget build(BuildContext context) {
-    List<EntryModel> _entryLists = List<EntryModel>();
+    List<EntryModel> _entryLists = [];
     return Scaffold(
       body: Column(
         children: <Widget>[
