@@ -1,5 +1,5 @@
-import './models/branch_model.dart';
-import './models/student_model.dart';
+import 'models/branch_model.dart';
+import 'models/student_model.dart';
 import 'models/user_model.dart';
 
 class Data {

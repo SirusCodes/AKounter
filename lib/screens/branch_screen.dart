@@ -10,6 +10,7 @@ import '../widgets/navigation_widget.dart';
 import '../widgets/snackbar.dart';
 import 'add_data/add_branches.dart';
 import 'branch_entry_list.dart';
+import 'record_screen.dart';
 import 'requirements/branch_requirements.dart';
 import 'settings/branch_settings_screen.dart';
 import 'student_screen.dart';
@@ -20,21 +21,26 @@ class BranchScreen extends StatelessWidget {
     List<Widget> _screenList = [
       StudentScreen(),
       BranchEntryList(),
+      RecordsScreen(),
       BranchSettingsScreen(),
     ];
 
     List<BottomNavigationBarItem> _itemList = [
       BottomNavigationBarItem(
         icon: Icon(Icons.people),
-        label: "Student List",
+        label: "Students",
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.library_books),
-        label: "Entry List",
+        label: "Entries",
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.file_copy_rounded),
+        label: "Records",
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.settings),
-        label: "Branch Settings",
+        label: "Settings",
       )
     ];
 

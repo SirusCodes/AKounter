@@ -1,8 +1,9 @@
-import 'package:akounter/provider/add_entry_provider.dart';
-import 'package:akounter/widgets/c_textformfield.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../enums/dress_size_enum.dart';
+import '../../provider/add_entry_provider.dart';
+import '../c_textformfield.dart';
 
 class Dress extends StatefulWidget {
   const Dress({Key key}) : super(key: key);

@@ -1,4 +1,4 @@
-import 'package:akounter/models/requirements_model.dart';
+import '../models/requirements_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../data.dart';
 import '../locator.dart';

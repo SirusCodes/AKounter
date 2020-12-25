@@ -1,7 +1,8 @@
-import 'package:akounter/data.dart';
-import 'package:akounter/locator.dart';
-import 'package:akounter/screens/requirements/requirements_list.dart';
 import 'package:flutter/material.dart';
+
+import '../../data.dart';
+import '../../locator.dart';
+import 'requirements_list.dart';
 
 class BranchRequirements extends StatelessWidget {
   final _branch = locator<Data>().getBranch;

@@ -1,5 +1,5 @@
-import 'package:akounter/models/requirements_model.dart';
-import 'package:akounter/services/requirement_services.dart';
+import '../models/requirements_model.dart';
+import '../services/requirement_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RequirementProvider {

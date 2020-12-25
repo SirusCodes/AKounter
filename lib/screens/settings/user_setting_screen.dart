@@ -1,9 +1,10 @@
-import 'package:akounter/locator.dart';
-import 'package:akounter/provider/login_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
+
 import '../../data.dart';
+import '../../locator.dart';
+import '../../provider/login_provider.dart';
 
 class UserSettingScreen extends StatelessWidget {
   const UserSettingScreen({Key key}) : super(key: key);

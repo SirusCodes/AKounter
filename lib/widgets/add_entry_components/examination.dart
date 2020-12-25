@@ -1,6 +1,7 @@
-import 'package:akounter/provider/add_entry_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../provider/add_entry_provider.dart';
 
 class Examination extends StatelessWidget {
   const Examination({Key key}) : super(key: key);

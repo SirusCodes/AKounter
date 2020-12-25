@@ -1,7 +1,8 @@
-import 'package:akounter/provider/add_entry_provider.dart';
-import 'package:akounter/widgets/c_textformfield.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../provider/add_entry_provider.dart';
+import '../c_textformfield.dart';
 
 class Others extends StatefulWidget {
   Others({Key key}) : super(key: key);

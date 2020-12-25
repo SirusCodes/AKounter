@@ -15,6 +15,7 @@ class _NavigationWidgetState extends State<NavigationWidget> {
     return Scaffold(
       body: widget.screenList[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         items: widget.itemList,
         currentIndex: _currentIndex,
         onTap: (index) {

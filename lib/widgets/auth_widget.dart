@@ -1,13 +1,14 @@
-import 'package:akounter/locator.dart';
-import 'package:akounter/models/user_model.dart';
-import 'package:akounter/provider/login_provider.dart';
-import 'package:akounter/screens/branch_screen.dart';
-import 'package:akounter/screens/settings/user_setting_screen.dart';
-import 'package:akounter/widgets/navigation_widget.dart';
-import 'package:akounter/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../data.dart';
+import '../locator.dart';
+import '../models/user_model.dart';
+import '../provider/login_provider.dart';
+import '../screens/branch_screen.dart';
+import '../screens/login_screen.dart';
+import '../screens/settings/user_setting_screen.dart';
+import 'navigation_widget.dart';
 
 class AuthWidget extends StatelessWidget {
   const AuthWidget({Key key}) : super(key: key);

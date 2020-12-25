@@ -1,8 +1,9 @@
-import 'package:akounter/models/student_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
+
 import '../data.dart';
 import '../locator.dart';
+import '../models/student_model.dart';
 
 class StudentServices {
   FirebaseFirestore _db = FirebaseFirestore.instance;

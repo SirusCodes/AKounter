@@ -1,9 +1,10 @@
-import 'package:akounter/locator.dart';
-import 'package:akounter/provider/add_entry_provider.dart';
-import 'package:akounter/widgets/c_textformfield.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../data.dart';
+import '../../locator.dart';
+import '../../provider/add_entry_provider.dart';
+import '../c_textformfield.dart';
 
 class Monthly extends StatefulWidget {
   Monthly({Key key}) : super(key: key);

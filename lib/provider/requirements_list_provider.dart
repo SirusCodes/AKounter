@@ -1,8 +1,8 @@
-import 'package:akounter/locator.dart';
-import 'package:akounter/models/branch_model.dart';
-import 'package:akounter/models/requirements_model.dart';
-import 'package:akounter/provider/branch_provider.dart';
-import 'package:akounter/services/requirement_services.dart';
+import '../locator.dart';
+import '../models/branch_model.dart';
+import '../models/requirements_model.dart';
+import 'branch_provider.dart';
+import '../services/requirement_services.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

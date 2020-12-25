@@ -1,10 +1,10 @@
-import 'package:akounter/locator.dart';
-import 'package:akounter/models/entry_model.dart';
-import 'package:akounter/provider/add_entry_provider.dart';
-import 'package:akounter/provider/entry_provider.dart';
-import 'package:akounter/screens/add_data/add_entry.dart';
-import 'package:akounter/screens/requirements/student_requirements_list.dart';
-import 'package:akounter/widgets/snackbar.dart';
+import '../locator.dart';
+import '../models/entry_model.dart';
+import '../provider/add_entry_provider.dart';
+import '../provider/entry_provider.dart';
+import 'add_data/add_entry.dart';
+import 'requirements/student_requirements_list.dart';
+import '../widgets/snackbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/gestures.dart';

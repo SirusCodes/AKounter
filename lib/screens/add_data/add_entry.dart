@@ -1,19 +1,20 @@
-import 'package:akounter/models/entry_model.dart';
-import 'package:akounter/provider/add_entry_provider.dart';
-import 'package:akounter/provider/entry_provider.dart';
-import 'package:akounter/widgets/add_entry_components/dress.dart';
-import 'package:akounter/widgets/add_entry_components/equipments.dart';
-import 'package:akounter/widgets/add_entry_components/examination.dart';
-import 'package:akounter/widgets/add_entry_components/monthly.dart';
-import 'package:akounter/widgets/add_entry_components/others.dart';
-import 'package:akounter/widgets/c_textformfield.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
-import 'package:akounter/enums/type_payment_enum.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+
 import '../../data.dart';
+import '../../enums/type_payment_enum.dart';
 import '../../locator.dart';
+import '../../models/entry_model.dart';
+import '../../provider/add_entry_provider.dart';
+import '../../provider/entry_provider.dart';
+import '../../widgets/add_entry_components/dress.dart';
+import '../../widgets/add_entry_components/equipments.dart';
+import '../../widgets/add_entry_components/examination.dart';
+import '../../widgets/add_entry_components/monthly.dart';
+import '../../widgets/add_entry_components/others.dart';
+import '../../widgets/c_textformfield.dart';
 
 class AddEntry extends StatefulWidget {
   AddEntry({Key key}) : super(key: key);

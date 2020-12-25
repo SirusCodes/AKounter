@@ -1,6 +1,7 @@
-import 'package:akounter/models/student_model.dart';
-import 'package:akounter/services/student_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../models/student_model.dart';
+import '../services/student_services.dart';
 
 class StudentProvider {
   StudentServices _students = StudentServices();

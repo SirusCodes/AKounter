@@ -1,8 +1,9 @@
-import 'package:akounter/models/requirements_model.dart';
-import 'package:akounter/provider/requirement_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../models/requirements_model.dart';
+import '../../provider/requirement_provider.dart';
 
 class StudentRequirementsList extends StatelessWidget {
   const StudentRequirementsList({Key key}) : super(key: key);

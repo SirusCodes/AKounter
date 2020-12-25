@@ -1,14 +1,14 @@
-import 'package:akounter/locator.dart';
-import 'package:akounter/models/branch_model.dart';
-import 'package:akounter/models/user_model.dart';
-import 'package:akounter/provider/branch_provider.dart';
-import 'package:akounter/widgets/c_textformfield.dart';
-import 'package:akounter/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../data.dart';
+import '../../locator.dart';
+import '../../models/branch_model.dart';
+import '../../models/user_model.dart';
+import '../../provider/branch_provider.dart';
+import '../../widgets/c_textformfield.dart';
+import '../../widgets/snackbar.dart';
 
 class AddBranch extends StatefulWidget {
   const AddBranch({Key key, this.branch}) : super(key: key);

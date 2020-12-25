@@ -1,15 +1,11 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../../extensions/date_extention.dart';
 
 import '../../data.dart';
 import '../../locator.dart';
 import '../../models/branch_model.dart';
 import '../../models/user_model.dart';
 import '../../provider/branch_provider.dart';
-import '../../provider/database_manager.dart';
 import '../../widgets/c_textformfield.dart';
 import '../../widgets/snackbar.dart';
 
@@ -32,7 +28,6 @@ class _BranchSettingsScreenState extends State<BranchSettingsScreen> {
   Widget build(BuildContext context) {
     List _branchInList = data.instructors;
     List _branchInNameList = data.instructorNames;
-    final _databaseManager = Provider.of<DatabaseManager>(context);
 
     return
         // LoadingOverlay(
@@ -47,46 +42,6 @@ class _BranchSettingsScreenState extends State<BranchSettingsScreen> {
       appBar: AppBar(
         title: Text("Branch Settings"),
         elevation: 0.0,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.cloud_upload),
-            tooltip: "upload to cloud",
-            onPressed: () {
-              setState(() {
-                _databaseManager.setIndicator = true;
-              });
-              DatabaseManager.upload();
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.cloud_download),
-            onPressed: () async {
-              final selectedDateRange = await showDateRangePicker(
-                context: context,
-                firstDate: DateTime(2020, 1, 1),
-                lastDate: DateTime.now().copyWith(
-                  year: DateTime.now().year + 1,
-                ),
-                initialDateRange: DateTimeRange(
-                  start: DateTime.now().copyWith(
-                    month: DateTime.now().month - 1,
-                  ),
-                  end: DateTime.now(),
-                ),
-              );
-              if (selectedDateRange != null) {
-                final path =
-                    await DatabaseManager().monthlyRecord(selectedDateRange);
-
-                if (path != null) {
-                  cSnackBar(context, message: "File saved at $path");
-                } else {
-                  cSnackBar(context, message: "Error saving file");
-                }
-              }
-            },
-          )
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

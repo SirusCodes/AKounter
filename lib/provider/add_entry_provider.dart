@@ -1,5 +1,9 @@
+import 'package:date_format/date_format.dart';
+import 'package:flutter/foundation.dart';
+
 import '../data.dart';
 import '../enums/dress_size_enum.dart';
+import '../extensions/date_extention.dart';
 import '../locator.dart';
 import '../models/entry_model.dart';
 import '../models/requirements_model.dart';
@@ -8,9 +12,6 @@ import 'branch_provider.dart';
 import 'entry_provider.dart';
 import 'requirement_provider.dart';
 import 'student_provider.dart';
-import 'package:date_format/date_format.dart';
-import 'package:flutter/foundation.dart';
-import '../extensions/date_extention.dart';
 
 //! may refactor it later
 
