@@ -69,6 +69,7 @@ class _AddEntryState extends State<AddEntry> {
   @override
   Widget build(BuildContext context) {
     final _width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -97,17 +98,19 @@ class _AddEntryState extends State<AddEntry> {
                               ),
                               onPressed: _showDatePicker,
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: Text(
-                                "Total:   ${_entry.getTotal}",
-                                style: Theme.of(context).textTheme.headline3,
-                              ),
-                            ),
                             Text("Subtotal:   ${_entry.getSubtotal}"),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text("Pending:   ${_entry.getPending}"),
+                            if (_entry.getPending != 0)
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  _entry.getPending < 0
+                                      ? "Balance: ${-_entry.getPending}"
+                                      : "Advance: ${_entry.getPending}",
+                                ),
+                              ),
+                            Text(
+                              "Total:   ${_entry.getTotal}",
+                              style: Theme.of(context).textTheme.headline3,
                             ),
                             Form(
                               key: _formKey,
@@ -204,7 +207,7 @@ class _AddEntryState extends State<AddEntry> {
                     monthsPaid: _entry.getMonthRange,
                   ),
                 );
-                // _entry.postSaveStudent(_date);
+                _entry.postSaveStudent(_date);
                 Navigator.pop(context);
               }
             },
