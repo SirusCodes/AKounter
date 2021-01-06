@@ -99,7 +99,7 @@ class DatabaseManager extends ChangeNotifier {
       csvList.add(row);
     }
 
-    return await _writeToFile(csvList, dateRange);
+    return await _writeToFile(csvList, dateRange, "Balance Sheet");
   }
 
   Future<String> monthlyRecord(DateTimeRange dateTimeRange) async {
@@ -126,19 +126,20 @@ class DatabaseManager extends ChangeNotifier {
       csvList.add(row);
     }
 
-    return await _writeToFile(csvList, dateTimeRange);
+    return await _writeToFile(csvList, dateTimeRange, "Monthly Record");
   }
 
   Future<String> _writeToFile(
     List<List> csvList,
     DateTimeRange dateRange,
+    String type,
   ) async {
     final branch = locator<Data>().getBranch;
 
     String convertedCsv = ListToCsvConverter().convert(csvList);
     final start = formatDate(dateRange.start, [MM]);
     final last = formatDate(dateRange.end, [MM]);
-    String fileName = "${branch.name}_$start-$last.csv";
+    String fileName = "${branch.name}_$type\_$start-$last.csv";
     String dirPath = await _checkWritePermissionNGetDirPath();
 
     if (dirPath != null) {
