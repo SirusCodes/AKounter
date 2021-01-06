@@ -49,7 +49,7 @@ class _AddEntryState extends State<AddEntry> {
     _entry.setPending = _student.getStudent.pending;
 
     // set monthly price
-    if (_student.getStudent.belt <= 3)
+    if (_student.getStudent.belt < 3)
       _entry.setSubtotal = _student.getBranch.belowGreen;
     else
       _entry.setSubtotal = _student.getBranch.aboveGreen;
