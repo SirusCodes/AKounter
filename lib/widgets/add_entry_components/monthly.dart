@@ -22,7 +22,7 @@ class _MonthlyState extends State<Monthly> {
   double _slider = 1.0;
   @override
   void initState() {
-    _perMonth.text = _student.getStudent.belt <= 3
+    _perMonth.text = _student.getStudent.belt < 3
         ? _student.getBranch.belowGreen.toString()
         : _student.getBranch.aboveGreen.toString();
     super.initState();
